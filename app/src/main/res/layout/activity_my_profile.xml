@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:context=".employee.MyProfileActivity">
+<ScrollView
+    android:id="@+id/scrollView1"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:id="@+id/layout_acc_details"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="5dp" >
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:background="#c1c1c1"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/TextView0279"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="6dp"
+                android:layout_marginLeft="6dp"
+                android:layout_marginTop="6dp"
+                android:text="Update Profile :"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+        <TextView
+            android:id="@+id/lblBrN_NewProposal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:text="First Name:"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+        <EditText
+            android:id="@+id/txtfname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:layout_marginBottom="15dp"
+            android:background="@drawable/edittextbac"
+            android:capitalize="characters"
+            android:ems="10"
+            android:paddingBottom="8dp"
+            android:paddingLeft="5dp"
+            android:paddingTop="8dp"
+            android:textSize="20sp" >
+            <requestFocus />
+        </EditText>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:text="Last Name :"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+        <EditText
+            android:id="@+id/txtlname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:background="@drawable/edittextbac"
+            android:capitalize="characters"
+            android:inputType="text"
+            android:ems="10"
+            android:paddingBottom="8dp"
+            android:paddingLeft="5dp"
+            android:paddingTop="8dp"
+            android:textSize="20sp" >
+            <requestFocus />
+        </EditText>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:text="Mobile :"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/txtmobile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="phone"
+            android:layout_marginBottom="15dp"
+            android:background="@drawable/edittextbac"
+            android:capitalize="characters"
+            android:ems="10"
+            android:paddingBottom="8dp"
+            android:paddingLeft="5dp"
+            android:paddingTop="8dp"
+            android:textSize="20sp" >
+            <requestFocus />
+        </EditText>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:text="Address :"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+        <EditText
+            android:id="@+id/txtaddr"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textMultiLine"
+            android:maxLines="4"
+            android:layout_marginBottom="15dp"
+            android:background="@drawable/edittextbac"
+            android:capitalize="characters"
+            android:ems="10"
+            android:paddingBottom="8dp"
+            android:paddingLeft="5dp"
+            android:paddingTop="8dp"
+            android:textSize="20sp" >
+            <requestFocus />
+        </EditText>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:text="Email :"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+        <EditText
+            android:id="@+id/txtemail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textWebEmailAddress"
+            android:layout_marginBottom="15dp"
+            android:background="@drawable/edittextbac"
+            android:capitalize="characters"
+            android:ems="10"
+            android:paddingBottom="8dp"
+            android:paddingLeft="5dp"
+            android:paddingTop="8dp"
+            android:textSize="20sp" >
+            <requestFocus />
+        </EditText>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:text="Password :"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/etPasswordLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:passwordToggleEnabled="true"
+                >
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword"
+                    android:background="@drawable/edittextbac"
+                    android:paddingBottom="8dp"
+                    android:paddingLeft="5dp"
+                    android:paddingTop="8dp"
+                    android:textSize="20sp" />
+                <requestFocus />
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+
+
+
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#ffffff"
+        android:layout_margin="10dp"
+        android:id="@+id/upload_nac_img">
+        <TextView
+            android:id="@+id/txtTitle2_AttachDocument"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#ffffff"
+            android:fontFamily="Arial"
+            android:padding="10dp"
+            android:text="Upload Profile:"
+            android:textColor="#000000"
+            android:textSize="15dp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp" >
+
+            <Button
+                android:id="@+id/btnBrowse_AttachDocument"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_marginRight="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/squarecorner_rounded_gray"
+                android:text="Browse" />
+
+            <Button
+                android:id="@+id/btnCapture_AttachDocument"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/squarecorner_rounded_gray"
+                android:text="Capture" />
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/imgPreview_AttachDocument"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/attachment" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginBottom="10dp">
+
+            <Button
+                android:id="@+id/btnRotate1_AttachDocument"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/rotate_left" />
+
+            <Button
+                android:id="@+id/btnCrop_AttachDocument"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"
+                android:background="@drawable/crop" />
+
+            <Button
+                android:id="@+id/btnRotate_AttachDocument"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/rotate_right" />
+        </LinearLayout>
+    </LinearLayout>
+
+
+        <Button
+            android:id="@+id/btnUpdateEmp"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/squarecorner_rounded"
+            android:fontFamily="sans-serif"
+            android:gravity="center"
+            android:text="Update"
+            android:textColor="#ffffff"
+            android:textStyle="bold"
+            android:layout_margin="10dp"
+            />
+    </LinearLayout>
+</ScrollView>
+</androidx.appcompat.widget.LinearLayoutCompat>

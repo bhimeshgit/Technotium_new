@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".workorder.fragment.OrderInfoFragment">
+    <ScrollView
+        android:id="@+id/scrollView1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/layout_acc_details"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="5dp" >
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:background="#c1c1c1"
+                android:orientation="vertical" >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="6dp"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginTop="6dp"
+                    android:text="Order Details :"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="Order Date:"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+            <EditText
+                android:id="@+id/txtOrderDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textCapCharacters"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/edittextbac"
+                android:capitalize="characters"
+                android:ems="10"
+                android:paddingBottom="8dp"
+                android:paddingLeft="5dp"
+                android:paddingTop="8dp"
+                android:textSize="20sp" >
+                <requestFocus />
+            </EditText>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="Capacity(KW):"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+            <EditText
+                android:id="@+id/txtcapacity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textCapCharacters"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/edittextbac"
+                android:capitalize="characters"
+                android:ems="10"
+                android:paddingBottom="8dp"
+                android:paddingLeft="5dp"
+                android:paddingTop="8dp"
+                android:textSize="20sp" >
+                <requestFocus />
+            </EditText>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="Location:"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+            <EditText
+                android:id="@+id/txtlocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textCapCharacters"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/edittextbac"
+                android:capitalize="characters"
+                android:ems="10"
+                android:paddingBottom="8dp"
+                android:paddingLeft="5dp"
+                android:paddingTop="8dp"
+                android:textSize="20sp" >
+                <requestFocus />
+            </EditText>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="Grid Type:"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+            <Spinner
+                android:id="@+id/spnGridType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/edittextbac" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="Phase :"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+            <Spinner
+                android:id="@+id/spnPhase"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/edittextbac" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="System Details(Other than standard) :"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+            <EditText
+                android:id="@+id/txtsysdetails"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine"
+                android:maxLines="4"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/edittextbac"
+                android:capitalize="characters"
+                android:ems="10"
+                android:paddingBottom="8dp"
+                android:paddingLeft="5dp"
+                android:paddingTop="8dp"
+                android:textSize="20sp" >
+                <requestFocus />
+            </EditText>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="Panel Make:"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+            <EditText
+                android:id="@+id/txtpanel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textCapCharacters"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/edittextbac"
+                android:capitalize="characters"
+                android:ems="10"
+                android:paddingBottom="8dp"
+                android:paddingLeft="5dp"
+                android:paddingTop="8dp"
+                android:textSize="20sp" >
+                <requestFocus />
+            </EditText>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="Inverter Make:"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+            <EditText
+                android:id="@+id/txtinverter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textCapCharacters"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/edittextbac"
+                android:capitalize="characters"
+                android:ems="10"
+                android:paddingBottom="8dp"
+                android:paddingLeft="5dp"
+                android:paddingTop="8dp"
+                android:textSize="20sp" >
+                <requestFocus />
+            </EditText>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="Structure :"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+            <Spinner
+                android:id="@+id/spnStructure"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/edittextbac" />
+
+            <TextView
+                android:id="@+id/txtamounttxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="Amount:"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+            <EditText
+                android:id="@+id/txtamount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/edittextbac"
+                android:capitalize="characters"
+                android:ems="10"
+                android:paddingBottom="8dp"
+                android:paddingLeft="5dp"
+                android:paddingTop="8dp"
+                android:textSize="20sp" >
+                <requestFocus />
+            </EditText>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="Contact Person Mobile:"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+            <EditText
+                android:id="@+id/txtmobile_con_person"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/edittextbac"
+                android:capitalize="characters"
+                android:ems="10"
+                android:paddingBottom="8dp"
+                android:paddingLeft="5dp"
+                android:paddingTop="8dp"
+                android:textSize="20sp" >
+                <requestFocus />
+            </EditText>
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+    </ScrollView>
+</FrameLayout>

@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".status.fragment.TechnicalStatus">
+<androidx.core.widget.NestedScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+   <androidx.appcompat.widget.LinearLayoutCompat
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:orientation="vertical">
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_view"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/card_view_shape">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_margin="5dp">
+            <TextView
+                android:id="@+id/status_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:inputType="textMultiLine"
+                />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp">
+        <CheckBox
+            android:id="@+id/rccb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginTop="6dp"
+            android:text="RCCB/ELCB Installation"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="14dp"
+            />
+        <CheckBox
+            android:id="@+id/panel_installation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginTop="6dp"
+            android:text="Panel Installation"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="14dp"  />
+        <CheckBox
+            android:id="@+id/grounding"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginTop="6dp"
+            android:text="Grounding"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="14dp"  />
+        <CheckBox
+            android:id="@+id/earthing"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginTop="6dp"
+            android:text="Earthing"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="14dp"  />
+        <CheckBox
+            android:id="@+id/inverter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginTop="6dp"
+            android:text="Inverter Installation"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="14dp"  />
+        <CheckBox
+            android:id="@+id/acdb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginTop="6dp"
+            android:text="ACDB"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="14dp"  />
+        <CheckBox
+            android:id="@+id/dcdb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginTop="6dp"
+            android:text="DCDB"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="14dp"  />
+        <CheckBox
+            android:id="@+id/la"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginTop="6dp"
+            android:text="LA Installation"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="14dp"  />
+        <CheckBox
+            android:id="@+id/meter_installation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginTop="6dp"
+            android:text="Meter Installation"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="14dp"  />
+
+        <CheckBox
+            android:id="@+id/Service_wire_installation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginTop="6dp"
+            android:text="Service Wire Installation"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="14dp"  />
+
+        <CheckBox
+            android:id="@+id/Structure_installation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginTop="6dp"
+            android:text="Structure Installation"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="14dp"  />
+
+        <CheckBox
+            android:id="@+id/Walkway"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginTop="6dp"
+            android:text="Walkway"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="14dp"  />
+
+        <CheckBox
+            android:id="@+id/Structure_painting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginTop="6dp"
+            android:text="Structure Painting"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="14dp"  />
+
+        <CheckBox
+            android:id="@+id/AC_Wiring"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginTop="6dp"
+            android:text="AC Wiring"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="14dp"  />
+
+        <CheckBox
+            android:id="@+id/DC_Wiring"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginTop="6dp"
+            android:text="DC Wiring"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="14dp"  />
+        <CheckBox
+            android:id="@+id/Commissioning_of_project"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginTop="6dp"
+            android:text="Commissioning of Project"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="14dp"  />
+
+        <CheckBox
+            android:id="@+id/Remote_Monitoring"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginTop="6dp"
+            android:text="Remote Monitoring"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="14dp"  />
+
+        <EditText
+            android:id="@+id/txtOther"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textMultiLine"
+            android:layout_marginBottom="15dp"
+            android:background="@drawable/edittextbac"
+            android:capitalize="characters"
+            android:ems="10"
+            android:hint="Enter other status"
+            android:layout_marginRight="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            android:paddingBottom="8dp"
+            android:paddingLeft="5dp"
+            android:paddingTop="8dp"
+            android:textSize="14dp" >
+            <requestFocus />
+        </EditText>
+
+        <Button
+            android:id="@+id/btnSetStatus"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/squarecorner_rounded"
+            android:fontFamily="sans-serif"
+            android:gravity="center"
+            android:text="Set Status"
+            android:textColor="#ffffff"
+            android:textStyle="bold"
+            android:layout_margin="10dp"
+            />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+   </androidx.appcompat.widget.LinearLayoutCompat>
+</androidx.core.widget.NestedScrollView>
+</FrameLayout>

@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "338946275124",
+    "firebase_url": "https://technotiumtech-d5d50.firebaseio.com",
+    "project_id": "technotiumtech-d5d50",
+    "storage_bucket": "technotiumtech-d5d50.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:338946275124:android:0d128126aafadb64309761",
+        "android_client_info": {
+          "package_name": "com.technotium.technotiumapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "338946275124-n7duhemjhlpn40g2khm9qu4p2344qsjs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC3QZze7WdzSVos0URUdXGST8L2raRDZjw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "338946275124-n7duhemjhlpn40g2khm9qu4p2344qsjs.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

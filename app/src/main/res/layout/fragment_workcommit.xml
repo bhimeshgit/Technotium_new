@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".workorder.fragment.WorkcommitFragment">
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/layout_acc_details"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="5dp" >
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:background="#c1c1c1"
+            android:orientation="vertical" >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="6dp"
+                android:layout_marginLeft="6dp"
+                android:layout_marginTop="6dp"
+                android:text="Work Commitments :"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+        <CheckBox
+            android:id="@+id/load_extension"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginTop="6dp"
+            android:text="Load Extension"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="18sp"
+            android:textStyle="bold"  />
+        <CheckBox
+            android:id="@+id/changeofname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginTop="6dp"
+            android:text="Change Of Name"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="18sp"
+            android:textStyle="bold"  />
+        <CheckBox
+            android:id="@+id/solarsanction"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginTop="6dp"
+            android:text="Solar Sanction"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="18sp"
+            android:textStyle="bold"  />
+        <CheckBox
+            android:id="@+id/meterinstall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginTop="6dp"
+            android:text="Meter Insrallation"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="18sp"
+            android:textStyle="bold"  />
+        <CheckBox
+            android:id="@+id/medasaction"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginTop="6dp"
+            android:text="MEDA sanction"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="18sp"
+            android:textStyle="bold"  />
+        <CheckBox
+            android:id="@+id/subsidy_approval"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginTop="6dp"
+            android:text="Subsidy Approval"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="18sp"
+            android:textStyle="bold"  />
+        <CheckBox
+            android:id="@+id/commissioning"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginTop="6dp"
+            android:text="Commissioning"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="18sp"
+            android:textStyle="bold"  />
+        <CheckBox
+            android:id="@+id/agreement"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginTop="6dp"
+            android:text="Agreement"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="18sp"
+            android:textStyle="bold"  />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:text="Panel Capacity(Wp):"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+        <EditText
+            android:id="@+id/txtpanelcapacity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textCapCharacters"
+            android:layout_marginBottom="15dp"
+            android:background="@drawable/edittextbac"
+            android:capitalize="characters"
+            android:ems="10"
+            android:paddingBottom="8dp"
+            android:paddingLeft="5dp"
+            android:paddingTop="8dp"
+            android:textSize="20sp" >
+            <requestFocus />
+        </EditText>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:text="Inverter Capacity(KW):"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+        <EditText
+            android:id="@+id/txtinvertercapacity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textCapCharacters"
+            android:layout_marginBottom="15dp"
+            android:background="@drawable/edittextbac"
+            android:capitalize="characters"
+            android:ems="10"
+            android:paddingBottom="8dp"
+            android:paddingLeft="5dp"
+            android:paddingTop="8dp"
+            android:textSize="20sp" >
+            <requestFocus />
+        </EditText>
+
+        <TextView
+            android:id="@+id/txtRatetxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:text="Rate from company:"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+        <EditText
+            android:id="@+id/txtRate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textCapCharacters"
+            android:layout_marginBottom="15dp"
+            android:background="@drawable/edittextbac"
+            android:capitalize="characters"
+            android:ems="10"
+            android:paddingBottom="8dp"
+            android:paddingLeft="5dp"
+            android:paddingTop="8dp"
+            android:textSize="20sp" >
+            <requestFocus />
+        </EditText>
+        <Button
+            android:id="@+id/btnSave"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/squarecorner_rounded"
+            android:fontFamily="sans-serif"
+            android:gravity="center"
+            android:text="Save"
+            android:textColor="#ffffff"
+            android:textStyle="bold" />
+        <Button
+            android:id="@+id/btnUpdate"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/squarecorner_rounded"
+            android:fontFamily="sans-serif"
+            android:gravity="center"
+            android:text="Update"
+            android:textColor="#ffffff"
+            android:textStyle="bold" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+    </androidx.core.widget.NestedScrollView>
+
+
+</FrameLayout>

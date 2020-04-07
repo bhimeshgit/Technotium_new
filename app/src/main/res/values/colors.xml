@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#FFFFFF</color>
+    <color name="colorPrimaryDark">#007acc</color>
+    <color name="colorAccent">#D81B60</color>
+    <color name="colorWelcomeBack">#FFFFFF</color>
+    <color name="color_navigation_list_background">#FFFFFF</color>
+    <color name="color_selector_navigation_item">#008577</color>
+    <color name="light_gray_front">#f2f2f2</color>
+    <color name="blue_sky">#FFFF</color>
+    <color name="caldroid_gray">#CCC</color>
+    <color name="color_text_black">#000000</color>
+    <color name="ic_launcher_background">#ffffff</color>
+</resources>

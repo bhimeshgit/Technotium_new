@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    >
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="170dp"
+            app:srcCompat="@drawable/nodoc"
+            />
+        <TextView
+            android:id="@+id/doc_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            android:layout_gravity="center"
+            android:textStyle="bold"
+            android:textSize="16dp"
+            android:layout_margin="10dp"
+            android:textColor="@color/color_text_black"/>
+        <Button
+            android:id="@+id/btnShare"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_weight="1"
+            android:background="@drawable/squarecorner_rounded"
+            android:fontFamily="sans-serif"
+            android:gravity="center"
+            android:text="Share"
+            android:layout_marginBottom="15dp"
+            android:layout_gravity="center"
+            android:textColor="#ffffff"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

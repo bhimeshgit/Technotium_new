@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".workorder.fragment.CustomerInfoFragment">
+    <ScrollView
+        android:id="@+id/scrollView1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:id="@+id/layout_acc_details"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="5dp" >
+
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:background="#c1c1c1"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/TextView0279"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="6dp"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginTop="6dp"
+                    android:text="Customer Details :"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="Project Type :"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+            <Spinner
+                android:id="@+id/spnProjectType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/edittextbac" />
+
+            <TextView
+                android:id="@+id/lblBrN_NewProposal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="First Name:"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+            <EditText
+                android:id="@+id/txtfname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textCapCharacters"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/edittextbac"
+                android:capitalize="characters"
+                android:digits="0,1,2,3,4,5,6,7,8,9,., ,qwertzuiopasdfghjklyxcvbnm,QWERTYUIOPASDFGHJKLZXCVBNM"
+                android:ems="10"
+                android:paddingBottom="8dp"
+                android:paddingLeft="5dp"
+                android:paddingTop="8dp"
+                android:textSize="20sp" >
+                <requestFocus />
+            </EditText>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="Middle Name :"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+            <EditText
+                android:id="@+id/txtmname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textCapCharacters"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/edittextbac"
+                android:capitalize="characters"
+                android:ems="10"
+                android:paddingBottom="8dp"
+                android:paddingLeft="5dp"
+                android:paddingTop="8dp"
+                android:textSize="20sp" >
+                <requestFocus />
+            </EditText>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="Last Name :"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+            <EditText
+                android:id="@+id/txtlname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textCapCharacters"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/edittextbac"
+                android:capitalize="characters"
+                android:ems="10"
+                android:paddingBottom="8dp"
+                android:paddingLeft="5dp"
+                android:paddingTop="8dp"
+                android:textSize="20sp" >
+                <requestFocus />
+            </EditText>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="Mobile :"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/txtmobile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="phone"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/edittextbac"
+                android:capitalize="characters"
+                android:ems="10"
+                android:paddingBottom="8dp"
+                android:paddingLeft="5dp"
+                android:paddingTop="8dp"
+                android:textSize="20sp" >
+                <requestFocus />
+            </EditText>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="Address :"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+            <EditText
+                android:id="@+id/txtaddr"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine"
+                android:maxLines="4"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/edittextbac"
+                android:capitalize="characters"
+                android:ems="10"
+                android:paddingBottom="8dp"
+                android:paddingLeft="5dp"
+                android:paddingTop="8dp"
+                android:textSize="20sp" >
+                <requestFocus />
+            </EditText>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="State :"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+            <Spinner
+                android:id="@+id/spnState"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/edittextbac" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="City :"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+            <EditText
+                android:id="@+id/txtcity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/edittextbac"
+                android:capitalize="characters"
+                android:ems="10"
+                android:paddingBottom="8dp"
+                android:paddingLeft="5dp"
+                android:paddingTop="8dp"
+                android:textSize="20sp" >
+                <requestFocus />
+            </EditText>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="Email :"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+            <EditText
+                android:id="@+id/txtemail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/edittextbac"
+                android:capitalize="characters"
+                android:ems="10"
+                android:paddingBottom="8dp"
+                android:paddingLeft="5dp"
+                android:paddingTop="8dp"
+                android:textSize="20sp" >
+                <requestFocus />
+            </EditText>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="Designation :"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+            <EditText
+                android:id="@+id/txtdesignation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/edittextbac"
+                android:capitalize="characters"
+                android:ems="10"
+                android:paddingBottom="8dp"
+                android:paddingLeft="5dp"
+                android:paddingTop="8dp"
+                android:textSize="20sp" >
+                <requestFocus />
+            </EditText>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="Billing Unit(BU) :"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+            <EditText
+                android:id="@+id/txtbu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/edittextbac"
+                android:capitalize="characters"
+                android:ems="10"
+                android:paddingBottom="8dp"
+                android:paddingLeft="5dp"
+                android:paddingTop="8dp"
+                android:textSize="20sp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="Consumer No. :"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+            <EditText
+                android:id="@+id/txtconsumer_no"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/edittextbac"
+                android:capitalize="characters"
+                android:ems="10"
+                android:paddingBottom="8dp"
+                android:paddingLeft="5dp"
+                android:paddingTop="8dp"
+                android:textSize="20sp" >
+
+            </EditText>
+        </LinearLayout>
+
+
+    </ScrollView>
+</FrameLayout>

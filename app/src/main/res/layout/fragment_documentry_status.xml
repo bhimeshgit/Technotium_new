@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".status.fragment.DocumentryStatusFragment">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                android:orientation="vertical">
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/card_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/card_view_shape">
+
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="5dp"
+                        android:gravity="center">
+
+                        <TextView
+                            android:id="@+id/status_txt"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:inputType="textMultiLine"/>
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+                </androidx.cardview.widget.CardView>
+
+
+
+                <CheckBox
+                    android:id="@+id/change_of_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginBottom="6dp"
+                    android:text="Change of name"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="14dp" />
+
+                <CheckBox
+                    android:id="@+id/solar_sanction"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginBottom="6dp"
+                    android:text="Solar Sanction"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="14dp" />
+
+                <CheckBox
+                    android:id="@+id/subsidy_sanction"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginBottom="6dp"
+                    android:text="Subsidy Sanction"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="14dp" />
+
+                <CheckBox
+                    android:id="@+id/meter_installation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginBottom="6dp"
+                    android:text="Meter Installation"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="14dp" />
+
+                <CheckBox
+                    android:id="@+id/agreement"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginBottom="6dp"
+                    android:text="Agreement"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="14dp" />
+
+                <CheckBox
+                    android:id="@+id/load_extension"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginBottom="6dp"
+                    android:text="Load Extension"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="14dp" />
+
+                <CheckBox
+                    android:id="@+id/Application_submission"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginBottom="6dp"
+                    android:text="Application Submission"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="14dp" />
+
+                <CheckBox
+                    android:id="@+id/Site_Visit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginBottom="6dp"
+                    android:text="Site Visit"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="14dp" />
+
+                <CheckBox
+                    android:id="@+id/Final_submission"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginBottom="6dp"
+                    android:text="Final Submission"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="14dp" />
+
+                <CheckBox
+                    android:id="@+id/JIR_application"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginBottom="6dp"
+                    android:text="JIR Application"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="14dp" />
+
+                <CheckBox
+                    android:id="@+id/Meter_Testing"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginBottom="6dp"
+                    android:text="Meter Testing"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="14dp" />
+
+                <CheckBox
+                    android:id="@+id/Invoice_Generation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginBottom="6dp"
+                    android:text="Invoice Generation"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="14dp" />
+
+                <CheckBox
+                    android:id="@+id/Documents_handover_to_client"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginBottom="6dp"
+                    android:text="Documents Handover To Client"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="14dp" />
+
+                <CheckBox
+                    android:id="@+id/Insurance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginBottom="6dp"
+                    android:text="Insurance"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="14dp" />
+                <EditText
+                    android:id="@+id/txtOther"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginBottom="15dp"
+                    android:background="@drawable/edittextbac"
+                    android:capitalize="characters"
+                    android:ems="10"
+                    android:hint="Enter other status"
+                    android:inputType="textMultiLine"
+                    android:paddingLeft="5dp"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:textSize="14dp">
+
+                    <requestFocus />
+                </EditText>
+                <TextView
+                    android:id="@+id/exname_txt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:inputType="textMultiLine"/>
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <Button
+                android:id="@+id/btnSetStatus"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="10dp"
+                android:background="@drawable/squarecorner_rounded"
+                android:fontFamily="sans-serif"
+                android:gravity="center"
+                android:text="Set Status"
+                android:textColor="#ffffff"
+                android:textStyle="bold" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+    </androidx.core.widget.NestedScrollView>
+</FrameLayout>
