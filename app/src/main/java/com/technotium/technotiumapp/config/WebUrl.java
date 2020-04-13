@@ -1,8 +1,8 @@
 package com.technotium.technotiumapp.config;
 
 public class WebUrl {
-//   public static String BASE_URL="http://192.168.0.7/technotium/";
-  public static String BASE_URL= "http://4isoftwares.com/technotium/";
+   public static String BASE_URL="http://192.168.0.5/technotium/";
+//  public static String BASE_URL= "http://4isoftwares.com/technotium/";
 
 
     public static String LOGIN_URL=BASE_URL+"app_login.php";
@@ -39,4 +39,9 @@ public class WebUrl {
     public static String  ADD_EXPENSES=BASE_URL+"addExpenses.php";
     public static String  GET_ALL_EXPENSES=BASE_URL+"getAllExpenses.php";
     public static String DELETE_EXPENSE_URL=BASE_URL+"deleteExpenses.php";
+    public static String WORK_ORDER_REPORT=BASE_URL+"work_order_report.php";
+    public static String ADD_PANEL_SERIAL_NO=BASE_URL+"addSerialNo.php";
+    public static String ADD_METER_READING=BASE_URL+"addMeterReading_afterSale.php";
+    public static String GET_SERIAL_NO=BASE_URL+"getSerialNo_afterSale.php";
+    public static String DELETE_SERIAL_NO=BASE_URL+"deleteSerialNo.php";
 }

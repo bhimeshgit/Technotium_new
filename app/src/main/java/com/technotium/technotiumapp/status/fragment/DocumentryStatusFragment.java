@@ -1,5 +1,6 @@
 package com.technotium.technotiumapp.status.fragment;
 
+import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.Uri;
@@ -13,7 +14,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,10 +25,16 @@ import com.technotium.technotiumapp.R;
 import com.technotium.technotiumapp.config.JsonParserVolley;
 import com.technotium.technotiumapp.config.SessionManager;
 import com.technotium.technotiumapp.config.WebUrl;
+import com.technotium.technotiumapp.expenses.activity.AddExpense;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 
 public class DocumentryStatusFragment extends Fragment {
@@ -36,16 +45,17 @@ public class DocumentryStatusFragment extends Fragment {
     ,Insurance;
     EditText txtOther;
     int order_id;
-    TextView status_txt,exname_txt;
+    TextView exname_txt;
+    EditText status_txt,txtEname,txtLastUpdateDate,txtUpdateDate;
     Button btn;
     ProgressDialog pDialog;
-
+    LinearLayout date_lay,ename_lay;
+    String OrderDate;
+    String orderToset="";
     public DocumentryStatusFragment() {
         // Required empty public constructor
 
     }
-
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -79,6 +89,13 @@ public class DocumentryStatusFragment extends Fragment {
         Invoice_generation=view.findViewById(R.id.Invoice_Generation);
         Documents_handover_to_client=view.findViewById(R.id.Documents_handover_to_client);
         Insurance=view.findViewById(R.id.Insurance);
+        txtEname=view.findViewById(R.id.txtEname);
+        txtLastUpdateDate=view.findViewById(R.id.txtLastUpdateDate);
+        txtEname.setEnabled(false);
+        txtLastUpdateDate.setEnabled(false);
+        txtUpdateDate=view.findViewById(R.id.txtUpdateDate);
+        date_lay=view.findViewById(R.id.date_lay);
+        ename_lay=view.findViewById(R.id.ename_lay);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -89,9 +106,45 @@ public class DocumentryStatusFragment extends Fragment {
         pDialog.setMessage("Please Wait...");
         pDialog.setCancelable(true);
         getOrderStatus();
+//        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+//        Calendar cal=Calendar.getInstance();
+//        Date dt=cal.getTime();
+//        orderToset=sdf.format(dt);
+//        txtUpdateDate.setText(new SimpleDateFormat("dd-MM-yyyy").format(dt));
+        txtUpdateDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dateFunction();
+            }
+        });
         return view;
     }
-
+    public void dateFunction(){
+        Calendar calendar= Calendar.getInstance();
+        int year =calendar.get(Calendar.YEAR);
+        int month=calendar.get(Calendar.MONTH);
+        int days=calendar.get(Calendar.DAY_OF_MONTH);
+        DatePickerDialog dg=new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                int monthofyear=month+1;
+                String date=dayOfMonth+"-"+monthofyear+"-"+year;
+                txtUpdateDate.setText(date);
+                SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+                Date dt = null;
+                try {
+                    dt = format.parse(date);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                SimpleDateFormat your_format = new SimpleDateFormat("yyyy-MM-dd");
+                OrderDate = your_format.format(dt);
+                orderToset=OrderDate;
+            }
+        },year,month,days);
+        dg.getDatePicker().setMaxDate(new Date().getTime());
+        dg.show();
+    }
     public void updateStatus(){
         int flg=0;
         StringBuilder status=new StringBuilder("");
@@ -143,12 +196,14 @@ public class DocumentryStatusFragment extends Fragment {
         if(Insurance.isChecked()){
             status.append("Insurance, ");flg=1;
         }
+        if(status_txt.getText().toString().length()>0){
+            status.append(status_txt.getText().toString()+" ");
+        }
 
         if(!txtOther.getText().toString().equals("")){
             status.append(txtOther.getText().toString());
             flg=1;
         }
-
 
         if(flg==0){
             Toast.makeText(getActivity(),"Please select or enter status",Toast.LENGTH_SHORT).show();
@@ -159,6 +214,7 @@ public class DocumentryStatusFragment extends Fragment {
         final JsonParserVolley jsonParserVolley = new JsonParserVolley(getActivity());
         jsonParserVolley.addParameter("order_id", order_id+"");
         jsonParserVolley.addParameter("status", status.toString());
+        jsonParserVolley.addParameter("update_date", orderToset);
         jsonParserVolley.addParameter("userid", SessionManager.getMyInstance(getActivity()).getEmpid());
         jsonParserVolley.executeRequest(Request.Method.POST, WebUrl.UPDATE_ORDER_STATTUS_URL ,new JsonParserVolley.VolleyCallback() {
                     @Override
@@ -170,6 +226,7 @@ public class DocumentryStatusFragment extends Fragment {
                             int success=jsonObject.getInt("success");
                             if(success==1){
                                 Toast.makeText(getActivity(),jsonObject.getString("message"),Toast.LENGTH_SHORT).show();
+                                txtOther.setText("");
                                 getOrderStatus();
                             }
                             else{
@@ -198,6 +255,16 @@ public class DocumentryStatusFragment extends Fragment {
 
                             if(success==1){
                                 String status_data=jsonObject.getString("data");
+                                String update_date=jsonObject.getString("update_date");
+                                String ename=jsonObject.getString("ename");
+                                if(!update_date.equals("") && !update_date.equals("null")){
+                                    date_lay.setVisibility(View.VISIBLE);
+                                    txtLastUpdateDate.setText(update_date);
+                                }
+                                if(!ename.equals("") && !ename.equals("null")){
+                                    ename_lay.setVisibility(View.VISIBLE);
+                                    txtEname.setText(ename);
+                                }
                                 String[] status_array=status_data.split(",");
                                 StringBuilder other_status=new StringBuilder("");
                                 for(String s : status_array){
@@ -253,7 +320,8 @@ public class DocumentryStatusFragment extends Fragment {
                                 }
                                 if(!other_status.toString().trim().equals("")){
                                     status_txt.setText(other_status);
-                                    txtOther.setText(other_status);
+                                //    txtOther.setText(other_status);
+
                                 }
                             }
                             else{

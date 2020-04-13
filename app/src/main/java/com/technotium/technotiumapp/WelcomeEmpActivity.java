@@ -59,8 +59,8 @@ public class WelcomeEmpActivity extends AppCompatActivity  implements Navigation
     ProgressDialog pDialog;
     GridLayoutManager layoutManager;
     ArrayList<HomeIcon> icon_list;
-    int[] imageId={R.drawable.home_work_order,R.drawable.home_payment,R.drawable.home_doc_scan,R.drawable.home_whats_go_on,R.drawable.home_material,R.drawable.expense};
-    String[] iconName={"Work Order","Payment","Doc Scan","Status","Material","Expenses"};
+    int[] imageId={R.drawable.home_work_order,R.drawable.home_payment,R.drawable.home_doc_scan,R.drawable.home_whats_go_on,R.drawable.home_material,R.drawable.expense,R.drawable.after_sale,R.drawable.incentive};
+    String[] iconName={"Work Order","Payment","Doc Scan","Status","Material","Expenses","After Sale","Dealer Incentive"};
     HomeIconAdapter adapter;
     WelcomeEmpActivity currentActivity;
     ImageView empProfileImg;
@@ -139,6 +139,9 @@ public class WelcomeEmpActivity extends AppCompatActivity  implements Navigation
                 }
                 else if(position==5){
                     intent.putExtra("modul","expense");
+                }
+                else if(position==6){
+                    intent.putExtra("modul","after_sale");
                 }
                 startActivity(intent);
 

@@ -1,5 +1,6 @@
 package com.technotium.technotiumapp.status.fragment;
 
+import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.Uri;
@@ -13,7 +14,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +29,11 @@ import com.technotium.technotiumapp.config.WebUrl;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 
 public class TechnicalStatus extends Fragment {
 
@@ -35,9 +43,12 @@ public class TechnicalStatus extends Fragment {
     CheckBox Commissioning_of_project,Remote_Monitoring,Structure_installation;
     EditText txtOther;
     int order_id;
-    TextView status_txt;
+    TextView status_txt,txtEname,txtLastUpdateDate,txtUpdateDate;;
     Button btn;
     ProgressDialog pDialog;
+    LinearLayout date_lay,ename_lay;
+    String OrderDate;
+    String orderToset="";
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +84,13 @@ public class TechnicalStatus extends Fragment {
         DC_Wiring=view.findViewById(R.id.DC_Wiring);
         txtOther=view.findViewById(R.id.txtOther);
         status_txt=view.findViewById(R.id.status_txt);
+        txtEname=view.findViewById(R.id.txtEname);
+        txtLastUpdateDate=view.findViewById(R.id.txtLastUpdateDate);
+        txtEname.setEnabled(false);
+        txtLastUpdateDate.setEnabled(false);
+        txtUpdateDate=view.findViewById(R.id.txtUpdateDate);
+        date_lay=view.findViewById(R.id.date_lay);
+        ename_lay=view.findViewById(R.id.ename_lay);
         btn=view.findViewById(R.id.btnSetStatus);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,10 +101,41 @@ public class TechnicalStatus extends Fragment {
         pDialog = new ProgressDialog(getActivity());
         pDialog.setMessage("Please Wait...");
         pDialog.setCancelable(true);
+        txtUpdateDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dateFunction();
+            }
+        });
         getOrderTechnicalStatus();
         return view;
     }
-
+    public void dateFunction(){
+        Calendar calendar= Calendar.getInstance();
+        int year =calendar.get(Calendar.YEAR);
+        int month=calendar.get(Calendar.MONTH);
+        int days=calendar.get(Calendar.DAY_OF_MONTH);
+        DatePickerDialog dg=new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                int monthofyear=month+1;
+                String date=dayOfMonth+"-"+monthofyear+"-"+year;
+                txtUpdateDate.setText(date);
+                SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+                Date dt = null;
+                try {
+                    dt = format.parse(date);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                SimpleDateFormat your_format = new SimpleDateFormat("yyyy-MM-dd");
+                OrderDate = your_format.format(dt);
+                orderToset=OrderDate;
+            }
+        },year,month,days);
+        dg.getDatePicker().setMaxDate(new Date().getTime());
+        dg.show();
+    }
     public void getOrderTechnicalStatus(){
         final JsonParserVolley jsonParserVolley = new JsonParserVolley(getActivity());
         jsonParserVolley.addParameter("order_id", order_id+"");
@@ -100,6 +149,16 @@ public class TechnicalStatus extends Fragment {
                             if(success==1){
 
                                 String[] status_array=jsonObject.getString("data").split(",");
+                                String update_date=jsonObject.getString("update_date");
+                                String ename=jsonObject.getString("ename");
+                                if(!update_date.equals("") && !update_date.equals("null")){
+                                    date_lay.setVisibility(View.VISIBLE);
+                                    txtLastUpdateDate.setText(update_date);
+                                }
+                                if(!ename.equals("") && !ename.equals("null")){
+                                    ename_lay.setVisibility(View.VISIBLE);
+                                    txtEname.setText(ename);
+                                }
                                 StringBuilder other_status=new StringBuilder("");
                                 for(String s : status_array){
                                     if(s.trim().equalsIgnoreCase(rccb.getText().toString().trim())){
@@ -162,7 +221,7 @@ public class TechnicalStatus extends Fragment {
                                 }
                                 if(!other_status.toString().trim().equals("")){
                                     status_txt.setText(other_status);
-                                    txtOther.setText(other_status);
+                                //    txtOther.setText(other_status);
                                 }
 
                             }
@@ -245,6 +304,9 @@ public class TechnicalStatus extends Fragment {
         if(Structure_installation.isChecked()){
             status.append("Structure Installation, ");flg=1;
         }
+        if(status_txt.getText().toString().length()>0){
+            status.append(status_txt.getText().toString()+" ");
+        }
 
         if(!txtOther.getText().toString().equals("")){
             status.append(txtOther.getText().toString());
@@ -260,6 +322,7 @@ public class TechnicalStatus extends Fragment {
         jsonParserVolley.addParameter("order_id", order_id+"");
         jsonParserVolley.addParameter("status", status.toString());
         jsonParserVolley.addParameter("userid", SessionManager.getMyInstance(getActivity()).getEmpid());
+        jsonParserVolley.addParameter("update_date", orderToset);
         jsonParserVolley.executeRequest(Request.Method.POST, WebUrl.UPDATE_TECHNICAL_ORDER_STATUS_URL ,new JsonParserVolley.VolleyCallback() {
                     @Override
                     public void getResponse(String response) {
@@ -272,6 +335,7 @@ public class TechnicalStatus extends Fragment {
                             if(success==1){
                                 Toast.makeText(getActivity(),jsonObject.getString("message"),Toast.LENGTH_SHORT).show();
                                 getOrderTechnicalStatus();
+                                txtOther.setText("");
                             }
                             else{
                                 Toast.makeText(getActivity(),jsonObject.getString("message"),Toast.LENGTH_SHORT).show();

@@ -28,7 +28,7 @@ import java.util.Date;
 
 public class OrderInfoFragment extends Fragment implements DataUpdate {
 
-    EditText txtcapacity,txtlocation,txtsysdetails,txtpanel,txtinverter,txtamount,txtOrderDate,txtmobile_con_person;
+    EditText txtcapacity,txtlocation,txtsysdetails,txtpanel,txtinverter,txtamount,txtOrderDate,txtmobile_con_person,txtgst_no;
     Spinner spnPhase,spnStructure,spnGridType;
     ArrayList<String> gridArray=new ArrayList<>();
     ArrayList<String> structureArray=new ArrayList<>();
@@ -64,6 +64,7 @@ public class OrderInfoFragment extends Fragment implements DataUpdate {
         txtamount=view.findViewById(R.id.txtamount);
         txtamounttxt=view.findViewById(R.id.txtamounttxt);
         txtOrderDate=view.findViewById(R.id.txtOrderDate);
+        txtgst_no=view.findViewById(R.id.txtgst_no);
         txtmobile_con_person=view.findViewById(R.id.txtmobile_con_person);
         SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
         Calendar cal=Calendar.getInstance();
@@ -139,6 +140,7 @@ public class OrderInfoFragment extends Fragment implements DataUpdate {
         workOrderPojo.setOrder_date(orderToset);
         workOrderPojo.setGridType(spnGridType.getSelectedItem().toString());
         workOrderPojo.setContactPerson(txtmobile_con_person.getText().toString());
+        workOrderPojo.setGst_no(txtgst_no.getText().toString());
         return workOrderPojo;
     }
 
@@ -153,6 +155,7 @@ public class OrderInfoFragment extends Fragment implements DataUpdate {
                 txtinverter.setText(workOrderPojo.getInverter());
                 txtamount.setText(workOrderPojo.getAmount());
                 orderToset=workOrderPojo.getOrder_date();
+                txtgst_no.setText(workOrderPojo.getGst_no());
                 try {
                     Date dt = new SimpleDateFormat("yyyy-MM-dd").parse(orderToset);
                     txtOrderDate.setText(new SimpleDateFormat("dd-MM-yyyy").format(dt));

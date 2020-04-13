@@ -1,6 +1,7 @@
 package com.technotium.technotiumapp.workorder.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 import com.technotium.technotiumapp.R;
 import com.technotium.technotiumapp.config.SessionManager;
 import com.technotium.technotiumapp.workorder.activity.SearchOrderActivity;
+import com.technotium.technotiumapp.workorder.activity.WorkOrderPdfReportActivity;
 import com.technotium.technotiumapp.workorder.model.WorkOrderPojo;
 
 import java.util.ArrayList;
@@ -54,8 +56,10 @@ public class WorkOrderAdapter extends RecyclerView.Adapter<WorkOrderAdapter.Work
         holder.mobileTxt.setText(workOrderPojo.getMobile());
         holder.addedByTxt.setText("Ex.: "+workOrderPojo.getAdded_by());
         holder.orderDateTxt.setText(workOrderPojo.getOrder_date());
+
         if(workOrderPojo.getWo_activity()==0){
             holder.btnDelete.setVisibility(View.GONE);
+            holder.btnReport.setVisibility(View.GONE);
         }
         if(!SessionManager.getMyInstance(context).getEmpType().equalsIgnoreCase("admin")){
             holder.btnDelete.setVisibility(View.GONE);
@@ -64,6 +68,13 @@ public class WorkOrderAdapter extends RecyclerView.Adapter<WorkOrderAdapter.Work
             @Override
             public void onClick(View v) {
                 ((SearchOrderActivity)context).showDeleteAlertDialog(Integer.parseInt(workOrderPojo.getPkid()),position);
+            }
+        });
+        holder.btnReport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((SearchOrderActivity)context).startActivity(new Intent((SearchOrderActivity)context, WorkOrderPdfReportActivity.class));
+                ((SearchOrderActivity)context).finish();
             }
         });
 
@@ -91,12 +102,13 @@ public class WorkOrderAdapter extends RecyclerView.Adapter<WorkOrderAdapter.Work
 
     public static class WorkOrderViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener ,View.OnLongClickListener{
         TextView customerNameTxt,mobileTxt,addedByTxt,orderDateTxt;
-        CardView card_view;Button btnDelete;
+        CardView card_view;Button btnDelete,btnReport;
         public WorkOrderViewHolder(View view) {
             super(view);
             view.setOnClickListener(this);
             view.setOnLongClickListener(this);
             btnDelete=(Button) view.findViewById(R.id.btnDelete);
+            btnReport=(Button) view.findViewById(R.id.btnReport);
             customerNameTxt = (TextView) view.findViewById(R.id.customerNameTxt);
             mobileTxt= (TextView) view.findViewById(R.id.mobileTxt);
             addedByTxt= (TextView) view.findViewById(R.id.addedByTxt);

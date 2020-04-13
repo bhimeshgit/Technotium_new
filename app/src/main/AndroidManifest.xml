@@ -2,6 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.technotium.technotiumapp">
 
+    <uses-permission android:name="android.permission.STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:name=".config.ApplicationGlobal"
         android:allowBackup="true"
@@ -11,8 +18,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".expenses.activity.AddExpense"></activity>
-        <activity android:name=".expenses.activity.ViewAllExpenses"  android:theme="@style/Theme.AppCompat.Light" />
+        <activity android:name=".after_sales.Activities.AfterSalesActivity"  android:theme="@style/Theme.AppCompat.Light"></activity>
+        <activity
+            android:name=".workorder.activity.WorkOrderPdfReportActivity"
+            android:theme="@style/Theme.AppCompat.Light" />
+        <activity android:name=".expenses.activity.AddExpense" />
+        <activity
+            android:name=".expenses.activity.ViewAllExpenses"
+            android:theme="@style/Theme.AppCompat.Light" />
         <activity android:name=".ForgotPasswordActivity" />
         <activity android:name=".LockActivity" />
         <activity android:name=".employee.MyProfileActivity" />
@@ -41,12 +54,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <service
-            android:name=".config.services.FireBaseMessagingService" android:permission="false">
+            android:name=".config.services.FireBaseMessagingService"
+            android:permission="false">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
         <activity android:name=".WelcomeEmpActivity" />
         <activity android:name=".workorder.activity.WorkOrderActivity" />
 
@@ -60,12 +76,5 @@
                 android:resource="@xml/provider_paths" />
         </provider>
     </application>
-    <uses-permission android:name="android.permission.STORAGE" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.INTERNET" />
-
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
 </manifest>

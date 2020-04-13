@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,6 +13,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -22,6 +24,7 @@ import com.technotium.technotiumapp.config.SessionManager;
 import com.technotium.technotiumapp.config.WebUrl;
 import com.technotium.technotiumapp.material.adapter.MaterialAdapter;
 import com.technotium.technotiumapp.material.model.MaterialPojo;
+import com.technotium.technotiumapp.payment.activity.AddPaymentActivity;
 import com.technotium.technotiumapp.workorder.activity.SearchOrderActivity;
 import com.technotium.technotiumapp.workorder.model.WorkOrderPojo;
 
@@ -29,7 +32,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class AddMaterialActivity extends AppCompatActivity {
 
@@ -44,6 +51,9 @@ public class AddMaterialActivity extends AppCompatActivity {
     RecyclerView.LayoutManager layoutManager;
     MaterialAdapter adapter;
     AlertDialog alertDialog;
+    EditText txtMaterialDate;
+    String OrderDate;
+    String orderToset;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +73,7 @@ public class AddMaterialActivity extends AppCompatActivity {
         txtquantity=findViewById(R.id.txtquantity);
         txtMaterialName=findViewById(R.id.txtMaterialName);
         lv_materialList=findViewById(R.id.lv_materialList);
+        txtMaterialDate=findViewById(R.id.txtOrderDate);
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,9 +83,46 @@ public class AddMaterialActivity extends AppCompatActivity {
         pDialog = new ProgressDialog(currentActivity);
         pDialog.setMessage("Please Wait...");
         pDialog.setCancelable(false);
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+        Calendar cal=Calendar.getInstance();
+        Date dt=cal.getTime();
+        orderToset=sdf.format(dt);
+        txtMaterialDate.setText(new SimpleDateFormat("dd-MM-yyyy").format(dt));
+        txtMaterialDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dateFunction();
+            }
+        });
         getMaterial();
     }
+    public void dateFunction(){
+        Calendar calendar= Calendar.getInstance();
+        int year =calendar.get(Calendar.YEAR);
+        int month=calendar.get(Calendar.MONTH);
+        int days=calendar.get(Calendar.DAY_OF_MONTH);
+        DatePickerDialog dg=new DatePickerDialog(AddMaterialActivity.this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                int monthofyear=month+1;
+                String date=dayOfMonth+"-"+monthofyear+"-"+year;
+                txtMaterialDate.setText(date);
+                SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+                Date dt = null;
+                try {
+                    dt = format.parse(date);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                SimpleDateFormat your_format = new SimpleDateFormat("yyyy-MM-dd");
+                OrderDate = your_format.format(dt);
+                orderToset=OrderDate;
+            }
+        },year,month,days);
+        dg.getDatePicker().setMaxDate(new Date().getTime());
+        dg.show();
 
+    }
     private void addMaterial(){
         if(txtMaterialName.getText().toString().trim().equals("")){
             Toast.makeText(currentActivity,"Enter material name",Toast.LENGTH_SHORT).show();
@@ -89,6 +137,7 @@ public class AddMaterialActivity extends AppCompatActivity {
             jsonParserVolley.addParameter("quantity",txtquantity.getText().toString());
             jsonParserVolley.addParameter("order_id",workOrderPojo.getPkid());
             jsonParserVolley.addParameter("userid", SessionManager.getMyInstance(currentActivity).getEmpid());
+            jsonParserVolley.addParameter("material_date", orderToset);
             jsonParserVolley.executeRequest(Request.Method.POST, WebUrl.ADD_MATERIAL_URL ,new JsonParserVolley.VolleyCallback() {
                         @Override
                         public void getResponse(String response) {

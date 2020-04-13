@@ -1,10 +1,8 @@
-package com.technotium.technotiumapp.payment.activity;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.FileProvider;
+package com.technotium.technotiumapp.after_sales.dialog;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -19,28 +17,32 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.core.content.FileProvider;
+import androidx.fragment.app.DialogFragment;
+
 import com.android.volley.Request;
 import com.technotium.technotiumapp.BuildConfig;
 import com.technotium.technotiumapp.R;
-import com.technotium.technotiumapp.WelcomeEmpActivity;
+import com.technotium.technotiumapp.after_sales.adapter.MeterReadingAdapter;
+import com.technotium.technotiumapp.after_sales.adapter.SerialNoAdapter;
+import com.technotium.technotiumapp.after_sales.model.MeterReadingPojo;
+import com.technotium.technotiumapp.after_sales.model.SerialNoPojo;
 import com.technotium.technotiumapp.config.ImageProcessing;
 import com.technotium.technotiumapp.config.JsonParserVolley;
 import com.technotium.technotiumapp.config.SessionManager;
 import com.technotium.technotiumapp.config.WebUrl;
-import com.technotium.technotiumapp.workorder.model.WorkOrderPojo;
+import com.technotium.technotiumapp.payment.activity.AddPaymentActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -51,107 +53,177 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-public class AddPaymentActivity extends AppCompatActivity {
+public class AddMeterReadingDlgFrag  extends DialogFragment {
+    public static final String TAG = AddSerailNoDlgFrag.class.getSimpleName();
+    private Context mContext;
+    private Dialog mDialog;
+    private EditText txtSerialNo,txtDate,txtPass;
+    private TextView txtTitle;
+    String OrderDate,type,order_id;
+    String orderToset;
+    private Button btnAdd;
+    private ProgressDialog pDialog;
+    private ArrayList<MeterReadingPojo> panelno_list;
+    MeterReadingAdapter serialNoAdapter;
+    private TextView txtviewSerial;
 
+    private LinearLayout portal_lay,upload_nac_img,serial_no_lay;
+
+    //upload Image
     Button btnBrowse_AttachDocument,btnCapture_AttachDocument;
     ImageView imgPreview_AttachDocument ;
     Button btnRotate_AttachDocument ,btnRotate1_AttachDocument,btnCrop_AttachDocument,btnSave_AttachDocument ;
-    AddPaymentActivity currentActivity;
+
     public static final int BROWSE_IMAGE_REQUEST_CODE=101,CAMERA_CAPTURE_IMAGE_REQUEST_CODE=102,MEDIA_TYPE_IMAGE = 1,CROP_IMAGE_REQUEST_CODE = 4;;
     private static Uri fileUri;
     static String filePath = "",filename = "",IMAGE_DIRECTORY_NAME = "Technotium",encodedPhotoString="";
     Bitmap bitmap;
-    RadioGroup radioGroup;
-    RadioButton radioCheque,radioCash,radioNEFT,radioOther;
-    WorkOrderPojo workOrderPojo;
-    EditText txtAmout,txtComment,txtPayDate;
-    ProgressDialog pDialog;
-    String OrderDate;
-    String orderToset;
-    AutoCompleteTextView pay_txt;
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_payment);
-        getSupportActionBar().hide();
-        if(getIntent().getSerializableExtra("orderData") != null) {
-            workOrderPojo =(WorkOrderPojo) getIntent().getSerializableExtra("orderData");
-            init();
-        }
+    public AddMeterReadingDlgFrag(String type, String order_id, ArrayList<MeterReadingPojo> panelno_list, MeterReadingAdapter serialNoAdapter) {
+        this.type=type;
+        this.order_id=order_id;
+        this.panelno_list=panelno_list;
+        this.serialNoAdapter=serialNoAdapter;
     }
-    public void init(){
-        currentActivity=AddPaymentActivity.this;
-        btnBrowse_AttachDocument=findViewById(R.id.btnBrowse_AttachDocument);
-        btnCapture_AttachDocument=findViewById(R.id.btnCapture_AttachDocument);
-        imgPreview_AttachDocument=findViewById(R.id.imgPreview_AttachDocument);
-        btnRotate_AttachDocument=findViewById(R.id.btnRotate_AttachDocument) ;
-        btnRotate1_AttachDocument=findViewById(R.id.btnRotate1_AttachDocument)  ;
-        btnCrop_AttachDocument=findViewById(R.id.btnCrop_AttachDocument) ;
-        btnSave_AttachDocument=findViewById(R.id.btnSave_AttachDocument);
-        txtPayDate=findViewById(R.id.txtPayDate);
-        txtAmout=findViewById(R.id.txtAmout);
-        txtComment=findViewById(R.id.txtComment);
-        radioCheque=findViewById(R.id.radioCheque) ;
-        radioCash=findViewById(R.id.radioCash);
-        radioNEFT=findViewById(R.id.radioNEFT);
-        radioOther=findViewById(R.id.radioOther);
-        radioGroup=findViewById(R.id.radioGroup);
-        btnBrowse_AttachDocument.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                browseImage(currentActivity);
-            }
-        });
-        btnCapture_AttachDocument.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                captureImage(currentActivity);
-            }
-        });
-        btnSave_AttachDocument.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                saveDetail();
-            }
-        });
 
-        pDialog = new ProgressDialog(currentActivity);
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        mContext = getActivity();
+        mDialog = new Dialog(mContext);
+        mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        mDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        mDialog.setContentView(R.layout.dlg_add_serial_no);
+        init();
+        return mDialog;
+    }
+
+    private void init() {
+        txtSerialNo=mDialog.findViewById(R.id.txtSerialNo);
+        txtDate=mDialog.findViewById(R.id.txtDate);
+        txtPass=mDialog.findViewById(R.id.txtPass);
+        txtTitle=mDialog.findViewById(R.id.txtTitle);
+        btnAdd=mDialog.findViewById(R.id.btnAdd);
+        txtviewSerial=mDialog.findViewById(R.id.txtviewSerial);
+        portal_lay=mDialog.findViewById(R.id.portal_lay);
+        upload_nac_img=mDialog.findViewById(R.id.upload_nac_img);
+        serial_no_lay=mDialog.findViewById(R.id.serial_no_lay);
+
+        btnBrowse_AttachDocument=mDialog.findViewById(R.id.btnBrowse_AttachDocument);
+        btnCapture_AttachDocument=mDialog.findViewById(R.id.btnCapture_AttachDocument);
+        imgPreview_AttachDocument=mDialog.findViewById(R.id.imgPreview_AttachDocument);
+        btnRotate_AttachDocument=mDialog.findViewById(R.id.btnRotate_AttachDocument) ;
+        btnRotate1_AttachDocument=mDialog.findViewById(R.id.btnRotate1_AttachDocument)  ;
+        btnCrop_AttachDocument=mDialog.findViewById(R.id.btnCrop_AttachDocument) ;
+        btnSave_AttachDocument=mDialog.findViewById(R.id.btnSave_AttachDocument);
+
+        if(type.equals("portal")){
+            portal_lay.setVisibility(View.VISIBLE);
+            txtTitle.setText("Portal Details");
+        }
+        else if(type.equals("gen_meter_reading") || type.equals("net_meter_reading")){
+            serial_no_lay.setVisibility(View.GONE);
+            upload_nac_img.setVisibility(View.VISIBLE);
+            if(type.equals("gen_meter_reading")){ txtTitle.setText("Generation Meter Serial No.");}
+            if(type.equals("net_meter_reading")){txtTitle.setText("Net Meter Serial No."); }
+        }
+        else if(type.equals("panel")){txtTitle.setText("Panel Details"); }
+        else if(type.equals("inverter")){txtTitle.setText("Inverter Details"); }
+        else if(type.equals("wifi_stick")){txtTitle.setText("Wifi Stick Details"); }
+        else if(type.equals("get_meter_serial")){ txtTitle.setText("Generation Meter Serial No.");}
+        else if(type.equals("net_meter_serial")){txtTitle.setText("Net Meter Serial No."); }
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addMeterReading();
+            }
+        });
+        pDialog = new ProgressDialog(getActivity());
         pDialog.setMessage("Please Wait...");
-        pDialog.setCancelable(true);
+        pDialog.setCancelable(false);
 
         SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
         Calendar cal=Calendar.getInstance();
         Date dt=cal.getTime();
         orderToset=sdf.format(dt);
-        txtPayDate.setText(new SimpleDateFormat("dd-MM-yyyy").format(dt));
-        txtPayDate.setOnClickListener(new View.OnClickListener() {
+        txtDate.setText(new SimpleDateFormat("dd-MM-yyyy").format(dt));
+        txtDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dateFunction();
             }
         });
 
-
-        pay_txt = (AutoCompleteTextView) findViewById(R.id.autocomplete_bank);
-        String[] banks = getResources().getStringArray(R.array.bank_array);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, banks);
-        pay_txt.setAdapter(adapter);
+        btnBrowse_AttachDocument.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                browseImage(getActivity());
+            }
+        });
+        btnCapture_AttachDocument.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                captureImage(getActivity());
+            }
+        });
     }
+
+    private void addMeterReading() {
+        final JsonParserVolley jsonParserVolley = new JsonParserVolley(getActivity());
+        pDialog.show();
+        jsonParserVolley.addParameter("order_id",order_id);;
+        jsonParserVolley.addParameter("userid", SessionManager.getMyInstance(getActivity()).getEmpid());
+        jsonParserVolley.addParameter("image", encodedPhotoString);
+        jsonParserVolley.addParameter("type", type);
+        jsonParserVolley.addParameter("add_date", orderToset);
+        jsonParserVolley.executeRequest(Request.Method.POST, WebUrl.ADD_METER_READING ,new JsonParserVolley.VolleyCallback() {
+                    @Override
+                    public void getResponse(String response) {
+                        pDialog.dismiss();
+                        try {
+                            JSONObject jsonObject=new JSONObject(response);
+                            int success=jsonObject.getInt("success");
+                            if(success==1){
+                                int pkid=jsonObject.getInt("pkid");
+                                String imagepath=jsonObject.getString("imagepath");
+                                Toast.makeText(getActivity(),jsonObject.getString("message"),Toast.LENGTH_SHORT).show();
+                                MeterReadingPojo meterReadingPojo=new MeterReadingPojo();
+                                meterReadingPojo.setInserttimestamp(orderToset);
+                                meterReadingPojo.setPkid(pkid+"");
+                                meterReadingPojo.setType(type);
+                                meterReadingPojo.setActive(1);
+                                meterReadingPojo.setReading_img(imagepath);
+                                meterReadingPojo.setOrder_id(order_id);
+                                meterReadingPojo.setAdded_by(SessionManager.getMyInstance(getActivity()).getEmpName());
+                                panelno_list.add(meterReadingPojo);
+                                serialNoAdapter.notifyDataSetChanged();
+                                mDialog.dismiss();
+                            }
+                            else{
+                                Toast.makeText(getActivity(),jsonObject.getString("message"),Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+        );
+    }
+
     public void dateFunction(){
         Calendar calendar= Calendar.getInstance();
         int year =calendar.get(Calendar.YEAR);
         int month=calendar.get(Calendar.MONTH);
         int days=calendar.get(Calendar.DAY_OF_MONTH);
-        DatePickerDialog dg=new DatePickerDialog(AddPaymentActivity.this, new DatePickerDialog.OnDateSetListener() {
+        DatePickerDialog dg=new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 int monthofyear=month+1;
                 String date=dayOfMonth+"-"+monthofyear+"-"+year;
-                txtPayDate.setText(date);
+                txtDate.setText(date);
                 SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
                 Date dt = null;
                 try {
@@ -166,15 +238,18 @@ public class AddPaymentActivity extends AppCompatActivity {
         },year,month,days);
         dg.getDatePicker().setMaxDate(new Date().getTime());
         dg.show();
+    }
 
+    public void showProgressDialog(){
+        pDialog.show();
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         // TODO Auto-generated method stub
         super.onActivityResult(requestCode, resultCode, data);
         //***************** DIR For Edited Image *********************\
-        File myDir = new File(Environment.getExternalStorageDirectory() + "/Loksuvidha/Images");
+        File myDir = new File(Environment.getExternalStorageDirectory() + "/Technotium/Images");
         if (!myDir.exists()) {
             myDir.mkdirs();
         }
@@ -241,13 +316,13 @@ public class AddPaymentActivity extends AppCompatActivity {
                     try{
 //						cropCapturedImage(Uri.fromFile(file));
 
-                        cropCapturedImage(FileProvider.getUriForFile(currentActivity, BuildConfig.APPLICATION_ID + ".provider",file));
+                        cropCapturedImage(FileProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".provider",file));
 
                     }
                     catch(ActivityNotFoundException aNFE){
                         //display an error message if user device doesn't support
                         String errorMessage = "Sorry - your device doesn't support the crop action!";
-                        Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), errorMessage, Toast.LENGTH_SHORT).show();
                     }
                 }
             });
@@ -264,7 +339,7 @@ public class AddPaymentActivity extends AppCompatActivity {
                     //options.inSampleSize = 8;
                     //bitmap = BitmapFactory.decodeFile(filePath, options);
                     bitmap = ImageProcessing.decodeSampledBitmapFromFile(filePath, 1024,768);
-                    filename = "0" + "_" + SessionManager.getMyInstance(currentActivity).getEmpid()+ "_" +"1" + ".jpg";
+                    filename = "0" + "_" + SessionManager.getMyInstance(getContext()).getEmpid()+ "_" +"1" + ".jpg";
                     Matrix matrix = new Matrix();
                     Bitmap newbitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
                     bitmap = newbitmap;
@@ -286,18 +361,18 @@ public class AddPaymentActivity extends AppCompatActivity {
                     }
                 }
                 else {
-                    Toast.makeText(getApplicationContext(),"Sorry, file path is missing!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(),"Sorry, file path is missing!", Toast.LENGTH_LONG).show();
 
                 }
             }
             else if (resultCode == Activity.RESULT_CANCELED) {
                 // user cancelled Image capture
-                Toast.makeText(getApplicationContext(),"User cancelled image capture", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(),"User cancelled image capture", Toast.LENGTH_SHORT).show();
 
             }
             else {
                 // failed to capture image
-                Toast.makeText(getApplicationContext(),"Sorry! Failed to capture image", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(),"Sorry! Failed to capture image", Toast.LENGTH_SHORT).show();
 
             }
         }
@@ -307,14 +382,14 @@ public class AddPaymentActivity extends AppCompatActivity {
             if (resultCode == Activity.RESULT_OK) {
 
                 Uri uri = data.getData();
-                filePath = getRealPathFromURI(getApplicationContext(), uri);
+                filePath = getRealPathFromURI(getContext(), uri);
 
                 if (filePath != null) {
                     //BitmapFactory.Options options = new BitmapFactory.Options();
                     //options.inSampleSize = 8;
                     //bitmap = BitmapFactory.decodeFile(filePath, options);
                     bitmap = ImageProcessing.decodeSampledBitmapFromFile(filePath, 1024,768);
-                    filename = "0" + "_" + SessionManager.getMyInstance(currentActivity).getEmpid()+ "_" +"1" + ".jpg";
+                    filename = "0" + "_" + SessionManager.getMyInstance(getContext()).getEmpid()+ "_" +"1" + ".jpg";
 
                     Matrix matrix = new Matrix();
                     Bitmap newbitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
@@ -339,16 +414,16 @@ public class AddPaymentActivity extends AppCompatActivity {
                     }
                 }
                 else {
-                    Toast.makeText(getApplicationContext(),"Sorry, file path is missing!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(),"Sorry, file path is missing!", Toast.LENGTH_LONG).show();
                 }
 
             }
             else if (resultCode == Activity.RESULT_CANCELED) {
-                Toast.makeText(getApplicationContext(),"User cancelled image browsing", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(),"User cancelled image browsing", Toast.LENGTH_SHORT).show();
             }
             else {
                 // failed to record video
-                Toast.makeText(getApplicationContext(),"Sorry! Failed to browse image", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(),"Sorry! Failed to browse image", Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -418,7 +493,7 @@ public class AddPaymentActivity extends AppCompatActivity {
         }
     }
 
-    public static void captureImage(Activity activity) {
+    public  void captureImage(Activity activity) {
         // TODO Auto-generated method stub
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
@@ -427,7 +502,7 @@ public class AddPaymentActivity extends AppCompatActivity {
         activity.startActivityForResult(intent, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
     }
 
-    public static void browseImage(Activity activity) {
+    public  void browseImage(Activity activity) {
         // TODO Auto-generated method stub
         Intent galleryIntent = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         activity.startActivityForResult(galleryIntent, BROWSE_IMAGE_REQUEST_CODE);
@@ -492,84 +567,5 @@ public class AddPaymentActivity extends AppCompatActivity {
                 cursor.close();
             }
         }
-    }
-
-    private void saveDetail(){
-
-        final JsonParserVolley jsonParserVolley = new JsonParserVolley(currentActivity);
-        String payment_mode="";
-        if(radioGroup.getCheckedRadioButtonId()==radioCash.getId()){
-            payment_mode="Cash";
-        }
-        else if(radioGroup.getCheckedRadioButtonId()==radioCheque.getId()){
-            payment_mode="Cheque";
-        }
-        else if(radioGroup.getCheckedRadioButtonId()==radioOther.getId()){
-            payment_mode="Other";
-        }
-        else if(radioGroup.getCheckedRadioButtonId()==radioNEFT.getId()){
-            payment_mode="NEFT";
-        }
-        else{
-            Toast.makeText(currentActivity,"Select payment mode",Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if(txtAmout.getText().toString().trim().equals("")){
-            Toast.makeText(currentActivity,"Enter the amount",Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if(txtComment.getText().toString().trim().equals("")){
-            Toast.makeText(currentActivity,"Enter Comment",Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if(pay_txt.getText().toString().trim().equals("")){
-            Toast.makeText(currentActivity,"Enter Bank Name",Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        pDialog.show();
-        jsonParserVolley.addParameter("order_id",workOrderPojo.getPkid());
-        jsonParserVolley.addParameter("payment_mode",payment_mode);
-        jsonParserVolley.addParameter("comment",txtComment.getText().toString());
-        jsonParserVolley.addParameter("amount",txtAmout.getText().toString());
-        jsonParserVolley.addParameter("userid", SessionManager.getMyInstance(currentActivity).getEmpid());
-        jsonParserVolley.addParameter("image", encodedPhotoString);
-        jsonParserVolley.addParameter("pay_date", orderToset);
-        jsonParserVolley.addParameter("bank_name", pay_txt.getText().toString());
-        jsonParserVolley.executeRequest(Request.Method.POST, WebUrl.ADD_PAYMENT_DETAIL_URL ,new JsonParserVolley.VolleyCallback() {
-                    @Override
-                    public void getResponse(String response) {
-                        pDialog.dismiss();
-                        Log.d("iss",response);
-                        try {
-                            JSONObject jsonObject=new JSONObject(response);
-                            int success=jsonObject.getInt("success");
-                            if(success==1){
-                                Toast.makeText(currentActivity,jsonObject.getString("message"),Toast.LENGTH_SHORT).show();
-                                Intent intent=new Intent(currentActivity,PaymentHistoryActivity.class);
-                                intent.putExtra("orderData",workOrderPojo);
-                                startActivity(intent);
-                                finish();
-                            }
-                            else{
-                                Toast.makeText(currentActivity,jsonObject.getString("message"),Toast.LENGTH_SHORT).show();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-        );
-
-    }
-
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        Intent intent=new Intent(currentActivity, PaymentHistoryActivity.class);
-        intent.putExtra("orderData",workOrderPojo);
-        startActivity(intent);
-        finish();
     }
 }

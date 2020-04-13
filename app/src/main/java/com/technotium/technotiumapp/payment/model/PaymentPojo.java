@@ -4,6 +4,15 @@ public class PaymentPojo {
     String payment_id;
     String order_id;
 
+    public String getPay_bank() {
+        return pay_bank;
+    }
+
+    public void setPay_bank(String pay_bank) {
+        this.pay_bank = pay_bank;
+    }
+
+    String pay_bank;
     public String getPayment_id() {
         return payment_id;
     }

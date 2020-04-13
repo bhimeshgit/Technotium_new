@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -20,6 +21,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -33,6 +35,7 @@ import com.technotium.technotiumapp.config.ImageProcessing;
 import com.technotium.technotiumapp.config.JsonParserVolley;
 import com.technotium.technotiumapp.config.SessionManager;
 import com.technotium.technotiumapp.config.WebUrl;
+import com.technotium.technotiumapp.material.activity.AddMaterialActivity;
 import com.technotium.technotiumapp.payment.activity.AddPaymentActivity;
 import com.technotium.technotiumapp.payment.activity.PaymentHistoryActivity;
 import com.technotium.technotiumapp.workorder.model.WorkOrderPojo;
@@ -44,7 +47,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -61,6 +66,9 @@ public class AddExpense extends AppCompatActivity {
     WorkOrderPojo workOrderPojo;
     EditText txtAmout,txtComment;
     ProgressDialog pDialog;
+    EditText txtExpDate;
+    String OrderDate;
+    String orderToset;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,6 +88,7 @@ public class AddExpense extends AppCompatActivity {
         btnCrop_AttachDocument=findViewById(R.id.btnCrop_AttachDocument) ;
         btnSave_AttachDocument=findViewById(R.id.btnSave_AttachDocument);
         txtAmout=findViewById(R.id.txtAmout);
+        txtExpDate=findViewById(R.id.txtExpDate);
         txtComment=findViewById(R.id.txtComment);
         btnBrowse_AttachDocument.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,6 +112,43 @@ public class AddExpense extends AppCompatActivity {
         pDialog = new ProgressDialog(currentActivity);
         pDialog.setMessage("Please Wait...");
         pDialog.setCancelable(true);
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+        Calendar cal=Calendar.getInstance();
+        Date dt=cal.getTime();
+        orderToset=sdf.format(dt);
+        txtExpDate.setText(new SimpleDateFormat("dd-MM-yyyy").format(dt));
+        txtExpDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dateFunction();
+            }
+        });
+    }
+    public void dateFunction(){
+        Calendar calendar= Calendar.getInstance();
+        int year =calendar.get(Calendar.YEAR);
+        int month=calendar.get(Calendar.MONTH);
+        int days=calendar.get(Calendar.DAY_OF_MONTH);
+        DatePickerDialog dg=new DatePickerDialog(AddExpense.this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                int monthofyear=month+1;
+                String date=dayOfMonth+"-"+monthofyear+"-"+year;
+                txtExpDate.setText(date);
+                SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+                Date dt = null;
+                try {
+                    dt = format.parse(date);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                SimpleDateFormat your_format = new SimpleDateFormat("yyyy-MM-dd");
+                OrderDate = your_format.format(dt);
+                orderToset=OrderDate;
+            }
+        },year,month,days);
+        dg.getDatePicker().setMaxDate(new Date().getTime());
+        dg.show();
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -440,7 +486,7 @@ public class AddExpense extends AppCompatActivity {
         jsonParserVolley.addParameter("amount",txtAmout.getText().toString());
         jsonParserVolley.addParameter("image", encodedPhotoString);
         jsonParserVolley.addParameter("userid",SessionManager.getMyInstance(currentActivity).getEmpid());
-
+        jsonParserVolley.addParameter("exp_date", orderToset);
         jsonParserVolley.executeRequest(Request.Method.POST, WebUrl.ADD_EXPENSES ,new JsonParserVolley.VolleyCallback() {
                     @Override
                     public void getResponse(String response) {

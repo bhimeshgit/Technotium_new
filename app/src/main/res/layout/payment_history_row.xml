@@ -66,6 +66,17 @@
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:id="@+id/txtBank"
+                        android:fontFamily="@string/font_family_light"
+                        android:textSize="14dp"
+                        android:text="Bank Name"
+                        android:textStyle="bold"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:textColor="@color/color_text_black"/>
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:id="@+id/txtComment"
                         android:fontFamily="@string/font_family_light"
                         android:textSize="14dp"
@@ -73,6 +84,7 @@
                         android:textStyle="bold"
                         android:layout_marginLeft="5dp"
                         android:layout_marginBottom="5dp"
+                        android:autoLink="web"
                         android:textColor="@color/color_text_black"/>
 
                 </androidx.appcompat.widget.LinearLayoutCompat>

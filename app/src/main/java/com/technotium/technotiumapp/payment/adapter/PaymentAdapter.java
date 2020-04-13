@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Handler;
+import android.text.util.Linkify;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -74,6 +75,13 @@ public class PaymentAdapter  extends RecyclerView.Adapter<PaymentAdapter.Payment
         holder.txtDate.setText("Payment Date: "+paymentPojo.getPayment_date());
         holder.txtAmount.setText("Payment Amount: "+paymentPojo.getAmount());
         holder.txtComment.setText("Comment: "+paymentPojo.getComment());
+        Linkify.addLinks(holder.txtComment, Linkify.WEB_URLS);
+        if(!paymentPojo.getPay_bank().equals("") && !paymentPojo.getPay_bank().equals("null")){
+            holder.txtBank.setText("Bank Name: "+paymentPojo.getPay_bank());
+        }
+        else{
+            holder.txtBank.setVisibility(View.GONE);
+        }
         if(paymentPojo.getActive().equals("2")){
             ((CardView)holder.card_view).setCardBackgroundColor(Color.GRAY);
         }
@@ -145,7 +153,7 @@ public class PaymentAdapter  extends RecyclerView.Adapter<PaymentAdapter.Payment
         void onLongItemClick(int position, View v);
     }
     public static class PaymentViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,View.OnLongClickListener {
-        TextView txtPayMode,txtDate,txtAmount,txtComment;
+        TextView txtPayMode,txtDate,txtAmount,txtComment,txtBank;
         ImageView pay_img;
         CardView card_view;
         Button btnShare;
@@ -156,6 +164,7 @@ public class PaymentAdapter  extends RecyclerView.Adapter<PaymentAdapter.Payment
             txtAmount= (TextView) view.findViewById(R.id.txtAmount);
             txtComment= (TextView) view.findViewById(R.id.txtComment);
             pay_img=(ImageView) view.findViewById(R.id.pay_img);
+            txtBank= (TextView) view.findViewById(R.id.txtBank);
             card_view=(CardView) view.findViewById(R.id.card_view);
             btnShare=(Button)view.findViewById(R.id.btnShare);
             view.setOnClickListener(this);
@@ -163,6 +172,7 @@ public class PaymentAdapter  extends RecyclerView.Adapter<PaymentAdapter.Payment
         }
         @Override
         public void onClick(View v) {
+
             clickListener.onItemClick(getAdapterPosition(), v);
         }
 

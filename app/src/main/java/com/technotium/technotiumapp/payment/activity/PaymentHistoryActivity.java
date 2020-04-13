@@ -129,6 +129,7 @@ public class PaymentHistoryActivity extends AppCompatActivity {
                                     paymentPojo.setPayment_date(jsonWO.getString("inserttimestamp"));
                                     paymentPojo.setPayment_mode(jsonWO.getString("payment_mode"));
                                     paymentPojo.setActive(jsonWO.getString("active"));
+                                    paymentPojo.setPay_bank(jsonWO.getString("pay_bank"));
                                //     paymentPojo.setTotal_paid(Integer.parseInt(jsonWO.getString("total_paid")));
                                 //    total_paid=Integer.parseInt(jsonWO.getString("total_paid"));
                                     paymentList.add(paymentPojo);

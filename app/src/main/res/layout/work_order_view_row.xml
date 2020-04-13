@@ -58,22 +58,43 @@
                 android:textStyle="bold"
                 android:textColor="@color/color_text_black"
                 />
-            <Button
-                android:id="@+id/btnDelete"
-                android:layout_width="wrap_content"
-                android:layout_height="25dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_weight="1"
-                android:background="@drawable/squarecorner_rounded"
-                android:fontFamily="sans-serif"
-                android:gravity="center"
-                android:text="Delete"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="10dp"
-                android:layout_gravity="center"
-                android:textColor="#ffffff"
-                android:textStyle="bold" />
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <Button
+                    android:id="@+id/btnDelete"
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/squarecorner_rounded"
+                    android:fontFamily="sans-serif"
+                    android:gravity="center"
+                    android:text="Delete"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_gravity="center"
+                    android:textColor="#ffffff"
+                    android:textStyle="bold" />
+                <Button
+                    android:id="@+id/btnReport"
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/squarecorner_rounded"
+                    android:fontFamily="sans-serif"
+                    android:gravity="center"
+                    android:text="View Report"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_gravity="center"
+                    android:textColor="#ffffff"
+                    android:textStyle="bold" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
         </androidx.appcompat.widget.LinearLayoutCompat>
     </androidx.cardview.widget.CardView>
 </androidx.appcompat.widget.LinearLayoutCompat>

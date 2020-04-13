@@ -229,6 +229,7 @@ public class WorkcommitFragment extends Fragment implements DataUpdate {
         jsonParserVolley.addParameter("agreement",workOrderPojo.getAgreement());
         jsonParserVolley.addParameter("consumer_no",workOrderPojo.getConsumer_no());
         jsonParserVolley.addParameter("bu",workOrderPojo.getBu());
+        jsonParserVolley.addParameter("gst_no",workOrderPojo.getGst_no());
         jsonParserVolley.addParameter("insertuserid",SessionManager.getMyInstance(getActivity()).getEmpid());
         return jsonParserVolley;
     }
