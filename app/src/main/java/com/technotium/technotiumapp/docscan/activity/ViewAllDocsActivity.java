@@ -3,24 +3,31 @@ package com.technotium.technotiumapp.docscan.activity;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.DownloadManager;
 import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -28,6 +35,16 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
+import com.downloader.Error;
+import com.downloader.OnCancelListener;
+import com.downloader.OnDownloadListener;
+import com.downloader.OnPauseListener;
+import com.downloader.OnProgressListener;
+import com.downloader.OnStartOrResumeListener;
+import com.downloader.PRDownloader;
+import com.downloader.Progress;
+import com.downloader.Status;
+import com.downloader.utils.Utils;
 import com.technotium.technotiumapp.BuildConfig;
 import com.technotium.technotiumapp.R;
 import com.technotium.technotiumapp.config.JsonParserVolley;
@@ -48,14 +65,16 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class ViewAllDocsActivity extends AppCompatActivity {
     RecyclerView lv_doc_list;
     ViewAllDocsActivity currentActivity;
     ArrayList<DocPojo> docList;
     DocAdapter adapter;
-    Button btnAddNew;
+    Button btnAddNew,btnDownload;
     RecyclerView.LayoutManager layoutManager;
     private Dialog zoomable_image_dialog;
     SubsamplingScaleImageView imageView;
@@ -63,6 +82,9 @@ public class ViewAllDocsActivity extends AppCompatActivity {
     WorkOrderPojo workOrderPojo;
     ProgressDialog pDialog;
     Bitmap mbitmap;
+    ProgressBar progressBarOne;
+    int downloadIdOne;
+    String dirPath;//Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getPath();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,20 +103,30 @@ public class ViewAllDocsActivity extends AppCompatActivity {
         currentActivity= ViewAllDocsActivity.this;
         docList=new ArrayList<>();
         lv_doc_list=findViewById(R.id.lv_docList);
+        progressBarOne=findViewById(R.id.progressBar);
 
         btnAddNew=findViewById(R.id.btnAddNew);
         btnAddNew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(currentActivity,UploadDocActivity.class);
+        //        Intent intent=new Intent(currentActivity,UploadDocActivity.class);
+                Intent intent=new Intent(currentActivity,UploadMultipleDocActivity.class);
                 intent.putExtra("orderData",workOrderPojo);
                 startActivity(intent);
                 finish();
             }
         });
+        btnDownload=findViewById(R.id.btnDownload);
+        btnDownload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                downloadAllDocs();
+            }
+        });
         pDialog = new ProgressDialog(currentActivity);
         pDialog.setMessage("Please Wait...");
         pDialog.setCancelable(false);
+        dirPath= Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath(); //getRootDirPath(currentActivity);
         getAllDocs();
     }
 
@@ -151,6 +183,76 @@ public class ViewAllDocsActivity extends AppCompatActivity {
         );
     }
 
+    private void downloadAllDocs(){
+
+        if (Status.RUNNING == PRDownloader.getStatus(downloadIdOne)) {
+            PRDownloader.pause(downloadIdOne);
+            return;
+        }
+
+        progressBarOne.setIndeterminate(true);
+        progressBarOne.getIndeterminateDrawable().setColorFilter(
+                Color.BLUE, android.graphics.PorterDuff.Mode.SRC_IN);
+
+        if (Status.PAUSED == PRDownloader.getStatus(downloadIdOne)) {
+            PRDownloader.resume(downloadIdOne);
+            return;
+        }
+        Long tsLong = System.currentTimeMillis()/1000;
+        final String download_file_name = tsLong.toString()+"_WO.zip";
+        String DOWNLOAD_DOCS_URL= WebUrl.DOWNLOAD_ALL_DOC_URL+"?order_id="+workOrderPojo.getPkid()+"&userid="+SessionManager.getMyInstance(currentActivity).getEmpid();
+        downloadIdOne = PRDownloader.download(DOWNLOAD_DOCS_URL, dirPath,download_file_name )
+                .build()
+                .setOnStartOrResumeListener(new OnStartOrResumeListener() {
+                    @Override
+                    public void onStartOrResume() {
+                        progressBarOne.setIndeterminate(false);
+                    }
+                })
+                .setOnPauseListener(new OnPauseListener() {
+                    @Override
+                    public void onPause() {
+
+                    }
+                })
+                .setOnCancelListener(new OnCancelListener() {
+                    @Override
+                    public void onCancel() {
+                        progressBarOne.setProgress(0);
+                        downloadIdOne = 0;
+                        progressBarOne.setIndeterminate(false);
+                    }
+                })
+                .setOnProgressListener(new OnProgressListener() {
+                    @Override
+                    public void onProgress(Progress progress) {
+                        long progressPercent = progress.currentBytes * 100 / progress.totalBytes;
+                        progressBarOne.setProgress((int) progressPercent);
+//                        textViewProgressOne.setText(Utils.getProgressDisplayLine(progress.currentBytes, progress.totalBytes));
+                        progressBarOne.setIndeterminate(false);
+                    }
+                })
+                .start(new OnDownloadListener() {
+                    @Override
+                    public void onDownloadComplete() {
+                        File file=new File(dirPath+"/"+download_file_name);
+                        DownloadManager downloadManager = (DownloadManager) currentActivity.getSystemService(Context.DOWNLOAD_SERVICE);
+                        downloadManager.addCompletedDownload(file.getName(), file.getName(), true,
+                                "application", file.getPath(), file.length(), true);
+                        startActivity(new Intent(DownloadManager.ACTION_VIEW_DOWNLOADS));
+                    }
+
+                    @Override
+                    public void onError(Error error) {
+                        Toast.makeText(getApplicationContext(), "Error in downloading file", Toast.LENGTH_SHORT).show();
+                        progressBarOne.setProgress(0);
+                        downloadIdOne = 0;
+                        progressBarOne.setIndeterminate(false);
+
+                    }
+                });
+
+    }
     public void showZoomImageDialog(String image_url){
 
         zoomable_image_dialog=new Dialog(currentActivity, R.style.AlertDialogTheme);
@@ -167,8 +269,6 @@ public class ViewAllDocsActivity extends AppCompatActivity {
             }
         });
         zoomable_image_dialog.show();
-
-
     }
 
     public void deactivateDoc(String docId){

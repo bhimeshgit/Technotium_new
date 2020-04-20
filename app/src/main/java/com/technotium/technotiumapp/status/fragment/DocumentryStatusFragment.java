@@ -46,7 +46,8 @@ public class DocumentryStatusFragment extends Fragment {
     EditText txtOther;
     int order_id;
     TextView exname_txt;
-    EditText status_txt,txtEname,txtLastUpdateDate,txtUpdateDate;
+    EditText txtEname,txtLastUpdateDate,txtUpdateDate;
+    TextView status_txt;
     Button btn;
     ProgressDialog pDialog;
     LinearLayout date_lay,ename_lay;

@@ -6,20 +6,50 @@
     android:layout_height="match_parent"
     tools:context=".docscan.activity.ViewAllDocsActivity"
     android:orientation="vertical">
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="2"
+            android:layout_marginTop="10dp">
 
         <Button
-            android:id="@+id/btnAddNew"
-            android:layout_width="200dp"
+            android:id="@+id/btnDownload"
+            android:layout_width="170dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:background="@drawable/squarecorner_rounded"
             android:fontFamily="sans-serif"
             android:gravity="center"
-            android:text="Add New Document"
+            android:text="Download All Docs"
             android:textColor="#ffffff"
             android:textStyle="bold"
-            android:layout_margin="10dp"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
             />
+        <Button
+            android:id="@+id/btnAddNew"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/squarecorner_rounded"
+            android:fontFamily="sans-serif"
+            android:gravity="center"
+            android:text="Add New Docs"
+            android:textColor="#ffffff"
+            android:textStyle="bold"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:progressTint="@color/colorPrimaryDark" />
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/lv_docList"
             android:layout_width="match_parent"

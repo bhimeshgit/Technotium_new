@@ -70,7 +70,7 @@
             android:layout_marginBottom="6dp"
             android:layout_marginLeft="6dp"
             android:layout_marginTop="6dp"
-            android:text="Meter Insrallation"
+            android:text="Meter Installation"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textSize="18sp"
             android:textStyle="bold"  />

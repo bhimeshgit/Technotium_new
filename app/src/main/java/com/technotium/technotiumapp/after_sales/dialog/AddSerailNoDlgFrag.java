@@ -28,6 +28,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.DialogFragment;
@@ -36,6 +37,7 @@ import com.android.volley.Request;
 import com.technotium.technotiumapp.BuildConfig;
 import com.technotium.technotiumapp.R;
 import com.technotium.technotiumapp.after_sales.Activities.AfterSalesActivity;
+import com.technotium.technotiumapp.after_sales.Activities.ScannerActivity;
 import com.technotium.technotiumapp.after_sales.adapter.SerialNoAdapter;
 import com.technotium.technotiumapp.after_sales.model.SerialNoPojo;
 import com.technotium.technotiumapp.config.ImageProcessing;
@@ -71,7 +73,7 @@ public class AddSerailNoDlgFrag extends DialogFragment {
     private ArrayList<SerialNoPojo> panelno_list;
     SerialNoAdapter serialNoAdapter;
     private TextView txtviewSerial;
-
+    private ImageView scanner_img;
     private LinearLayout portal_lay,upload_nac_img,serial_no_lay;
 
     //upload Image
@@ -83,6 +85,7 @@ public class AddSerailNoDlgFrag extends DialogFragment {
     private static Uri fileUri;
     static String filePath = "",filename = "",IMAGE_DIRECTORY_NAME = "Technotium",encodedPhotoString="";
     Bitmap bitmap;
+    private static final int BARCODE_SCANNER_REQUEST_CODE=201;
     public AddSerailNoDlgFrag(String type, String order_id,  ArrayList<SerialNoPojo> panelno_list,SerialNoAdapter serialNoAdapter) {
         this.type=type;
         this.order_id=order_id;
@@ -103,6 +106,7 @@ public class AddSerailNoDlgFrag extends DialogFragment {
 
     private void init() {
         txtSerialNo=mDialog.findViewById(R.id.txtSerialNo);
+        scanner_img=mDialog.findViewById(R.id.scanner_img);
         txtDate=mDialog.findViewById(R.id.txtDate);
         txtPass=mDialog.findViewById(R.id.txtPass);
         btnAdd=mDialog.findViewById(R.id.btnAdd);
@@ -159,6 +163,22 @@ public class AddSerailNoDlgFrag extends DialogFragment {
                 dateFunction();
             }
         });
+        scanner_img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivityForResult(new Intent(getActivity(), ScannerActivity.class),BARCODE_SCANNER_REQUEST_CODE);
+            }
+        });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==BARCODE_SCANNER_REQUEST_CODE){
+            if(data.getStringExtra("barcode_value")!=null){
+                txtSerialNo.setText(data.getStringExtra("barcode_value"));
+            }
+        }
     }
 
     private void addSerialNo() {

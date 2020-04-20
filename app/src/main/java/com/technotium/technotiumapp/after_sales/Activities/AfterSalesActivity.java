@@ -1,5 +1,6 @@
 package com.technotium.technotiumapp.after_sales.Activities;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -9,17 +10,25 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Toast;
 
 import com.android.volley.Request;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.davemorrissey.labs.subscaleview.ImageSource;
+import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.technotium.technotiumapp.R;
 import com.technotium.technotiumapp.after_sales.adapter.MeterReadingAdapter;
 import com.technotium.technotiumapp.after_sales.adapter.SerialNoAdapter;
@@ -56,6 +65,8 @@ public class AfterSalesActivity extends AppCompatActivity {
     private MeterReadingAdapter gen_meterReadingAdapter,net_meterReadingAdapter;
     private AlertDialog alertDialog;
     private String[] type_array={"portal","gen_meter_reading","net_meter_reading","panel","inverter","wifi_stick","get_meter_serial","net_meter_serial"};
+    private Dialog zoomable_image_dialog;
+    private SubsamplingScaleImageView imageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -405,6 +416,7 @@ public class AfterSalesActivity extends AppCompatActivity {
         gen_meterReadingAdapter.setOnItemClickListener(new MeterReadingAdapter.ClickListener() {
             @Override
             public void onItemClick(int position, View v) {
+                showZoomImageDialog(WebUrl.BASE_URL+gen_meter_read_list.get(position).getReading_img());
             }
             @Override
             public void onLongItemClick(int position, View v) {
@@ -417,6 +429,7 @@ public class AfterSalesActivity extends AppCompatActivity {
         net_meterReadingAdapter.setOnItemClickListener(new MeterReadingAdapter.ClickListener() {
             @Override
             public void onItemClick(int position, View v) {
+                showZoomImageDialog(WebUrl.BASE_URL+net_meter_read_list.get(position).getReading_img());
             }
             @Override
             public void onLongItemClick(int position, View v) {
@@ -573,5 +586,25 @@ public class AfterSalesActivity extends AppCompatActivity {
         intent.putExtra("modul","after_sale");
         startActivity(intent);
         finish();
+    }
+
+    public void showZoomImageDialog(String image_url){
+
+        zoomable_image_dialog=new Dialog(currentActivity, R.style.AlertDialogTheme);
+        zoomable_image_dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        zoomable_image_dialog.setContentView(R.layout.zoomable_image_dialog);
+        zoomable_image_dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        zoomable_image_dialog.setCancelable(true);
+        imageView = (SubsamplingScaleImageView) zoomable_image_dialog.findViewById(R.id.imageView);
+        Glide.with(currentActivity).asBitmap().load(image_url).into(new SimpleTarget<Bitmap>() {
+            @Override
+            public void onResourceReady(@NonNull Bitmap bitmap, @Nullable com.bumptech.glide.request.transition.Transition<? super Bitmap> transition) {
+                imageView.setImage(ImageSource.bitmap(bitmap)); //For SubsampleImage
+
+            }
+        });
+        zoomable_image_dialog.show();
+
+
     }
 }

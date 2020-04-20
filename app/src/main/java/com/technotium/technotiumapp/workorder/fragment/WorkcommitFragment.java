@@ -109,6 +109,9 @@ public class WorkcommitFragment extends Fragment implements DataUpdate {
             @Override
             public void onClick(View v) {
                 workOrderPojo=getData();
+               if( validate()==0){
+                   return;
+               }
 //                SessionManager.getMyInstance(getActivity()).progressShow();
                 pDialog.setMessage("Please Wait...");
                 pDialog.setCancelable(false);
@@ -143,6 +146,58 @@ public class WorkcommitFragment extends Fragment implements DataUpdate {
         });
         setForUpdate();
         return view;
+    }
+
+    private int validate() {
+        if(workOrderPojo.getFname().trim().length()==0){
+            Toast.makeText(getContext(),"Enter the first name",Toast.LENGTH_SHORT).show();
+            return 0;
+        }
+        if(workOrderPojo.getMname().trim().length()==0){
+            Toast.makeText(getContext(),"Enter the middle name",Toast.LENGTH_SHORT).show();
+            return 0;
+        }
+        if(workOrderPojo.getLname().trim().length()==0){
+            Toast.makeText(getContext(),"Enter the last name",Toast.LENGTH_SHORT).show();
+            return 0;
+        }
+        if(workOrderPojo.getMobile().trim().length()!=10){
+            Toast.makeText(getContext(),"Enter the valid mobile no.",Toast.LENGTH_SHORT).show();
+            return 0;
+        }
+        if(workOrderPojo.getConsumer_no().trim().length()==0){
+            Toast.makeText(getContext(),"Enter the consumer no.",Toast.LENGTH_SHORT).show();
+            return 0;
+        }
+        if(workOrderPojo.getDesignation().trim().length()==0){
+            Toast.makeText(getContext(),"Enter the designation",Toast.LENGTH_SHORT).show();
+            return 0;
+        }
+        if(workOrderPojo.getCapacity().trim().length()==0){
+            Toast.makeText(getContext(),"Enter the capacity",Toast.LENGTH_SHORT).show();
+            return 0;
+        }
+        if(workOrderPojo.getPanel().trim().length()==0){
+            Toast.makeText(getContext(),"Enter the panel make",Toast.LENGTH_SHORT).show();
+            return 0;
+        }
+        if(workOrderPojo.getInvertercapicity().trim().length()==0){
+            Toast.makeText(getContext(),"Enter the inverter capacity",Toast.LENGTH_SHORT).show();
+            return 0;
+        }
+        if(workOrderPojo.getPanelcapacity().trim().length()==0){
+            Toast.makeText(getContext(),"Enter the panel capacity",Toast.LENGTH_SHORT).show();
+            return 0;
+        }
+        if(workOrderPojo.getRateFromCompany().trim().length()==0){
+            Toast.makeText(getContext(),"Enter the rate from company",Toast.LENGTH_SHORT).show();
+            return 0;
+        }
+        if(workOrderPojo.getProjectType().equals("--Select--")){
+            Toast.makeText(getContext(),"Select project type",Toast.LENGTH_SHORT).show();
+            return 0;
+        }
+        return 1;
     }
 
     @Override

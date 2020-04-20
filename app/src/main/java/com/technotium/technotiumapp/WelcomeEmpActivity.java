@@ -105,6 +105,11 @@ public class WelcomeEmpActivity extends AppCompatActivity  implements Navigation
         icon_list=new ArrayList<HomeIcon>();
         int count=0;
         for (String Name:iconName){
+            if(Name.equals("Dealer Incentive")) {
+                if (SessionManager.getMyInstance(currentActivity).getEmpType().equals("Employee") || SessionManager.getMyInstance(currentActivity).getEmpType().equals("Electrician")) {
+                    continue;
+                }
+            }
             HomeIcon homeIcon=new HomeIcon(imageId[count],Name);
             count++;
             icon_list.add(homeIcon);
@@ -114,6 +119,7 @@ public class WelcomeEmpActivity extends AppCompatActivity  implements Navigation
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
         adapter=new HomeIconAdapter(icon_list, WelcomeEmpActivity.this);
+
         recyclerView.setAdapter(adapter);
         adapter.setOnItemClickListener(new HomeIconAdapter.ClickListener() {
             @Override
@@ -142,6 +148,9 @@ public class WelcomeEmpActivity extends AppCompatActivity  implements Navigation
                 }
                 else if(position==6){
                     intent.putExtra("modul","after_sale");
+                }
+                else if(position==7){
+                    intent.putExtra("modul","dealer_incentive");
                 }
                 startActivity(intent);
 

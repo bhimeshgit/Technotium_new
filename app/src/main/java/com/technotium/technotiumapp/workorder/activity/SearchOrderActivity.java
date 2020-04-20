@@ -25,6 +25,7 @@ import com.technotium.technotiumapp.after_sales.Activities.AfterSalesActivity;
 import com.technotium.technotiumapp.config.JsonParserVolley;
 import com.technotium.technotiumapp.config.SessionManager;
 import com.technotium.technotiumapp.config.WebUrl;
+import com.technotium.technotiumapp.dealer_incentive.activities.DealerIncentiveActivity;
 import com.technotium.technotiumapp.docscan.activity.ViewAllDocsActivity;
 import com.technotium.technotiumapp.expenses.activity.AddExpense;
 import com.technotium.technotiumapp.expenses.activity.ViewAllExpenses;
@@ -171,6 +172,7 @@ public class SearchOrderActivity extends AppCompatActivity {
                                     workOrderPojo.setBu(jsonWO.getString("bu"));
                                     workOrderPojo.setActive(jsonWO.getInt("active"));
                                     workOrderPojo.setGst_no(jsonWO.getString("gst_no"));
+                                    workOrderPojo.setWo_report(jsonWO.getString("wo_report"));
                                     if(modul.equals("workorder")){
                                         workOrderPojo.setWo_activity(1);
                                     }
@@ -207,6 +209,9 @@ public class SearchOrderActivity extends AppCompatActivity {
                                         }
                                         else if(modul.equals("after_sale")){
                                             intent=new Intent(currentActivity, AfterSalesActivity.class);
+                                        }
+                                        else if(modul.equals("dealer_incentive")){
+                                            intent=new Intent(currentActivity, DealerIncentiveActivity.class);
                                         }
                                         intent.putExtra("orderData",orderList.get(position));
                                         startActivity(intent);

@@ -56,6 +56,7 @@ public class WorkOrderAdapter extends RecyclerView.Adapter<WorkOrderAdapter.Work
         holder.mobileTxt.setText(workOrderPojo.getMobile());
         holder.addedByTxt.setText("Ex.: "+workOrderPojo.getAdded_by());
         holder.orderDateTxt.setText(workOrderPojo.getOrder_date());
+        holder.wo_no_txt.setText(workOrderPojo.getPkid());
 
         if(workOrderPojo.getWo_activity()==0){
             holder.btnDelete.setVisibility(View.GONE);
@@ -73,8 +74,15 @@ public class WorkOrderAdapter extends RecyclerView.Adapter<WorkOrderAdapter.Work
         holder.btnReport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((SearchOrderActivity)context).startActivity(new Intent((SearchOrderActivity)context, WorkOrderPdfReportActivity.class));
-                ((SearchOrderActivity)context).finish();
+                if(workOrderPojo.getWo_report().trim().length()>0) {
+                    Intent intent = new Intent((SearchOrderActivity) context, WorkOrderPdfReportActivity.class);
+                    intent.putExtra("pdf_name", workOrderPojo.getWo_report());
+                    ((SearchOrderActivity) context).startActivity(intent);
+                    ((SearchOrderActivity) context).finish();
+                }
+                else{
+                    Toast.makeText(context,"Report is not available. Try to generate by updating Work Order.",Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -101,7 +109,7 @@ public class WorkOrderAdapter extends RecyclerView.Adapter<WorkOrderAdapter.Work
     }
 
     public static class WorkOrderViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener ,View.OnLongClickListener{
-        TextView customerNameTxt,mobileTxt,addedByTxt,orderDateTxt;
+        TextView customerNameTxt,mobileTxt,addedByTxt,orderDateTxt,wo_no_txt;
         CardView card_view;Button btnDelete,btnReport;
         public WorkOrderViewHolder(View view) {
             super(view);
@@ -114,6 +122,7 @@ public class WorkOrderAdapter extends RecyclerView.Adapter<WorkOrderAdapter.Work
             addedByTxt= (TextView) view.findViewById(R.id.addedByTxt);
             orderDateTxt= (TextView) view.findViewById(R.id.orderDateTxt);
             card_view=(CardView) view.findViewById(R.id.card_view);
+            wo_no_txt= (TextView) view.findViewById(R.id.wo_no_txt);
         }
         @Override
         public void onClick(View v) {
@@ -122,7 +131,6 @@ public class WorkOrderAdapter extends RecyclerView.Adapter<WorkOrderAdapter.Work
 
         @Override
         public boolean onLongClick(View v) {
-            Log.d("iss","Long click");
             clickListener.onLongItemClick(getAdapterPosition(),v);
             return true;
         }

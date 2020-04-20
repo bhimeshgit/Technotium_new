@@ -1,10 +1,12 @@
-package com.technotium.technotiumapp.payment.activity;
+package com.technotium.technotiumapp.docscan.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
-import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -21,31 +23,27 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
+import android.widget.AbsListView;
 import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.RadioButton;
-
-
-import android.widget.RadioGroup;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
+
 import com.android.volley.Request;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.technotium.technotiumapp.BuildConfig;
 import com.technotium.technotiumapp.R;
-import com.technotium.technotiumapp.WelcomeEmpActivity;
 import com.technotium.technotiumapp.config.ImageProcessing;
 import com.technotium.technotiumapp.config.JsonParserVolley;
 import com.technotium.technotiumapp.config.SessionManager;
 import com.technotium.technotiumapp.config.WebUrl;
-
-import com.technotium.technotiumapp.workorder.model.WorkOrderPojo;
+import com.technotium.technotiumapp.docscan.adapter.UploadDocAdapter;
+import com.technotium.technotiumapp.docscan.model.UploadDocPojo;
 import com.technotium.technotiumapp.workorder.adapter.SpinnerAdapter;
+import com.technotium.technotiumapp.workorder.model.WorkOrderPojo;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -53,44 +51,45 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-public class AddPaymentActivity extends AppCompatActivity {
-
+public class UploadMultipleDocActivity extends AppCompatActivity {
+    Spinner spndocName;
+    UploadMultipleDocActivity currentActivity;
+    ArrayList<String> docNameList;
+    SpinnerAdapter docName_adapter;
     Button btnBrowse_AttachDocument,btnCapture_AttachDocument;
     ImageView imgPreview_AttachDocument ;
     Button btnRotate_AttachDocument ,btnRotate1_AttachDocument,btnCrop_AttachDocument,btnSave_AttachDocument ;
-    AddPaymentActivity currentActivity;
     public static final int BROWSE_IMAGE_REQUEST_CODE=101,CAMERA_CAPTURE_IMAGE_REQUEST_CODE=102,MEDIA_TYPE_IMAGE = 1,CROP_IMAGE_REQUEST_CODE = 4;;
     private static Uri fileUri;
     static String filePath = "",filename = "",IMAGE_DIRECTORY_NAME = "Technotium",encodedPhotoString="";
     Bitmap bitmap;
-    RadioGroup radioGroup;
-    RadioButton radioCheque,radioCash,radioNEFT,radioOther;
     WorkOrderPojo workOrderPojo;
-    EditText txtAmout,txtComment,txtPayDate;
     ProgressDialog pDialog;
-    String OrderDate;
-    String orderToset;
-    AutoCompleteTextView pay_txt;
-    Spinner sp_bank_name;
+    ArrayList<UploadDocPojo> doc_List;
+    RecyclerView lv_docList;
+    UploadDocAdapter uploadDocAdapter;
+    Button btnUpload;
+    JsonArray docJsonArray;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_payment);
-        getSupportActionBar().hide();
+        setContentView(R.layout.activity_upload_multiple_doc);
         if(getIntent().getSerializableExtra("orderData") != null) {
             workOrderPojo =(WorkOrderPojo) getIntent().getSerializableExtra("orderData");
             init();
         }
+
     }
-    public void init(){
-        currentActivity=AddPaymentActivity.this;
+
+    private void init() {
+        spndocName=findViewById(R.id.spndocName);
+        currentActivity=UploadMultipleDocActivity.this;
+        docNameList=new ArrayList<String>();
         btnBrowse_AttachDocument=findViewById(R.id.btnBrowse_AttachDocument);
         btnCapture_AttachDocument=findViewById(R.id.btnCapture_AttachDocument);
         imgPreview_AttachDocument=findViewById(R.id.imgPreview_AttachDocument);
@@ -98,14 +97,7 @@ public class AddPaymentActivity extends AppCompatActivity {
         btnRotate1_AttachDocument=findViewById(R.id.btnRotate1_AttachDocument)  ;
         btnCrop_AttachDocument=findViewById(R.id.btnCrop_AttachDocument) ;
         btnSave_AttachDocument=findViewById(R.id.btnSave_AttachDocument);
-        txtPayDate=findViewById(R.id.txtPayDate);
-        txtAmout=findViewById(R.id.txtAmout);
-        txtComment=findViewById(R.id.txtComment);
-        radioCheque=findViewById(R.id.radioCheque) ;
-        radioCash=findViewById(R.id.radioCash);
-        radioNEFT=findViewById(R.id.radioNEFT);
-        radioOther=findViewById(R.id.radioOther);
-        radioGroup=findViewById(R.id.radioGroup);
+        btnUpload=findViewById(R.id.btnUpload);
         btnBrowse_AttachDocument.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -125,57 +117,175 @@ public class AddPaymentActivity extends AppCompatActivity {
             }
         });
 
-        pDialog = new ProgressDialog(currentActivity);
-        pDialog.setMessage("Please Wait...");
-        pDialog.setCancelable(true);
-
-        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
-        Calendar cal=Calendar.getInstance();
-        Date dt=cal.getTime();
-        orderToset=sdf.format(dt);
-        txtPayDate.setText(new SimpleDateFormat("dd-MM-yyyy").format(dt));
-        txtPayDate.setOnClickListener(new View.OnClickListener() {
+        btnUpload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dateFunction();
-            }
-        });
-
-        sp_bank_name=findViewById(R.id.sp_bank_name);
-        String[] banks = getResources().getStringArray(R.array.bank_array);
-        ArrayList<String> bank_list=new ArrayList<String>();
-        for (String s: banks){bank_list.add(s);}
-        SpinnerAdapter spinnerAdapter = new SpinnerAdapter(currentActivity, bank_list);
-        sp_bank_name.setAdapter(spinnerAdapter);
-    }
-    public void dateFunction(){
-        Calendar calendar= Calendar.getInstance();
-        int year =calendar.get(Calendar.YEAR);
-        int month=calendar.get(Calendar.MONTH);
-        int days=calendar.get(Calendar.DAY_OF_MONTH);
-        DatePickerDialog dg=new DatePickerDialog(AddPaymentActivity.this, new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                int monthofyear=month+1;
-                String date=dayOfMonth+"-"+monthofyear+"-"+year;
-                txtPayDate.setText(date);
-                SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
-                Date dt = null;
                 try {
-                    dt = format.parse(date);
-                } catch (ParseException e) {
+                    uploadAllDocs();
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                SimpleDateFormat your_format = new SimpleDateFormat("yyyy-MM-dd");
-                OrderDate = your_format.format(dt);
-                orderToset=OrderDate;
             }
-        },year,month,days);
-        dg.getDatePicker().setMaxDate(new Date().getTime());
-        dg.show();
+        });
+        pDialog = new ProgressDialog(currentActivity);
+        pDialog.setMessage("Please Wait...");
+        pDialog.setCancelable(false);
 
+        doc_List=new ArrayList<>();
+        lv_docList=findViewById(R.id.lv_docList);
+        uploadDocAdapter=new UploadDocAdapter(doc_List,currentActivity);
+        lv_docList.setLayoutManager(new LinearLayoutManager(currentActivity));
+        lv_docList.setAdapter(uploadDocAdapter);
+        getAllDocsName();
     }
 
+    private void uploadAllDocs() throws JSONException {
+        pDialog.show();
+        JSONArray jsonArray=new JSONArray();
+        for (UploadDocPojo pojo: doc_List) {
+            JSONObject jsonObject=new JSONObject();
+            jsonObject.put("doc_type",pojo.getDoc_type());
+            jsonObject.put("encodedPhotoString",pojo.getEncodedPhotoString());
+            jsonArray.put(jsonObject);
+        }
+        docJsonArray = (JsonArray) new Gson().toJsonTree(doc_List);
+        final JsonParserVolley jsonParserVolley = new JsonParserVolley(currentActivity);
+        jsonParserVolley.addParameter("order_id",workOrderPojo.getPkid());
+        jsonParserVolley.addParameter("doc_json",docJsonArray.toString());
+        jsonParserVolley.addParameter("userid", SessionManager.getMyInstance(currentActivity).getEmpid());
+        jsonParserVolley.executeRequest(Request.Method.POST, WebUrl.UPLOAD_ALL_DOC_URL ,new JsonParserVolley.VolleyCallback() {
+                    @Override
+                    public void getResponse(String response) {
+                        pDialog.dismiss();
+                        Log.d("iss","all doc="+response);
+                        try {
+                            JSONObject jsonObject=new JSONObject(response);
+                            int success=jsonObject.getInt("success");
+                            if(success==1){
+                                Toast.makeText(currentActivity,jsonObject.getString("message"),Toast.LENGTH_SHORT).show();
+                                Intent intent=new Intent(currentActivity, ViewAllDocsActivity.class);
+                                intent.putExtra("orderData",workOrderPojo);
+                                startActivity(intent);
+                                finish();
+                            }
+                            else{
+                                Toast.makeText(currentActivity,jsonObject.getString("message"),Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+        );
+    }
+
+    public static void captureImage(Activity activity) {
+        // TODO Auto-generated method stub
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
+        activity.startActivityForResult(intent, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
+    }
+
+    public static void browseImage(Activity activity) {
+        // TODO Auto-generated method stub
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        activity.startActivityForResult(galleryIntent, BROWSE_IMAGE_REQUEST_CODE);
+    }
+    public void cropCapturedImage(Uri picUri){
+        Intent cropIntent = new Intent("com.android.camera.action.CROP");
+        cropIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        cropIntent.setDataAndType(picUri, "image/*");
+        cropIntent.putExtra("crop", "true");
+
+        //indicate aspect of desired crop
+        cropIntent.putExtra("aspectX", 0);
+        cropIntent.putExtra("aspectY", 0);
+        cropIntent.putExtra("scale", true);
+        cropIntent.putExtra("return-data", true);
+        fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
+        cropIntent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
+        startActivityForResult(cropIntent, CROP_IMAGE_REQUEST_CODE);
+    }
+    public static Uri getOutputMediaFileUri(int type) {
+        return Uri.fromFile(getOutputMediaFile(type));
+    }
+    // returning image
+    private static File getOutputMediaFile(int type) {
+
+        // External sdcard location
+        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),IMAGE_DIRECTORY_NAME);
+
+        // Create the storage directory if it does not exist
+        if (!mediaStorageDir.exists()) {
+            if (!mediaStorageDir.mkdirs()) {
+                Log.d("TAG", "Oops! Failed create "+ IMAGE_DIRECTORY_NAME + " directory");
+                return null;
+            }
+        }
+
+        // Create a media file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss",
+                Locale.getDefault()).format(new Date());
+        File mediaFile;
+        if (type == MEDIA_TYPE_IMAGE) {
+            mediaFile = new File(mediaStorageDir.getPath() + File.separator+ "IMG_" + timeStamp + ".jpg");
+        }
+        else {
+            return null;
+        }
+
+        return mediaFile;
+    }
+    private String getRealPathFromURI(Context context, Uri contentUri) {
+        Cursor cursor = null;
+        try {
+            String[] proj = { MediaStore.Images.Media.DATA };
+            cursor = context.getContentResolver().query(contentUri, proj, null, null, null);
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            String path = cursor.getString(column_index);
+
+            return path;
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+    }
+
+    private void getAllDocsName() {
+        final JsonParserVolley jsonParserVolley = new JsonParserVolley(currentActivity);
+        jsonParserVolley.executeRequest(Request.Method.POST, WebUrl.GET_ALL_DOC_NAME_URL ,new JsonParserVolley.VolleyCallback() {
+                    @Override
+                    public void getResponse(String response) {
+                        Log.d("iss","response="+response);
+                        try {
+                            JSONObject jsonObject=new JSONObject(response);
+                            int success=jsonObject.getInt("success");
+                            if(success==1){
+                                JSONArray jsonArray=jsonObject.getJSONArray("data");
+                                docNameList.add("--SELECT--");
+                                for(int i=0;i<jsonArray.length();i++){
+                                    JSONObject jsonWO=jsonArray.getJSONObject(i);
+                                    docNameList.add(jsonWO.getString("doc_name"));
+                                }
+                                docNameList.add("Other");
+                                docName_adapter = new SpinnerAdapter(currentActivity, docNameList);
+                                spndocName.setAdapter(docName_adapter);
+                            }
+                            else{
+                                Toast.makeText(currentActivity,jsonObject.getString("message"),Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        SessionManager.getMyInstance(currentActivity).progressHide();
+                    }
+                }
+        );
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // TODO Auto-generated method stub
@@ -258,8 +368,6 @@ public class AddPaymentActivity extends AppCompatActivity {
                     }
                 }
             });
-
-
         }
 
         if (requestCode == CAMERA_CAPTURE_IMAGE_REQUEST_CODE) {
@@ -384,12 +492,12 @@ public class AddPaymentActivity extends AppCompatActivity {
             //Toast.makeText(getApplicationContext(), String.valueOf(requestCode)+"  -  "+String.valueOf(resultCode), Toast.LENGTH_SHORT).show();
         }
         compressImage();
-    }
 
+    }
     public void compressImage(){
         if (bitmap != null) {
-            int maxHeight=700;
-            int maxWidth=450;
+            int maxHeight=bitmap.getHeight();
+            int maxWidth=bitmap.getWidth();
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             int width = bitmap.getWidth();
             int height = bitmap.getHeight();
@@ -425,158 +533,42 @@ public class AddPaymentActivity extends AppCompatActivity {
         }
     }
 
-    public static void captureImage(Activity activity) {
-        // TODO Auto-generated method stub
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
-        activity.startActivityForResult(intent, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
-    }
-
-    public static void browseImage(Activity activity) {
-        // TODO Auto-generated method stub
-        Intent galleryIntent = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        activity.startActivityForResult(galleryIntent, BROWSE_IMAGE_REQUEST_CODE);
-    }
-    public void cropCapturedImage(Uri picUri){
-        Intent cropIntent = new Intent("com.android.camera.action.CROP");
-        cropIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        cropIntent.setDataAndType(picUri, "image/*");
-        cropIntent.putExtra("crop", "true");
-
-        //indicate aspect of desired crop
-        cropIntent.putExtra("aspectX", 0);
-        cropIntent.putExtra("aspectY", 0);
-        cropIntent.putExtra("scale", true);
-        cropIntent.putExtra("return-data", true);
-        fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
-        cropIntent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
-        startActivityForResult(cropIntent, CROP_IMAGE_REQUEST_CODE);
-    }
-    public static Uri getOutputMediaFileUri(int type) {
-        return Uri.fromFile(getOutputMediaFile(type));
-    }
-    // returning image
-    private static File getOutputMediaFile(int type) {
-
-        // External sdcard location
-        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),IMAGE_DIRECTORY_NAME);
-
-        // Create the storage directory if it does not exist
-        if (!mediaStorageDir.exists()) {
-            if (!mediaStorageDir.mkdirs()) {
-                Log.d("TAG", "Oops! Failed create "+ IMAGE_DIRECTORY_NAME + " directory");
-                return null;
-            }
-        }
-
-        // Create a media file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss",
-                Locale.getDefault()).format(new Date());
-        File mediaFile;
-        if (type == MEDIA_TYPE_IMAGE) {
-            mediaFile = new File(mediaStorageDir.getPath() + File.separator+ "IMG_" + timeStamp + ".jpg");
-        }
-        else {
-            return null;
-        }
-
-        return mediaFile;
-    }
-    private String getRealPathFromURI(Context context, Uri contentUri) {
-        Cursor cursor = null;
-        try {
-            String[] proj = { MediaStore.Images.Media.DATA };
-            cursor = context.getContentResolver().query(contentUri, proj, null, null, null);
-            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-            cursor.moveToFirst();
-            String path = cursor.getString(column_index);
-
-            return path;
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-    }
-
-    private void saveDetail(){
-
-        final JsonParserVolley jsonParserVolley = new JsonParserVolley(currentActivity);
-        String payment_mode="";
-        if(radioGroup.getCheckedRadioButtonId()==radioCash.getId()){
-            payment_mode="Cash";
-        }
-        else if(radioGroup.getCheckedRadioButtonId()==radioCheque.getId()){
-            payment_mode="Cheque";
-        }
-        else if(radioGroup.getCheckedRadioButtonId()==radioOther.getId()){
-            payment_mode="Other";
-        }
-        else if(radioGroup.getCheckedRadioButtonId()==radioNEFT.getId()){
-            payment_mode="NEFT";
-        }
-        else{
-            Toast.makeText(currentActivity,"Select payment mode",Toast.LENGTH_SHORT).show();
+    private void saveDetail() {
+        if(spndocName.getSelectedItem().toString().equals("--SELECT--")){
+            Toast.makeText(currentActivity,"Select document name",Toast.LENGTH_SHORT).show();
+            pDialog.dismiss();
             return;
         }
-        if(txtAmout.getText().toString().trim().equals("")){
-            Toast.makeText(currentActivity,"Enter the amount",Toast.LENGTH_SHORT).show();
+        if (encodedPhotoString.equals("")){
+            Toast.makeText(currentActivity,"Select document",Toast.LENGTH_SHORT).show();
+            pDialog.dismiss();
             return;
         }
-        if(txtComment.getText().toString().trim().equals("")){
-            Toast.makeText(currentActivity,"Enter Comment",Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if(sp_bank_name.getSelectedItem().toString().equals("--Select--")){
-            Toast.makeText(currentActivity,"Enter Bank Name",Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        pDialog.show();
-        jsonParserVolley.addParameter("order_id",workOrderPojo.getPkid());
-        jsonParserVolley.addParameter("payment_mode",payment_mode);
-        jsonParserVolley.addParameter("comment",txtComment.getText().toString());
-        jsonParserVolley.addParameter("amount",txtAmout.getText().toString());
-        jsonParserVolley.addParameter("userid", SessionManager.getMyInstance(currentActivity).getEmpid());
-        jsonParserVolley.addParameter("image", encodedPhotoString);
-        jsonParserVolley.addParameter("pay_date", orderToset);
-        jsonParserVolley.addParameter("bank_name", sp_bank_name.getSelectedItem().toString());
-        jsonParserVolley.executeRequest(Request.Method.POST, WebUrl.ADD_PAYMENT_DETAIL_URL ,new JsonParserVolley.VolleyCallback() {
-                    @Override
-                    public void getResponse(String response) {
-                        pDialog.dismiss();
-                        Log.d("iss",response);
-                        try {
-                            JSONObject jsonObject=new JSONObject(response);
-                            int success=jsonObject.getInt("success");
-                            if(success==1){
-                                Toast.makeText(currentActivity,jsonObject.getString("message"),Toast.LENGTH_SHORT).show();
-                                Intent intent=new Intent(currentActivity,PaymentHistoryActivity.class);
-                                intent.putExtra("orderData",workOrderPojo);
-                                startActivity(intent);
-                                finish();
-                            }
-                            else{
-                                Toast.makeText(currentActivity,jsonObject.getString("message"),Toast.LENGTH_SHORT).show();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-        );
-
+        UploadDocPojo uploadDocPojo=new UploadDocPojo();
+        uploadDocPojo.setEncodedPhotoString(encodedPhotoString);
+        uploadDocPojo.setDoc_type(spndocName.getSelectedItem().toString());
+        uploadDocPojo.setBitmap(bitmap);
+        doc_List.add(uploadDocPojo);
+        uploadDocAdapter.notifyDataSetChanged();
+        imgPreview_AttachDocument.setImageResource(0);
+        spndocName.setSelection(0);
+        btnUpload.setVisibility(View.VISIBLE);
     }
-
-
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent intent=new Intent(currentActivity, PaymentHistoryActivity.class);
-        intent.putExtra("orderData",workOrderPojo);
-        startActivity(intent);
-        finish();
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                Intent intent=new Intent(currentActivity, ViewAllDocsActivity.class);
+                intent.putExtra("orderData",workOrderPojo);
+                startActivity(intent);
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

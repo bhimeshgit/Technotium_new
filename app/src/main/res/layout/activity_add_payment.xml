@@ -113,18 +113,13 @@
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textSize="18sp"
                 android:textStyle="bold" />
-            <AutoCompleteTextView xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/autocomplete_bank"
-                android:layout_width="fill_parent"
+
+            <Spinner
+                android:id="@+id/sp_bank_name"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/edittextbac"
-                android:capitalize="characters"
-                android:ems="10"
-                android:paddingBottom="8dp"
-                android:paddingLeft="5dp"
-                android:paddingTop="8dp"
-                android:textSize="20sp"
-                android:layout_marginBottom="15dp"/>
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/edittextbac" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

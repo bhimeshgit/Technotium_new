@@ -8,6 +8,7 @@
     <string name="notifications_admin_channel_name">Firebase channel</string>
     <string name="notifications_admin_channel_description">Firebase Notification channel</string>
     <string-array name="bank_array">
+        <item>--Select--</item>
         <item>Federal Bank</item>
         <item>BOI</item>
     </string-array>

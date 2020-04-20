@@ -6,6 +6,15 @@ public class WorkOrderPojo implements Serializable {
     String fname;
     String added_by;
 
+    public String getWo_report() {
+        return wo_report;
+    }
+
+    public void setWo_report(String wo_report) {
+        this.wo_report = wo_report;
+    }
+
+    String wo_report;
     public String getGst_no() {
         return gst_no;
     }

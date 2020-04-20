@@ -63,6 +63,7 @@ public class CustomerInfoFragment extends Fragment  implements DataUpdate {
         stateArray.add("Uttarakhand");
         stateArray.add("West Bengal");
 
+        projectTypeArray.add("--Select--");
         projectTypeArray.add("Residential");
         projectTypeArray.add("Commercial");
         projectTypeArray.add("Industrial");

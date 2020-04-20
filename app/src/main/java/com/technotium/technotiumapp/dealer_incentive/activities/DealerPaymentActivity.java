@@ -1,4 +1,4 @@
-package com.technotium.technotiumapp.payment.activity;
+package com.technotium.technotiumapp.dealer_incentive.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
@@ -19,7 +19,6 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -27,25 +26,18 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.RadioButton;
-
-
 import android.widget.RadioGroup;
-import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
+
 import com.android.volley.Request;
 import com.technotium.technotiumapp.BuildConfig;
 import com.technotium.technotiumapp.R;
-import com.technotium.technotiumapp.WelcomeEmpActivity;
 import com.technotium.technotiumapp.config.ImageProcessing;
 import com.technotium.technotiumapp.config.JsonParserVolley;
 import com.technotium.technotiumapp.config.SessionManager;
 import com.technotium.technotiumapp.config.WebUrl;
 
-import com.technotium.technotiumapp.workorder.model.WorkOrderPojo;
-import com.technotium.technotiumapp.workorder.adapter.SpinnerAdapter;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -55,42 +47,39 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-public class AddPaymentActivity extends AppCompatActivity {
+public class DealerPaymentActivity extends AppCompatActivity {
 
     Button btnBrowse_AttachDocument,btnCapture_AttachDocument;
     ImageView imgPreview_AttachDocument ;
     Button btnRotate_AttachDocument ,btnRotate1_AttachDocument,btnCrop_AttachDocument,btnSave_AttachDocument ;
-    AddPaymentActivity currentActivity;
+    DealerPaymentActivity currentActivity;
     public static final int BROWSE_IMAGE_REQUEST_CODE=101,CAMERA_CAPTURE_IMAGE_REQUEST_CODE=102,MEDIA_TYPE_IMAGE = 1,CROP_IMAGE_REQUEST_CODE = 4;;
     private static Uri fileUri;
     static String filePath = "",filename = "",IMAGE_DIRECTORY_NAME = "Technotium",encodedPhotoString="";
     Bitmap bitmap;
     RadioGroup radioGroup;
     RadioButton radioCheque,radioCash,radioNEFT,radioOther;
-    WorkOrderPojo workOrderPojo;
     EditText txtAmout,txtComment,txtPayDate;
     ProgressDialog pDialog;
     String OrderDate;
     String orderToset;
-    AutoCompleteTextView pay_txt;
-    Spinner sp_bank_name;
+    String dealer_incentive_id;
+    private static final int ADD_PAYMENT_RESULT_CODE=102;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_payment);
-        getSupportActionBar().hide();
-        if(getIntent().getSerializableExtra("orderData") != null) {
-            workOrderPojo =(WorkOrderPojo) getIntent().getSerializableExtra("orderData");
+        setContentView(R.layout.activity_dealer_payment);
+        if(getIntent().getStringExtra("dealer_incentive_id") != null) {
+            dealer_incentive_id =getIntent().getStringExtra("dealer_incentive_id");
             init();
         }
     }
     public void init(){
-        currentActivity=AddPaymentActivity.this;
+        currentActivity= DealerPaymentActivity.this;
         btnBrowse_AttachDocument=findViewById(R.id.btnBrowse_AttachDocument);
         btnCapture_AttachDocument=findViewById(R.id.btnCapture_AttachDocument);
         imgPreview_AttachDocument=findViewById(R.id.imgPreview_AttachDocument);
@@ -141,19 +130,13 @@ public class AddPaymentActivity extends AppCompatActivity {
             }
         });
 
-        sp_bank_name=findViewById(R.id.sp_bank_name);
-        String[] banks = getResources().getStringArray(R.array.bank_array);
-        ArrayList<String> bank_list=new ArrayList<String>();
-        for (String s: banks){bank_list.add(s);}
-        SpinnerAdapter spinnerAdapter = new SpinnerAdapter(currentActivity, bank_list);
-        sp_bank_name.setAdapter(spinnerAdapter);
     }
     public void dateFunction(){
         Calendar calendar= Calendar.getInstance();
         int year =calendar.get(Calendar.YEAR);
         int month=calendar.get(Calendar.MONTH);
         int days=calendar.get(Calendar.DAY_OF_MONTH);
-        DatePickerDialog dg=new DatePickerDialog(AddPaymentActivity.this, new DatePickerDialog.OnDateSetListener() {
+        DatePickerDialog dg=new DatePickerDialog(currentActivity, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 int monthofyear=month+1;
@@ -529,21 +512,16 @@ public class AddPaymentActivity extends AppCompatActivity {
             Toast.makeText(currentActivity,"Enter Comment",Toast.LENGTH_SHORT).show();
             return;
         }
-        if(sp_bank_name.getSelectedItem().toString().equals("--Select--")){
-            Toast.makeText(currentActivity,"Enter Bank Name",Toast.LENGTH_SHORT).show();
-            return;
-        }
 
         pDialog.show();
-        jsonParserVolley.addParameter("order_id",workOrderPojo.getPkid());
+        jsonParserVolley.addParameter("dealer_incentive_id",dealer_incentive_id);
         jsonParserVolley.addParameter("payment_mode",payment_mode);
         jsonParserVolley.addParameter("comment",txtComment.getText().toString());
         jsonParserVolley.addParameter("amount",txtAmout.getText().toString());
         jsonParserVolley.addParameter("userid", SessionManager.getMyInstance(currentActivity).getEmpid());
         jsonParserVolley.addParameter("image", encodedPhotoString);
         jsonParserVolley.addParameter("pay_date", orderToset);
-        jsonParserVolley.addParameter("bank_name", sp_bank_name.getSelectedItem().toString());
-        jsonParserVolley.executeRequest(Request.Method.POST, WebUrl.ADD_PAYMENT_DETAIL_URL ,new JsonParserVolley.VolleyCallback() {
+        jsonParserVolley.executeRequest(Request.Method.POST, WebUrl.ADD_DEALER_PAYMENT_URL ,new JsonParserVolley.VolleyCallback() {
                     @Override
                     public void getResponse(String response) {
                         pDialog.dismiss();
@@ -553,9 +531,8 @@ public class AddPaymentActivity extends AppCompatActivity {
                             int success=jsonObject.getInt("success");
                             if(success==1){
                                 Toast.makeText(currentActivity,jsonObject.getString("message"),Toast.LENGTH_SHORT).show();
-                                Intent intent=new Intent(currentActivity,PaymentHistoryActivity.class);
-                                intent.putExtra("orderData",workOrderPojo);
-                                startActivity(intent);
+                                Intent intent=new Intent();
+                                setResult(ADD_PAYMENT_RESULT_CODE,intent);
                                 finish();
                             }
                             else{
@@ -574,9 +551,6 @@ public class AddPaymentActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent intent=new Intent(currentActivity, PaymentHistoryActivity.class);
-        intent.putExtra("orderData",workOrderPojo);
-        startActivity(intent);
         finish();
     }
 }

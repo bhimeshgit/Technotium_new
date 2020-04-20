@@ -1,8 +1,8 @@
 package com.technotium.technotiumapp.config;
 
 public class WebUrl {
-   public static String BASE_URL="http://192.168.0.5/technotium/";
-//  public static String BASE_URL= "http://4isoftwares.com/technotium/";
+//   public static String BASE_URL="http://192.168.42.196/technotium/";
+  public static String BASE_URL= "http://4isoftwares.com/technotium/";
 
 
     public static String LOGIN_URL=BASE_URL+"app_login.php";
@@ -39,9 +39,15 @@ public class WebUrl {
     public static String  ADD_EXPENSES=BASE_URL+"addExpenses.php";
     public static String  GET_ALL_EXPENSES=BASE_URL+"getAllExpenses.php";
     public static String DELETE_EXPENSE_URL=BASE_URL+"deleteExpenses.php";
-    public static String WORK_ORDER_REPORT=BASE_URL+"work_order_report.php";
+    public static String WORK_ORDER_REPORT=BASE_URL+"work_order_report/";
     public static String ADD_PANEL_SERIAL_NO=BASE_URL+"addSerialNo.php";
     public static String ADD_METER_READING=BASE_URL+"addMeterReading_afterSale.php";
     public static String GET_SERIAL_NO=BASE_URL+"getSerialNo_afterSale.php";
     public static String DELETE_SERIAL_NO=BASE_URL+"deleteSerialNo.php";
+    public static String ADD_UPDATE_DEALER_INCENTIVE=BASE_URL+"addUpdateDealerIncentive.php";
+    public static String GET_DEALER_INCENTIVE=BASE_URL+"getDealerIncentive.php";
+    public static String ADD_DEALER_PAYMENT_URL=BASE_URL+"addDelearpayment.php";
+    public static String GET_DEALER_PAYMENT_DETAIL_URL=BASE_URL+"getDealerPayment.php";
+    public static String DOWNLOAD_ALL_DOC_URL=BASE_URL+"downloadAllDocs.php";
+    public static String  UPLOAD_ALL_DOC_URL=BASE_URL+"uploadAllDocs.php";
 }

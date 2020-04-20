@@ -79,6 +79,7 @@ public class UploadDocActivity extends AppCompatActivity {
 
     private void init() {
         spndocName=findViewById(R.id.spndocName);
+
         currentActivity=UploadDocActivity.this;
         docNameList=new ArrayList<String>();
         btnBrowse_AttachDocument=findViewById(R.id.btnBrowse_AttachDocument);

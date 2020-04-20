@@ -18,7 +18,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".after_sales.Activities.AfterSalesActivity"  android:theme="@style/Theme.AppCompat.Light"></activity>
+        <activity android:name=".docscan.activity.UploadMultipleDocActivity"></activity>
+        <activity android:name=".dealer_incentive.activities.DealerPaymentActivity" />
+        <activity android:name=".dealer_incentive.activities.DealerIncentiveActivity" />
+        <activity android:name=".after_sales.Activities.ScannerActivity" />
+        <activity
+            android:name=".after_sales.Activities.AfterSalesActivity"
+            android:theme="@style/Theme.AppCompat.Light" />
         <activity
             android:name=".workorder.activity.WorkOrderPdfReportActivity"
             android:theme="@style/Theme.AppCompat.Light" />
@@ -51,6 +57,7 @@
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
