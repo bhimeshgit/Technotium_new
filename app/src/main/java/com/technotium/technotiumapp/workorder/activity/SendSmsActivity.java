@@ -1,12 +1,12 @@
 package com.technotium.technotiumapp.workorder.activity;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -15,24 +15,21 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.android.volley.Request;
+import com.google.gson.Gson;
 import com.technotium.technotiumapp.R;
 import com.technotium.technotiumapp.WelcomeEmpActivity;
-import com.technotium.technotiumapp.after_sales.Activities.AfterSalesActivity;
 import com.technotium.technotiumapp.config.JsonParserVolley;
 import com.technotium.technotiumapp.config.SessionManager;
 import com.technotium.technotiumapp.config.WebUrl;
-import com.technotium.technotiumapp.dealer_incentive.activities.DealerIncentiveActivity;
-import com.technotium.technotiumapp.docscan.activity.ViewAllDocsActivity;
-import com.technotium.technotiumapp.expenses.activity.AddExpense;
-import com.technotium.technotiumapp.expenses.activity.ViewAllExpenses;
-import com.technotium.technotiumapp.material.activity.AddMaterialActivity;
-import com.technotium.technotiumapp.payment.activity.PaymentHistoryActivity;
-import com.technotium.technotiumapp.status.activity.OrderStatusActivity;
+import com.technotium.technotiumapp.workorder.adapter.SmsSendAdapter;
 import com.technotium.technotiumapp.workorder.adapter.WorkOrderAdapter;
+import com.technotium.technotiumapp.workorder.dialog.MessageDialog;
 import com.technotium.technotiumapp.workorder.model.WorkOrderPojo;
 
 import org.json.JSONArray;
@@ -41,50 +38,57 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class SearchOrderActivity extends AppCompatActivity {
+public class SendSmsActivity extends AppCompatActivity {
 
     RecyclerView lv_wo;
     EditText txtCustomerName;
-    Button addNewBtn;
+    Button sendSmsBtn;
     ArrayList<WorkOrderPojo> orderList;
-    SearchOrderActivity currentActivity;
+    SendSmsActivity currentActivity;
     GridLayoutManager layoutManager;
-    WorkOrderAdapter adapter;
+    SmsSendAdapter adapter;
     String modul="";
     ProgressDialog pDialog;
-    AlertDialog alertDialog;
-    Button btnDelete,btnReport;
-    ArrayList<WorkOrderPojo> tempArrayList = new ArrayList<WorkOrderPojo>();
-
+    ArrayList<String> alstMobile;
+    String TAG=SendSmsActivity.class.getSimpleName();
+    MessageDialog messageDialog;
+    CheckBox selectAllChk;
+    int allChkFlg=0,itemChkflg=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search_order);
+        setContentView(R.layout.activity_send_sms);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        //Action bar
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setDisplayShowCustomEnabled(true);
+        getSupportActionBar().setCustomView(R.layout.custom_action_bar_send_msg_select_all);
+        View view =getSupportActionBar().getCustomView();
+        selectAllChk=view.findViewById(R.id.selectAllChk);
+
         init();
         Intent intent=getIntent();
-        addNewBtn.setVisibility(View.GONE);
         if(intent!=null){
             if(intent.getStringExtra("modul")!=null){
                 modul=intent.getStringExtra("modul");
                 if(modul.equals("workorder")){
-                    addNewBtn.setVisibility(View.VISIBLE);
+                    sendSmsBtn.setVisibility(View.VISIBLE);
                 }
             }
         }
     }
     private void init(){
         orderList=new ArrayList<>();
-        currentActivity=SearchOrderActivity.this;
+        currentActivity=SendSmsActivity.this;
         lv_wo= (RecyclerView)findViewById(R.id.lv_wo);
         txtCustomerName=findViewById(R.id.txtCustomerName);
-        addNewBtn=findViewById(R.id.btnAddNew);
-
-        addNewBtn.setOnClickListener(new View.OnClickListener() {
+        sendSmsBtn =findViewById(R.id.btnSendSms);
+        alstMobile=new ArrayList<>();
+        sendSmsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(currentActivity, WorkOrderActivity.class));
-                finish();
+                sendSms();
             }
         });
         getAllWorkOrder();
@@ -98,7 +102,7 @@ public class SearchOrderActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 int textlength = s.length();
-                tempArrayList.clear();
+                ArrayList<WorkOrderPojo> tempArrayList = new ArrayList<WorkOrderPojo>();
                 for(WorkOrderPojo c: orderList){
                     if (textlength <= c.getFullname().length()) {
                         if (c.getFullname().toLowerCase().contains(s.toString().toLowerCase())) {
@@ -106,7 +110,7 @@ public class SearchOrderActivity extends AppCompatActivity {
                         }
                     }
                 }
-                adapter=new WorkOrderAdapter(tempArrayList,currentActivity);
+                adapter=new SmsSendAdapter(tempArrayList,currentActivity);
                 lv_wo.setAdapter(adapter);
             }
 
@@ -115,15 +119,47 @@ public class SearchOrderActivity extends AppCompatActivity {
 
             }
         });
-        addNewBtn.setVisibility(View.GONE);
+
+        selectAllChk.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+
+                    if(orderList!=null){
+                        if(isChecked){
+                            alstMobile.clear();
+                            allChkFlg=1;
+                            for(WorkOrderPojo w : orderList){
+                                w.setSelected(isChecked);
+                                if(isChecked){
+                                    alstMobile.add(w.getMobile());
+                                }
+                            }
+                        }
+                        else {
+                            allChkFlg=0;
+                            if(itemChkflg==0) {
+                                alstMobile.clear();
+                                for (WorkOrderPojo w : orderList) {
+                                    w.setSelected(isChecked);
+                                }
+                            }
+                            itemChkflg=0;
+                        }
+
+                        adapter.notifyDataSetChanged();
+                    }
+            }
+        });
+
     }
 
     private void getAllWorkOrder(){
         showProgressDialog();
         final JsonParserVolley jsonParserVolley = new JsonParserVolley(currentActivity);
-        jsonParserVolley.addParameter("userid",SessionManager.getMyInstance(currentActivity).getEmpid());
+        jsonParserVolley.addParameter("userid", SessionManager.getMyInstance(currentActivity).getEmpid());
 
-        jsonParserVolley.executeRequest(Request.Method.POST,WebUrl.GET_ALL_WORK_ORDER_URL ,new JsonParserVolley.VolleyCallback() {
+        jsonParserVolley.executeRequest(Request.Method.POST, WebUrl.GET_ALL_WORK_ORDER_URL ,new JsonParserVolley.VolleyCallback() {
                     @Override
                     public void getResponse(String response) {
                         try {
@@ -183,45 +219,32 @@ public class SearchOrderActivity extends AppCompatActivity {
                                 layoutManager=new GridLayoutManager(currentActivity,1);
                                 lv_wo.setLayoutManager(layoutManager);
                                 lv_wo.setHasFixedSize(true);
-                                adapter=new WorkOrderAdapter(orderList, currentActivity);
+                                adapter=new SmsSendAdapter(orderList, currentActivity);
                                 lv_wo.setAdapter(adapter);
-                                tempArrayList.addAll(orderList);
-                                adapter.setOnItemClickListener(new WorkOrderAdapter.ClickListener() {
-                                    @Override
-                                    public void onItemClick(int position, View v) {
-                                        Intent intent=null;
-                                        if(modul.equals("workorder")){
-                                            intent=new Intent(currentActivity, WorkOrderActivity.class);
-                                        }
-                                        else if(modul.equals("payment")){
-                                            intent=new Intent(currentActivity, PaymentHistoryActivity.class);
-                                        }
-                                        else if(modul.equals("docscan")){
-                                            intent=new Intent(currentActivity, ViewAllDocsActivity.class);
-                                        }
-                                        else if(modul.equals("status")){
-                                            intent=new Intent(currentActivity, OrderStatusActivity.class);
-                                        }
-                                        else if(modul.equals("material")){
-                                            intent=new Intent(currentActivity, AddMaterialActivity.class);
-                                        }
-                                        else if(modul.equals("expense")){
-                                            intent=new Intent(currentActivity, ViewAllExpenses.class);
-                                        }
-                                        else if(modul.equals("after_sale")){
-                                            intent=new Intent(currentActivity, AfterSalesActivity.class);
-                                        }
-                                        else if(modul.equals("dealer_incentive")){
-                                            intent=new Intent(currentActivity, DealerIncentiveActivity.class);
-                                        }
-                                        intent.putExtra("orderData",tempArrayList.get(position));
-                                        startActivity(intent);
-                                        finish();
-                                    }
 
+                                adapter.setOnItemClickListener(new SmsSendAdapter.ClickListener() {
+                                    @Override
+                                    public void onItemClick(int position, boolean b) {
+                                        orderList.get(position).setSelected(b);
+
+                                        if(b) {
+                                            if(allChkFlg==0){
+                                                alstMobile.add(orderList.get(position).getMobile());
+                                            }
+                                        }
+                                        else {
+                                            if(allChkFlg==1){
+                                                itemChkflg=1;
+                                                selectAllChk.setChecked(false);
+                                            }
+
+                                            alstMobile.remove(orderList.get(position).getMobile());
+                                        }
+//                                        adapter.notifyItemChanged(position);
+                                    }
                                     @Override
                                     public void onLongItemClick(int position, View v) {
-                                        showDeleteAlertDialog(Integer.parseInt(orderList.get(position).getPkid()),position);
+
                                     }
                                 });
                             }
@@ -238,48 +261,10 @@ public class SearchOrderActivity extends AppCompatActivity {
 
     }
 
-    public void showDeleteAlertDialog(final int orderid,final int index){
-        alertDialog=new AlertDialog.Builder(currentActivity)
-                .setTitle("Delete entry")
-                .setMessage("Are you sure you want to delete this work order?")
-                // Specifying a listener allows you to take an action before dismissing the dialog.
-                // The dialog is automatically dismissed when a dialog button is clicked.
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        deactivateOrder(orderid,index);
-                    }
-                })
-                // A null listener allows the button to dismiss the dialog and take no further action.
-                .setNegativeButton(android.R.string.no, null)
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .show();
-    }
-    public void deactivateOrder(int orderid,final int index){
-        showProgressDialog();
-        final JsonParserVolley jsonParserVolley = new JsonParserVolley(currentActivity);
-        jsonParserVolley.addParameter("orderid",orderid+"");
-        jsonParserVolley.executeRequest(Request.Method.POST,WebUrl.DELETE_WORK_ORDER ,new JsonParserVolley.VolleyCallback() {
-                    @Override
-                    public void getResponse(String response) {
-                        pDialog.dismiss();
-                        Log.d("iss",response);
-                        try {
-                            JSONObject jsonObject=new JSONObject(response);
-                            int success=jsonObject.getInt("success");
-                            if(success==1){
-                                Toast.makeText(currentActivity,jsonObject.getString("message"),Toast.LENGTH_SHORT).show();
-                                orderList.get(index).setActive(2);
-                                adapter.notifyDataSetChanged();
-                            }
-                            else{
-                                Toast.makeText(currentActivity,jsonObject.getString("message"),Toast.LENGTH_SHORT).show();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-        );
+    private void sendSms(){
+        JSONArray jsonArray=new JSONArray(alstMobile);
+        messageDialog = new MessageDialog(jsonArray.toString());
+        messageDialog.show(getSupportFragmentManager(), TAG);
     }
 
 

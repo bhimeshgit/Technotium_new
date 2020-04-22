@@ -6,6 +6,15 @@ public class WorkOrderPojo implements Serializable {
     String fname;
     String added_by;
 
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
+
+    boolean  selected=false;
     public String getWo_report() {
         return wo_report;
     }

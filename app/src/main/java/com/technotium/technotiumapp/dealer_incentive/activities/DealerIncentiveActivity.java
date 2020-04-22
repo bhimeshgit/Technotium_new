@@ -18,6 +18,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -26,6 +27,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -55,7 +57,8 @@ import org.json.JSONObject;
 
 public class DealerIncentiveActivity extends AppCompatActivity {
 
-    EditText txtOrderAmout,txtCompanyRate,txtPanelAmt,txtInverterAmt,txtStructureAmt,txtOtherAmt,txtTotalAmt,txtNetAmount,txtTdsAmount,txtGrossAmount,txtBalanceAmount,txtPaidAmount;
+    EditText txtOrderAmout,txtCompanyRate,txtPanelAmt,txtInverterAmt,txtStructureAmt,txtOtherAmt;
+    EditText txtTotalAmt,txtNetAmount,txtTdsAmount,txtGrossAmount,txtBalanceAmount,txtPaidAmount,txtcapacity;
     Spinner spnTdsPercent;
     Button btnAddNew,btnAddPayment;
     double wo_amount,company_rate,panel_amt,inv_amt,structure_amt,other_amt,total_amt,net_amt,tds_amt,gross_amt,balance_amt,paid_amt;
@@ -74,18 +77,22 @@ public class DealerIncentiveActivity extends AppCompatActivity {
     GridLayoutManager layoutManager;
     private Dialog zoomable_image_dialog;
     private SubsamplingScaleImageView imageView;
+    TextView txtComRateAsPerCap;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dealer_incentive);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Intent intent=getIntent();
         if(intent!=null){
             if(intent.getSerializableExtra("orderData")!=null){
                 workOrderPojo=(WorkOrderPojo)intent.getSerializableExtra("orderData");
+                Log.d("iss","fname="+workOrderPojo.getFname());
                 generateId();
                 createObj();
                 onClick();
                 getDealerIncentive();
+
             }
         }
     }
@@ -109,7 +116,7 @@ public class DealerIncentiveActivity extends AppCompatActivity {
         wo_amount=Double.parseDouble(workOrderPojo.getAmount());
         txtOrderAmout.setEnabled(false);
         paymentList=new ArrayList<>();
-
+        txtcapacity.setText(workOrderPojo.getCapacity());
     }
 
     private void onClick(){
@@ -121,13 +128,13 @@ public class DealerIncentiveActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if(txtCompanyRate.getText().toString().trim().length()>0){
-                    company_rate=Double.parseDouble(txtCompanyRate.getText().toString());
+                    company_rate=Double.parseDouble(txtCompanyRate.getText().toString())*(Double.parseDouble(txtcapacity.getText().toString()));
                     calculate();
+                    txtComRateAsPerCap.setText("Company Rate As per Capacity: "+company_rate);
                 }
             }
             @Override
             public void afterTextChanged(Editable s) {
-
             }
         });
         txtPanelAmt.addTextChangedListener(new TextWatcher() {
@@ -349,7 +356,8 @@ public class DealerIncentiveActivity extends AppCompatActivity {
         btnAddNew=findViewById(R.id.btnAddNew);
         txtPaidAmount=findViewById(R.id.txtPaidAmount);
         btnAddPayment=findViewById(R.id.btnAddPayment);
-
+        txtcapacity=findViewById(R.id.txtcapacity);
+        txtComRateAsPerCap=findViewById(R.id.txtComRateAsPerCap);
         if(SessionManager.getMyInstance(currentActivity).getEmpType().equals("Dealer")) {
             txtCompanyRate.setEnabled(false);
             txtPanelAmt.setEnabled(false);
@@ -484,5 +492,17 @@ public class DealerIncentiveActivity extends AppCompatActivity {
         });
         zoomable_image_dialog.show();
     }
-
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                Intent intent=new Intent(currentActivity, SearchOrderActivity.class);
+                intent.putExtra("modul","dealer_incentive");
+                startActivity(intent);
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 }

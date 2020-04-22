@@ -45,6 +45,7 @@ import com.technotium.technotiumapp.employee.MyProfileActivity;
 import com.technotium.technotiumapp.employee.model.EmployeePojo;
 import com.technotium.technotiumapp.model.HomeIcon;
 import com.technotium.technotiumapp.workorder.activity.SearchOrderActivity;
+import com.technotium.technotiumapp.workorder.activity.SendSmsActivity;
 import com.technotium.technotiumapp.workorder.activity.WorkOrderActivity;
 
 import org.json.JSONArray;
@@ -89,6 +90,10 @@ public class WelcomeEmpActivity extends AppCompatActivity  implements Navigation
         Menu menu=navigationView.getMenu();
         if(SessionManager.getMyInstance(currentActivity).getEmpType().equals("Employee") || SessionManager.getMyInstance(currentActivity).getEmpType().equals("Electrician")){
             menu.findItem(R.id.manage_employee).setVisible(false);
+            menu.findItem(R.id.send_sms).setVisible(false);
+        }
+        if(SessionManager.getMyInstance(currentActivity).getEmpType().equals("Dealer")){
+            menu.findItem(R.id.send_sms).setVisible(false);
         }
 
         if(!ApplicationGlobal.checkInternetConenction(currentActivity)){
@@ -234,6 +239,9 @@ public class WelcomeEmpActivity extends AppCompatActivity  implements Navigation
         int id = item.getItemId();
         if(id==R.id.manage_employee){
             startActivity(new Intent(currentActivity, ManageEmployeeActivity.class));
+        }
+        if(id==R.id.send_sms){
+            startActivity(new Intent(currentActivity, SendSmsActivity.class));
         }
         else if(id==R.id.my_profile){
             startActivity(new Intent(currentActivity, MyProfileActivity.class));

@@ -23,7 +23,6 @@
                 android:layout_marginTop="6dp"
                 android:text="Dealer Incentive:"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-
                 android:textSize="18sp"
                 android:textStyle="bold" />
         </androidx.appcompat.widget.LinearLayoutCompat>
@@ -61,6 +60,32 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
+                android:text="Capacity:"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+            <EditText
+                android:id="@+id/txtcapacity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/edittextbac"
+                android:capitalize="characters"
+                android:ems="10"
+                android:textColor="@drawable/edit_text"
+                android:paddingBottom="8dp"
+                android:paddingLeft="5dp"
+                android:paddingTop="8dp"
+                android:enabled="false"
+                android:textSize="20sp">
+                <requestFocus />
+            </EditText>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
                 android:text="Company Rate:"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textSize="18sp"
@@ -81,6 +106,15 @@
                 android:paddingTop="8dp"
                 android:textSize="20sp" >
             </EditText>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:id="@+id/txtComRateAsPerCap"
+                android:text="Company Rate As per Capacity:"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="18sp"
+                android:textStyle="bold" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

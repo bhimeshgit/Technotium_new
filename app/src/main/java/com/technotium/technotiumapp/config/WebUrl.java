@@ -1,7 +1,7 @@
 package com.technotium.technotiumapp.config;
 
 public class WebUrl {
-//   public static String BASE_URL="http://192.168.42.196/technotium/";
+//   public static String BASE_URL="http://192.168.42.70/technotium/";
   public static String BASE_URL= "http://4isoftwares.com/technotium/";
 
 
@@ -50,4 +50,6 @@ public class WebUrl {
     public static String GET_DEALER_PAYMENT_DETAIL_URL=BASE_URL+"getDealerPayment.php";
     public static String DOWNLOAD_ALL_DOC_URL=BASE_URL+"downloadAllDocs.php";
     public static String  UPLOAD_ALL_DOC_URL=BASE_URL+"uploadAllDocs.php";
+
+    public static String  SEND_SMS_URL=BASE_URL+"sendSms.php";
 }
