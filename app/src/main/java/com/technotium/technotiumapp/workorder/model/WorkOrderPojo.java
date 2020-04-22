@@ -59,6 +59,24 @@ public class WorkOrderPojo implements Serializable {
 
     int active=0;
 
+    public String getFirm_name() {
+        return firm_name;
+    }
+
+    public void setFirm_name(String firm_name) {
+        this.firm_name = firm_name;
+    }
+
+    public String getContact_person_name() {
+        return contact_person_name;
+    }
+
+    public void setContact_person_name(String contact_person_name) {
+        this.contact_person_name = contact_person_name;
+    }
+
+    public String firm_name;
+    public String contact_person_name;
     public void setConsumer_no(String consumer_no) {
         this.consumer_no = consumer_no;
     }

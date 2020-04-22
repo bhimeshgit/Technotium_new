@@ -8,7 +8,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.READ_CONTACTS"/>
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <application
         android:name=".config.ApplicationGlobal"
@@ -19,11 +19,22 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".workorder.activity.SendSmsActivity" android:theme="@style/Theme.AppCompat.Light"></activity>
-        <activity android:name=".docscan.activity.UploadMultipleDocActivity" android:theme="@style/Theme.AppCompat.Light" />
-        <activity android:name=".dealer_incentive.activities.DealerPaymentActivity" android:theme="@style/Theme.AppCompat.Light" />
-        <activity android:name=".dealer_incentive.activities.DealerIncentiveActivity" android:theme="@style/Theme.AppCompat.Light" />
-        <activity android:name=".after_sales.Activities.ScannerActivity" android:theme="@style/Theme.AppCompat.Light"/>
+        <activity android:name=".workorder.activity.WorkOrderActivity_New"></activity>
+        <activity
+            android:name=".workorder.activity.SendSmsActivity"
+            android:theme="@style/Theme.AppCompat.Light" />
+        <activity
+            android:name=".docscan.activity.UploadMultipleDocActivity"
+            android:theme="@style/Theme.AppCompat.Light" />
+        <activity
+            android:name=".dealer_incentive.activities.DealerPaymentActivity"
+            android:theme="@style/Theme.AppCompat.Light" />
+        <activity
+            android:name=".dealer_incentive.activities.DealerIncentiveActivity"
+            android:theme="@style/Theme.AppCompat.Light" />
+        <activity
+            android:name=".after_sales.Activities.ScannerActivity"
+            android:theme="@style/Theme.AppCompat.Light" />
         <activity
             android:name=".after_sales.Activities.AfterSalesActivity"
             android:theme="@style/Theme.AppCompat.Light" />

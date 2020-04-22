@@ -83,7 +83,8 @@ public class SearchOrderActivity extends AppCompatActivity {
         addNewBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(currentActivity, WorkOrderActivity.class));
+                startActivity(new Intent(currentActivity, WorkOrderActivity_New.class));
+                //startActivity(new Intent(currentActivity, WorkOrderActivity.class));
                 finish();
             }
         });
@@ -154,6 +155,8 @@ public class SearchOrderActivity extends AppCompatActivity {
                                     workOrderPojo.setSolarsanction(jsonWO.getString("solar_sanction"));
                                     workOrderPojo.setMeterinstallation(jsonWO.getString("meter_installation"));
                                     workOrderPojo.setPanelcapacity(jsonWO.getString("panel_capacity"));
+                                    workOrderPojo.setPanel(jsonWO.getString("panel"));
+                                    workOrderPojo.setInverter(jsonWO.getString("inverter"));
                                     workOrderPojo.setInvertercapicity(jsonWO.getString("inverter_capacity"));
                                     workOrderPojo.setOrder_date(jsonWO.getString("order_date"));
                                     workOrderPojo.setDesignation(jsonWO.getString("designation"));
@@ -174,6 +177,8 @@ public class SearchOrderActivity extends AppCompatActivity {
                                     workOrderPojo.setActive(jsonWO.getInt("active"));
                                     workOrderPojo.setGst_no(jsonWO.getString("gst_no"));
                                     workOrderPojo.setWo_report(jsonWO.getString("wo_report"));
+                                    workOrderPojo.setFirm_name(jsonWO.getString("firm_name"));
+                                    workOrderPojo.setContactPerson(jsonWO.getString("contact_person_name"));
                                     if(modul.equals("workorder")){
                                         workOrderPojo.setWo_activity(1);
                                     }
@@ -191,7 +196,7 @@ public class SearchOrderActivity extends AppCompatActivity {
                                     public void onItemClick(int position, View v) {
                                         Intent intent=null;
                                         if(modul.equals("workorder")){
-                                            intent=new Intent(currentActivity, WorkOrderActivity.class);
+                                            intent=new Intent(currentActivity, WorkOrderActivity_New.class);// intent=new Intent(currentActivity, WorkOrderActivity.class);
                                         }
                                         else if(modul.equals("payment")){
                                             intent=new Intent(currentActivity, PaymentHistoryActivity.class);

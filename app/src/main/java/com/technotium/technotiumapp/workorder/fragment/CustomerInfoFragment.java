@@ -98,6 +98,13 @@ public class CustomerInfoFragment extends Fragment  implements DataUpdate {
         spnProjectType=view.findViewById(R.id.spnProjectType);
         projectType_adapter = new SpinnerAdapter(getActivity(), projectTypeArray);
         spnProjectType.setAdapter(projectType_adapter);
+        txtmobile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent contactPickerIntent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+                startActivityForResult(contactPickerIntent,101);
+            }
+        });
         if(getArguments()!=null){
             if(getArguments().getSerializable("workorder")!=null){
                 workOrderPojo=(WorkOrderPojo)getArguments().getSerializable("workorder");
@@ -129,13 +136,7 @@ public class CustomerInfoFragment extends Fragment  implements DataUpdate {
                     }
                     spnProjectType.setSelection(position);
                 }
-                txtmobile.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent contactPickerIntent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
-                        startActivityForResult(contactPickerIntent,101);
-                    }
-                });
+
             }
         }
         return view;
