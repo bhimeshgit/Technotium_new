@@ -54,6 +54,7 @@ public class SendSmsActivity extends AppCompatActivity {
     MessageDialog messageDialog;
     CheckBox selectAllChk;
     int allChkFlg=0,itemChkflg=0;
+    ArrayList<WorkOrderPojo> tempArrayList = new ArrayList<WorkOrderPojo>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,7 +103,7 @@ public class SendSmsActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 int textlength = s.length();
-                ArrayList<WorkOrderPojo> tempArrayList = new ArrayList<WorkOrderPojo>();
+                tempArrayList.clear();
                 for(WorkOrderPojo c: orderList){
                     if (textlength <= c.getFullname().length()) {
                         if (c.getFullname().toLowerCase().contains(s.toString().toLowerCase())) {
@@ -219,13 +220,13 @@ public class SendSmsActivity extends AppCompatActivity {
                                 layoutManager=new GridLayoutManager(currentActivity,1);
                                 lv_wo.setLayoutManager(layoutManager);
                                 lv_wo.setHasFixedSize(true);
-                                adapter=new SmsSendAdapter(orderList, currentActivity);
+                                tempArrayList.addAll(orderList);
+                                adapter=new SmsSendAdapter(tempArrayList, currentActivity);
                                 lv_wo.setAdapter(adapter);
-
                                 adapter.setOnItemClickListener(new SmsSendAdapter.ClickListener() {
                                     @Override
                                     public void onItemClick(int position, boolean b) {
-                                        orderList.get(position).setSelected(b);
+                                        tempArrayList.get(position).setSelected(b);
 
                                         if(b) {
                                             if(allChkFlg==0){
