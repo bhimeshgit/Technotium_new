@@ -1,6 +1,7 @@
 package com.technotium.technotiumapp.workorder.fragment;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -195,5 +196,8 @@ public class OrderInfoFragment extends Fragment implements DataUpdate {
                 }
             }
         }
+    }
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+
     }
 }

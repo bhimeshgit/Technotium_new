@@ -162,6 +162,7 @@ public class WelcomeEmpActivity extends AppCompatActivity  implements Navigation
             }
         });
         isCameraPermissionGranted();
+        isReadContactsPermissionGranted();
     }
 
     public  boolean isReadStoragePermissionGranted() {
@@ -195,6 +196,21 @@ public class WelcomeEmpActivity extends AppCompatActivity  implements Navigation
         }
     }
 
+    public  boolean isReadContactsPermissionGranted() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (checkSelfPermission(Manifest.permission.READ_CONTACTS)
+                    == PackageManager.PERMISSION_GRANTED) {
+                return true;
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_CONTACTS}, 3);
+                return false;
+            }
+        }
+        else { //permission is automatically granted on sdk<23 upon installation
+            return true;
+        }
+    }
+
     public  boolean isCameraPermissionGranted() {
         if (Build.VERSION.SDK_INT >= 23) {
             if (checkSelfPermission(Manifest.permission.CAMERA)
@@ -216,10 +232,13 @@ public class WelcomeEmpActivity extends AppCompatActivity  implements Navigation
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch(requestCode){
             case 1:
-                   isWriteStoragePermissionGranted();
+                isWriteStoragePermissionGranted();
                    break;
             case 2:
                 isReadStoragePermissionGranted();
+                break;
+            case 3:
+                isReadContactsPermissionGranted();
                 break;
         }
     }

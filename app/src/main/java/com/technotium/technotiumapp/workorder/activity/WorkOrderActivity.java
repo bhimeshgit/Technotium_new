@@ -1,5 +1,6 @@
 package com.technotium.technotiumapp.workorder.activity;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -20,7 +21,7 @@ public class WorkOrderActivity extends AppCompatActivity {
     ViewPager viewPager;
     WorkOrderPojo workOrderPojo=new WorkOrderPojo();
     PagerAdapter adapter;
-
+    DataUpdate dataUpdate;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,22 +42,23 @@ public class WorkOrderActivity extends AppCompatActivity {
             adapter= new PagerAdapter(getSupportFragmentManager(),tabLayout.getTabCount(),null);
         }
         viewPager.setAdapter(adapter);
+        dataUpdate = (DataUpdate) adapter.getItem(0);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                DataUpdate dataUpdate = (DataUpdate) adapter.getItem(tab.getPosition());
+                dataUpdate = (DataUpdate) adapter.getItem(tab.getPosition());
                 dataUpdate.setData(workOrderPojo);
                 viewPager.setCurrentItem(tab.getPosition());
             }
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-                DataUpdate dataUpdate = (DataUpdate) adapter.getItem(tab.getPosition());
+                dataUpdate = (DataUpdate) adapter.getItem(tab.getPosition());
                 workOrderPojo=dataUpdate.getData();
             }
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-                DataUpdate dataUpdate = (DataUpdate) adapter.getItem(tab.getPosition());
+                dataUpdate = (DataUpdate) adapter.getItem(tab.getPosition());
                 dataUpdate.setData(workOrderPojo);
             }
         });
@@ -69,5 +71,14 @@ public class WorkOrderActivity extends AppCompatActivity {
         intent.putExtra("modul","workorder");
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(dataUpdate!=null){
+            dataUpdate.onActivityResult(requestCode, resultCode, data);
+        }
+
     }
 }

@@ -1,10 +1,16 @@
 package com.technotium.technotiumapp.workorder.fragment;
 
+import android.app.Activity;
+import android.content.ContentResolver;
+import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
 
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -123,6 +129,13 @@ public class CustomerInfoFragment extends Fragment  implements DataUpdate {
                     }
                     spnProjectType.setSelection(position);
                 }
+                txtmobile.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent contactPickerIntent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+                        startActivityForResult(contactPickerIntent,101);
+                    }
+                });
             }
         }
         return view;
@@ -150,4 +163,34 @@ public class CustomerInfoFragment extends Fragment  implements DataUpdate {
         workOrderPojo.setConsumer_no(txtconsumer_no.getText().toString());
         return workOrderPojo;
     }
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        if(requestCode==101){
+            if (resultCode == Activity.RESULT_OK) {
+                Uri contactData = data.getData();
+                ContentResolver cr = getActivity().getContentResolver();
+                Cursor cur = cr.query(contactData, null, null, null, null);
+                if (cur.getCount() > 0) {// thats mean some resutl has been found
+                    if(cur.moveToNext()) {
+                        String id = cur.getString(cur.getColumnIndex(ContactsContract.Contacts._ID));
+                        String name = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+//                        Log.e("Names", name);
+                        if (Integer.parseInt(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0)
+                        {
+                            // Query phone here. Covered next
+                            Cursor phones = getActivity().getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,null,ContactsContract.CommonDataKinds.Phone.CONTACT_ID +" = "+ id,null, null);
+                            while (phones.moveToNext()) {
+                                String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                                txtmobile.setText(phoneNumber);
+                            }
+                            phones.close();
+                        }
+
+                    }
+                }
+                cur.close();
+            }
+        }
+
+    }
+
 }

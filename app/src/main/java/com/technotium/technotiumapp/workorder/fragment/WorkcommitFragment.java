@@ -288,4 +288,7 @@ public class WorkcommitFragment extends Fragment implements DataUpdate {
         jsonParserVolley.addParameter("insertuserid",SessionManager.getMyInstance(getActivity()).getEmpid());
         return jsonParserVolley;
     }
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+
+    }
 }
