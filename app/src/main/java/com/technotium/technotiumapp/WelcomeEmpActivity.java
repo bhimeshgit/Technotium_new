@@ -291,14 +291,23 @@ public class WelcomeEmpActivity extends AppCompatActivity  implements Navigation
         showProgressDialog();
         final JsonParserVolley jsonParserVolley = new JsonParserVolley(currentActivity);
         jsonParserVolley.addParameter("empid",SessionManager.getMyInstance(currentActivity).getEmpid());
-
+        jsonParserVolley.addParameter("mobile",SessionManager.getMyInstance(currentActivity).getEmpMobile());
+        jsonParserVolley.addParameter("pass",SessionManager.getMyInstance(currentActivity).getEmpPass());
         jsonParserVolley.executeRequest(Request.Method.POST,WebUrl.CHECK_AUTHORIZED_EMPLOYEE ,new JsonParserVolley.VolleyCallback() {
                     @Override
                     public void getResponse(String response) {
                         pDialog.dismiss();
+                        Log.d("iss","valid="+response);
                         try {
                             JSONObject jsonObject=new JSONObject(response);
                             int success=jsonObject.getInt("success");
+                            if(success==2){
+                                SessionManager.getMyInstance(currentActivity).clearPreference();
+                                startActivity(new Intent(currentActivity, LoginActivity.class));
+                                finishAffinity();
+                                return;
+                            }
+
                             if(success==0){
                                 DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
                                 if (drawer.isDrawerOpen(GravityCompat.START)) {

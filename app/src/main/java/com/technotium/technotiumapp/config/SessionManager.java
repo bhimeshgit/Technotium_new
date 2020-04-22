@@ -75,6 +75,21 @@ public class SessionManager {
         return pref.getString("empType", "");
     }
 
+
+    public void setEmpMobile(String mobile) {
+        editor.putString("empMobile", mobile);
+        editor.commit();
+    }
+    public String getEmpMobile() {
+        return pref.getString("empMobile", "");
+    }
+    public void setEmpPass(String pass) {
+        editor.putString("empPass", pass);
+        editor.commit();
+    }
+    public String getEmpPass() {
+        return pref.getString("empPass", "");
+    }
     //******************* CLEAR ALL SHARED PREFERENCE IN THIS CLASS***************//
 
     public void clearPreference()

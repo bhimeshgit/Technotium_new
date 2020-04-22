@@ -88,6 +88,8 @@ public class LoginActivity extends AppCompatActivity {
                                 SessionManager.getMyInstance(currentActivity).setEmpName(jsonObject.getString("empname"));
                                 SessionManager.getMyInstance(currentActivity).setEmpImage(jsonObject.getString("emp_image"));
                                 SessionManager.getMyInstance(currentActivity).setEmpType(jsonObject.getString("emp_type"));
+                                SessionManager.getMyInstance(currentActivity).setEmpMobile(txtMobile.getText().toString());
+                                SessionManager.getMyInstance(currentActivity).setEmpPass(txtPass.getText().toString());
                                 Intent intent=new Intent(currentActivity,WelcomeEmpActivity.class);
                                 startActivity(intent);
                             }
