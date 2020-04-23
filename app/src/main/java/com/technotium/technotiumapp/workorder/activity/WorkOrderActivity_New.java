@@ -645,7 +645,7 @@ public class WorkOrderActivity_New extends AppCompatActivity {
                                 if(requestCode==101){
                                     txtmobile.setText(phoneNumber);
                                 }
-                                else{
+                                else if(requestCode==102){
                                     txtmobile_con_person.setText(phoneNumber);
                                 }
                             }
