@@ -92,7 +92,7 @@
             android:id="@+id/txtcapacity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textCapCharacters"
+            android:inputType="number"
             android:layout_marginBottom="15dp"
             android:background="@drawable/edittextbac"
             android:capitalize="characters"
@@ -101,7 +101,6 @@
             android:paddingLeft="5dp"
             android:paddingTop="8dp"
             android:textSize="20sp" >
-            <requestFocus />
         </EditText>
 
         <TextView
@@ -130,7 +129,7 @@
             android:id="@+id/txtconsumer_no"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="number"
+            android:inputType="text"
             android:layout_marginBottom="15dp"
             android:background="@drawable/edittextbac"
             android:capitalize="characters"
@@ -201,7 +200,6 @@
             android:paddingLeft="5dp"
             android:paddingTop="8dp"
             android:textSize="20sp" >
-            <requestFocus />
         </EditText>
 
         <TextView
@@ -225,7 +223,6 @@
             android:paddingLeft="5dp"
             android:paddingTop="8dp"
             android:textSize="20sp" >
-            <requestFocus />
         </EditText>
         <TextView
             android:layout_width="wrap_content"
@@ -248,7 +245,6 @@
             android:paddingLeft="5dp"
             android:paddingTop="8dp"
             android:textSize="20sp" >
-            <requestFocus />
         </EditText>
 
         <TextView
@@ -272,7 +268,6 @@
             android:paddingLeft="5dp"
             android:paddingTop="8dp"
             android:textSize="20sp" >
-            <requestFocus />
         </EditText>
 
         <TextView
@@ -287,7 +282,7 @@
             android:id="@+id/txtgst_no"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="number"
+            android:inputType="text"
             android:layout_marginBottom="15dp"
             android:background="@drawable/edittextbac"
             android:capitalize="characters"
@@ -327,21 +322,38 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textSize="18sp"
             android:textStyle="bold" />
-
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="15dp"
+            android:weightSum="10"
+       >
         <EditText
             android:id="@+id/txtmobile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="phone"
-            android:layout_marginBottom="15dp"
-            android:background="@drawable/edittextbac"
-            android:capitalize="characters"
-            android:ems="10"
             android:paddingBottom="8dp"
             android:paddingLeft="5dp"
             android:paddingTop="8dp"
-            android:textSize="20sp" >
+            android:background="@drawable/edittextbac"
+            android:capitalize="characters"
+            android:ems="10"
+            android:layout_marginTop="10dp"
+            android:textSize="20sp"
+            android:layout_weight="8">
         </EditText>
+
+            <ImageView
+                android:id="@+id/contact_pick_img"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_weight="2"
+                android:layout_marginLeft="5dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/contact_list_ico" />
+        </LinearLayout>>
 
         <TextView
             android:layout_width="wrap_content"
@@ -387,7 +399,6 @@
             android:paddingLeft="5dp"
             android:paddingTop="8dp"
             android:textSize="20sp" >
-            <requestFocus />
         </EditText>
         <TextView
             android:layout_width="wrap_content"
@@ -410,7 +421,6 @@
             android:paddingLeft="5dp"
             android:paddingTop="8dp"
             android:textSize="20sp" >
-            <requestFocus />
         </EditText>
 
         <TextView
@@ -449,7 +459,6 @@
             android:paddingLeft="5dp"
             android:paddingTop="8dp"
             android:textSize="20sp" >
-            <requestFocus />
         </EditText>
         <TextView
             android:layout_width="wrap_content"
@@ -459,20 +468,37 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textSize="18sp"
             android:textStyle="bold" />
-        <EditText
-            android:id="@+id/txtmobile_con_person"
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="number"
+            android:orientation="horizontal"
             android:layout_marginBottom="15dp"
-            android:background="@drawable/edittextbac"
-            android:capitalize="characters"
-            android:ems="10"
-            android:paddingBottom="8dp"
-            android:paddingLeft="5dp"
-            android:paddingTop="8dp"
-            android:textSize="20sp" >
-        </EditText>
+            android:weightSum="10">
+            <EditText
+                android:id="@+id/txtmobile_con_person"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="phone"
+                android:paddingBottom="8dp"
+                android:paddingLeft="5dp"
+                android:paddingTop="8dp"
+                android:background="@drawable/edittextbac"
+                android:capitalize="characters"
+                android:ems="10"
+                android:layout_marginTop="10dp"
+                android:textSize="20sp"
+                android:layout_weight="8">
+            </EditText>
+            <ImageView
+                android:id="@+id/contact2_pick_img"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginLeft="5dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/contact_list_ico"
+                android:layout_weight="2"/>
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -512,7 +538,6 @@
             android:paddingLeft="5dp"
             android:paddingTop="8dp"
             android:textSize="20sp" >
-            <requestFocus />
         </EditText>
         <TextView
             android:layout_width="wrap_content"
@@ -549,7 +574,6 @@
             android:paddingLeft="5dp"
             android:paddingTop="8dp"
             android:textSize="20sp" >
-            <requestFocus />
         </EditText>
         <TextView
             android:layout_width="wrap_content"
@@ -572,7 +596,6 @@
             android:paddingLeft="5dp"
             android:paddingTop="8dp"
             android:textSize="20sp" >
-            <requestFocus />
         </EditText>
 
         <TextView
@@ -780,7 +803,6 @@
             android:paddingLeft="5dp"
             android:paddingTop="8dp"
             android:textSize="20sp" >
-            <requestFocus />
         </EditText>
         <Button
             android:id="@+id/btnSave"

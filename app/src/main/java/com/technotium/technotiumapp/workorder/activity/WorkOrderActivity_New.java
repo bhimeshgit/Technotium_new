@@ -1,11 +1,16 @@
 package com.technotium.technotiumapp.workorder.activity;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.LinearLayoutCompat;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.util.Log;
@@ -14,6 +19,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -60,6 +66,7 @@ public class WorkOrderActivity_New extends AppCompatActivity {
 
     WorkOrderActivity_New currentActivity;
     LinearLayoutCompat finance_head_lay;
+    ImageView contact_pick_img,contact2_pick_img;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -172,11 +179,18 @@ public class WorkOrderActivity_New extends AppCompatActivity {
     }
 
     private void onClick() {
-        txtmobile.setOnClickListener(new View.OnClickListener() {
+        contact_pick_img.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent contactPickerIntent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
                 startActivityForResult(contactPickerIntent,101);
+            }
+        });
+        contact2_pick_img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent contactPickerIntent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+                startActivityForResult(contactPickerIntent,102);
             }
         });
         btnSave.setOnClickListener(new View.OnClickListener() {
@@ -301,12 +315,15 @@ public class WorkOrderActivity_New extends AppCompatActivity {
         projectTypeArray.add("Industrial");
         projectTypeArray.add("Public Service");
 
+        structureArray.add("--Select--");
         structureArray.add("ELEVATED");
         structureArray.add("ROOF TOP");
         structureArray.add("GROUND MOUNTED");
         structureArray.add("PLATFORM");
+        phaseArray.add("--Select--");
         phaseArray.add("1");
         phaseArray.add("3");
+        gridArray.add("--Select--");
         gridArray.add("On Grid");
         gridArray.add("Off Grid");
 
@@ -381,17 +398,20 @@ public class WorkOrderActivity_New extends AppCompatActivity {
         txtpanelcapacity=findViewById(R.id.txtpanelcapacity);
         txtinvertercapacity=findViewById(R.id.txtinvertercapacity);
         txtRate=findViewById(R.id.txtRate);
+        txtbu=findViewById(R.id.txtbu);
 
         btnSave=findViewById(R.id.btnSave);
         btnUpdate=findViewById(R.id.btnUpdate);
         if(SessionManager.getMyInstance(currentActivity).getEmpType().equalsIgnoreCase("Electrician")){
-        //    txtRate.setVisibility(View.GONE);
-        //    txtRatetxt.setVisibility(View.GONE);
+            txtRate.setVisibility(View.GONE);
+            txtRatetxt.setVisibility(View.GONE);
         }
         finance_head_lay=findViewById(R.id.finance_head_lay);
 
         txtContactPerson=findViewById(R.id.txtContactPerson);
         txtFirmName=findViewById(R.id.txtFirmName);
+        contact_pick_img=findViewById(R.id.contact_pick_img);
+        contact2_pick_img=findViewById(R.id.contact2_pick_img);
     }
 
     public void dateFunction(){
@@ -539,6 +559,14 @@ public class WorkOrderActivity_New extends AppCompatActivity {
             Toast.makeText(currentActivity,"Enter the panel make",Toast.LENGTH_SHORT).show();
             return 0;
         }
+        if(workOrderPojo.getInverter().trim().length()==0){
+            Toast.makeText(currentActivity,"Enter the inverter make",Toast.LENGTH_SHORT).show();
+            return 0;
+        }
+        if(workOrderPojo.getBu().trim().length()==0){
+            Toast.makeText(currentActivity,"Enter the billing unit",Toast.LENGTH_SHORT).show();
+            return 0;
+        }
         if(workOrderPojo.getInvertercapicity().trim().length()==0){
             Toast.makeText(currentActivity,"Enter the inverter capacity",Toast.LENGTH_SHORT).show();
             return 0;
@@ -555,6 +583,79 @@ public class WorkOrderActivity_New extends AppCompatActivity {
             Toast.makeText(currentActivity,"Select project type",Toast.LENGTH_SHORT).show();
             return 0;
         }
+        if(workOrderPojo.getGridType().equals("--Select--")){
+            Toast.makeText(currentActivity,"Select Grid type",Toast.LENGTH_SHORT).show();
+            return 0;
+        }
+        if(workOrderPojo.getPhase().equals("--Select--")){
+            Toast.makeText(currentActivity,"Select Phase",Toast.LENGTH_SHORT).show();
+            return 0;
+        }
+        if(workOrderPojo.getEmail().trim().length()==0){
+            Toast.makeText(currentActivity,"Enter the email id",Toast.LENGTH_SHORT).show();
+            return 0;
+        }
+        if(workOrderPojo.getAddress().trim().length()==0){
+            Toast.makeText(currentActivity,"Enter the address",Toast.LENGTH_SHORT).show();
+            return 0;
+        }
+        if(workOrderPojo.getStructure().equals("--Select--")){
+            Toast.makeText(currentActivity,"Select structure",Toast.LENGTH_SHORT).show();
+            return 0;
+        }
+
+        if(workOrderPojo.getGst_no().trim().length()!=0 && workOrderPojo.getGst_no().trim().length()!=11){
+            Toast.makeText(currentActivity,"Invalid GST No. It should be 11 character.",Toast.LENGTH_SHORT).show();
+            return 0;
+        }
+        if(txtamount.getVisibility()!=View.GONE && workOrderPojo.getAmount().trim().length()==0){
+            Toast.makeText(currentActivity,"Enter the work order amount",Toast.LENGTH_SHORT).show();
+            return 0;
+        }
+        if(txtRate.getVisibility()!=View.GONE && workOrderPojo.getRateFromCompany().trim().length()==0){
+            Toast.makeText(currentActivity,"Enter the rate from company",Toast.LENGTH_SHORT).show();
+            return 0;
+        }
+        if(workOrderPojo.getContactPerson().trim().length()>0 && workOrderPojo.getContactPerson().trim().length()==10){
+            Toast.makeText(currentActivity,"Invalid contact person mobile no.",Toast.LENGTH_SHORT).show();
+            return 0;
+        }
         return 1;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==101 || requestCode==102){
+            if (resultCode == Activity.RESULT_OK) {
+                Uri contactData = data.getData();
+                ContentResolver cr = currentActivity.getContentResolver();
+                Cursor cur = cr.query(contactData, null, null, null, null);
+                if (cur.getCount() > 0) {// thats mean some resutl has been found
+                    if(cur.moveToNext()) {
+                        String id = cur.getString(cur.getColumnIndex(ContactsContract.Contacts._ID));
+                        String name = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+//                        Log.e("Names", name);
+                        if (Integer.parseInt(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0)
+                        {
+                            // Query phone here. Covered next
+                            Cursor phones = currentActivity.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,null,ContactsContract.CommonDataKinds.Phone.CONTACT_ID +" = "+ id,null, null);
+                            while (phones.moveToNext()) {
+                                String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                                if(requestCode==101){
+                                    txtmobile.setText(phoneNumber);
+                                }
+                                else{
+                                    txtmobile_con_person.setText(phoneNumber);
+                                }
+                            }
+                            phones.close();
+                        }
+
+                    }
+                }
+                cur.close();
+            }
+        }
     }
 }

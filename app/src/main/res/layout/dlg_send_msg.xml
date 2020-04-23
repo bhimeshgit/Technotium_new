@@ -76,7 +76,15 @@
 
 
 
-
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:text="0/0"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:id="@+id/txtcharcount"/>
 
 
 

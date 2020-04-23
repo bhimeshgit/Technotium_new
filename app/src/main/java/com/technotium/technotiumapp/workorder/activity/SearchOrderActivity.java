@@ -178,7 +178,8 @@ public class SearchOrderActivity extends AppCompatActivity {
                                     workOrderPojo.setGst_no(jsonWO.getString("gst_no"));
                                     workOrderPojo.setWo_report(jsonWO.getString("wo_report"));
                                     workOrderPojo.setFirm_name(jsonWO.getString("firm_name"));
-                                    workOrderPojo.setContactPerson(jsonWO.getString("contact_person_name"));
+                                    workOrderPojo.setPhase(jsonWO.getString("phase"));
+                                    workOrderPojo.setContact_person_name(jsonWO.getString("contact_person_name"));
                                     if(modul.equals("workorder")){
                                         workOrderPojo.setWo_activity(1);
                                     }

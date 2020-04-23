@@ -14,12 +14,13 @@
             android:icon="@mipmap/ic_launcher"
             android:title="Manage Employee" />
         <item
-            android:id="@+id/logout"
-            android:icon="@mipmap/ic_launcher"
-            android:title="Logout" />
-        <item
             android:id="@+id/send_sms"
             android:icon="@mipmap/ic_launcher"
             android:title="Send SMS" />
+        <item
+            android:id="@+id/logout"
+            android:icon="@mipmap/ic_launcher"
+            android:title="Logout" />
+
     </group>
 </menu>

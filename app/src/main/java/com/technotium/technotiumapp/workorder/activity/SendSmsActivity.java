@@ -263,9 +263,14 @@ public class SendSmsActivity extends AppCompatActivity {
     }
 
     private void sendSms(){
-        JSONArray jsonArray=new JSONArray(alstMobile);
-        messageDialog = new MessageDialog(jsonArray.toString());
-        messageDialog.show(getSupportFragmentManager(), TAG);
+        if(alstMobile.size()>0){
+            JSONArray jsonArray=new JSONArray(alstMobile);
+            messageDialog = new MessageDialog(jsonArray.toString());
+            messageDialog.show(getSupportFragmentManager(), TAG);
+        }
+        else{
+            Toast.makeText(currentActivity,"Please select customer to send message",Toast.LENGTH_SHORT).show();
+        }
     }
 
 
@@ -276,6 +281,13 @@ public class SendSmsActivity extends AppCompatActivity {
         pDialog.show();
     }
 
+    public void sendSmsBtnClick(){
+        alstMobile.clear();
+        for (WorkOrderPojo w : orderList) {
+            w.setSelected(false);
+        }
+        adapter.notifyDataSetChanged();
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

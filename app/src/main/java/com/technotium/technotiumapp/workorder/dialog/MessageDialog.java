@@ -4,11 +4,14 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.DialogFragment;
@@ -17,6 +20,7 @@ import com.android.volley.Request;
 import com.technotium.technotiumapp.R;
 import com.technotium.technotiumapp.config.JsonParserVolley;
 import com.technotium.technotiumapp.config.WebUrl;
+import com.technotium.technotiumapp.workorder.activity.SendSmsActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,7 +33,8 @@ public class MessageDialog extends DialogFragment {
     private Button btnSend;
     private ProgressDialog pDialog;
     private String msg,mobile;
-
+    private TextView txtcharcount;
+    private int msg_count=0,char_count=0;
     public MessageDialog(String mobile){
         this.mobile=mobile;
     }
@@ -46,6 +51,7 @@ public class MessageDialog extends DialogFragment {
     private void init() {
         txtMsg=mDialog.findViewById(R.id.txtMsg);
         btnSend=mDialog.findViewById(R.id.btnSend);
+        txtcharcount=mDialog.findViewById(R.id.txtcharcount);
         pDialog = new ProgressDialog(getActivity());
         pDialog.setMessage("Please Wait...");
         pDialog.setCancelable(false);
@@ -53,6 +59,27 @@ public class MessageDialog extends DialogFragment {
             @Override
             public void onClick(View v) {
                 sendMsg();
+            }
+        });
+        txtMsg.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                char_count=txtMsg.getText().length();
+                msg_count=txtMsg.getText().length()/160;
+                if(msg_count>0){
+                    char_count=txtMsg.getText().length()%160;
+                }
+                txtcharcount.setText(msg_count+"/"+char_count);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
     }
@@ -80,7 +107,10 @@ public class MessageDialog extends DialogFragment {
 //                                Toast.makeText(mContext,jsonObject.getString("message"),Toast.LENGTH_SHORT).show();
 //                            }
                                 Toast.makeText(mContext,"Message sent successfully",Toast.LENGTH_SHORT).show();
-
+                            mDialog.dismiss();
+                            if(getActivity()  instanceof SendSmsActivity){
+                                ((SendSmsActivity)getActivity()).sendSmsBtnClick();
+                            }
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
