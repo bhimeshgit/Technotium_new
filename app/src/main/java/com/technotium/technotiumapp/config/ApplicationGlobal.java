@@ -128,8 +128,8 @@ public class ApplicationGlobal extends Application {
     public static void shownointernetconnectiondialog(Context context) {
         final Dialog dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setCancelable(true);
-        dialog.setCanceledOnTouchOutside(true);
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
         dialog.setContentView(R.layout.dg_nointernet);
         TextView tvretry = (TextView) dialog.findViewById(R.id.tvretry);
 

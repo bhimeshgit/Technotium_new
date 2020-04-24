@@ -57,4 +57,10 @@ public class WorkOrderPdfReportActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+
+    }
 }

@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -616,7 +617,7 @@ public class WorkOrderActivity_New extends AppCompatActivity {
             Toast.makeText(currentActivity,"Enter the rate from company",Toast.LENGTH_SHORT).show();
             return 0;
         }
-        if(workOrderPojo.getContactPerson().trim().length()>0 && workOrderPojo.getContactPerson().trim().length()==10){
+        if(workOrderPojo.getContactPerson().trim().length()>0 && workOrderPojo.getContactPerson().trim().length()!=10){
             Toast.makeText(currentActivity,"Invalid contact person mobile no.",Toast.LENGTH_SHORT).show();
             return 0;
         }
@@ -656,6 +657,28 @@ public class WorkOrderActivity_New extends AppCompatActivity {
                 }
                 cur.close();
             }
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent=new Intent(currentActivity, SearchOrderActivity.class);
+        intent.putExtra("modul","workorder");
+        startActivity(intent);
+        finish();
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                Intent intent=new Intent(currentActivity, SearchOrderActivity.class);
+                intent.putExtra("modul","workorder");
+                startActivity(intent);
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 }

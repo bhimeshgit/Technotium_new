@@ -163,6 +163,8 @@ public class WelcomeEmpActivity extends AppCompatActivity  implements Navigation
         });
         isCameraPermissionGranted();
         isReadContactsPermissionGranted();
+        isReadStoragePermissionGranted();
+        isWriteStoragePermissionGranted();
     }
 
     public  boolean isReadStoragePermissionGranted() {
