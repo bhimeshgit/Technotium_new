@@ -19,55 +19,89 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".workorder.activity.WorkOrderActivity_New" android:screenOrientation="portrait"></activity>
+        <activity android:name=".docscan.activity.UploadMultipleDocActivityLocal"></activity>
+        <activity
+            android:name=".workorder.activity.WorkOrderActivity_New"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".workorder.activity.SendSmsActivity"
-            android:theme="@style/Theme.AppCompat.Light" android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light" />
         <activity
             android:name=".docscan.activity.UploadMultipleDocActivity"
-            android:theme="@style/Theme.AppCompat.Light" android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light" />
         <activity
             android:name=".dealer_incentive.activities.DealerPaymentActivity"
-            android:theme="@style/Theme.AppCompat.Light" android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light" />
         <activity
             android:name=".dealer_incentive.activities.DealerIncentiveActivity"
-            android:theme="@style/Theme.AppCompat.Light" android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light" />
         <activity
             android:name=".after_sales.Activities.ScannerActivity"
-            android:theme="@style/Theme.AppCompat.Light" android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light" />
         <activity
             android:name=".after_sales.Activities.AfterSalesActivity"
-            android:theme="@style/Theme.AppCompat.Light" android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light" />
         <activity
             android:name=".workorder.activity.WorkOrderPdfReportActivity"
-            android:theme="@style/Theme.AppCompat.Light" android:screenOrientation="portrait"/>
-        <activity android:name=".expenses.activity.AddExpense" android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light" />
+        <activity
+            android:name=".expenses.activity.AddExpense"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".expenses.activity.ViewAllExpenses"
-            android:theme="@style/Theme.AppCompat.Light" android:screenOrientation="portrait"/>
-        <activity android:name=".ForgotPasswordActivity" android:screenOrientation="portrait" />
-        <activity android:name=".LockActivity"  android:screenOrientation="portrait"/>
-        <activity android:name=".employee.MyProfileActivity" android:screenOrientation="portrait"/>
-        <activity android:name=".status.activity.OrderStatusActivity" android:screenOrientation="portrait" />
-        <activity android:name=".material.activity.AddMaterialActivity" android:screenOrientation="portrait" />
-        <activity android:name=".employee.AddUpdateEmpActivity"  android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light" />
+        <activity
+            android:name=".ForgotPasswordActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".LockActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".employee.MyProfileActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".status.activity.OrderStatusActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".material.activity.AddMaterialActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".employee.AddUpdateEmpActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".employee.ManageEmployeeActivity"
-            android:theme="@style/Theme.AppCompat.Light" android:screenOrientation="portrait"/>
-        <activity android:name=".docscan.activity.UploadDocActivity" android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light" />
+        <activity
+            android:name=".docscan.activity.UploadDocActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".docscan.activity.ViewAllDocsActivity"
-            android:theme="@style/Theme.AppCompat.Light" android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light" />
         <activity
             android:name=".payment.activity.AddPaymentActivity"
-            android:theme="@style/Theme.AppCompat.Light" android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light" />
         <activity
             android:name=".payment.activity.PaymentHistoryActivity"
-            android:theme="@style/Theme.AppCompat.Light" android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light" />
         <activity
             android:name=".workorder.activity.SearchOrderActivity"
-            android:theme="@style/Theme.AppCompat.Light" android:screenOrientation="portrait"/>
-        <activity android:name=".LoginActivity" android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light" />
+        <activity
+            android:name=".LoginActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -83,8 +117,12 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".WelcomeEmpActivity" android:screenOrientation="portrait" />
-        <activity android:name=".workorder.activity.WorkOrderActivity" android:screenOrientation="portrait" />
+        <activity
+            android:name=".WelcomeEmpActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".workorder.activity.WorkOrderActivity"
+            android:screenOrientation="portrait" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

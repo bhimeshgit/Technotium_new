@@ -1,7 +1,7 @@
 package com.technotium.technotiumapp.config;
 
 public class WebUrl {
- //  public static String BASE_URL="http://192.168.42.112/technotium/";
+    //  public static String BASE_URL="http://192.168.42.112/technotium/";
 //  public static String BASE_URL= "http://4isoftwares.com/technotium/";
 public static String BASE_URL= "http://www.kitsgeotech.in/technotium/";
 
