@@ -36,20 +36,38 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textSize="18sp"
             android:textStyle="bold" />
-        <EditText
-            android:id="@+id/txtOrderDate"
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textCapCharacters"
-            android:layout_marginBottom="15dp"
-            android:background="@drawable/edittextbac"
-            android:capitalize="characters"
-            android:ems="10"
-            android:paddingBottom="8dp"
-            android:paddingLeft="5dp"
-            android:paddingTop="8dp"
-            android:textSize="20sp" >
-        </EditText>
+            android:id="@+id/txtOrderDate_lay"
+            android:weightSum="10"
+            android:layout_marginBottom="15dp">
+            <EditText
+                android:id="@+id/txtOrderDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="textCapCharacters"
+
+                android:background="@drawable/edittextbac"
+                android:capitalize="characters"
+                android:ems="10"
+                android:paddingBottom="8dp"
+                android:paddingLeft="5dp"
+                android:paddingTop="8dp"
+                android:textSize="20sp"
+                android:layout_weight="8">
+            </EditText>
+            <ImageView
+                android:id="@+id/date_img_view"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_weight="2"
+                android:layout_marginLeft="5dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/cal"
+                />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
 
         <TextView
             android:layout_width="wrap_content"
@@ -739,71 +757,77 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textSize="18sp"
             android:textStyle="bold"  />
-
-        <androidx.appcompat.widget.LinearLayoutCompat
-            android:id="@+id/finance_head_lay"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="15dp"
-            android:background="#c1c1c1"
-            android:orientation="vertical" >
+            android:id="@+id/finance_lay"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/finance_head_lay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:background="#c1c1c1"
+                android:orientation="vertical" >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="6dp"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginTop="6dp"
+                    android:text="Financials :"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="6dp"
-                android:layout_marginLeft="6dp"
-                android:layout_marginTop="6dp"
-                android:text="Financials :"
+                android:id="@+id/txtamounttxt"
+                android:layout_marginBottom="5dp"
+                android:text="Work Order Amount :"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textSize="18sp"
                 android:textStyle="bold" />
-        </androidx.appcompat.widget.LinearLayoutCompat>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/txtamounttxt"
-            android:layout_marginBottom="5dp"
-            android:text="Work Order Amount :"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-        <EditText
-            android:id="@+id/txtamount"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:layout_marginBottom="15dp"
-            android:background="@drawable/edittextbac"
-            android:capitalize="characters"
-            android:ems="10"
-            android:paddingBottom="8dp"
-            android:paddingLeft="5dp"
-            android:paddingTop="8dp"
-            android:textSize="20sp" >
-        </EditText>
-        <TextView
-            android:id="@+id/txtRatetxt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:text="Rate from company:"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-        <EditText
-            android:id="@+id/txtRate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textCapCharacters"
-            android:layout_marginBottom="15dp"
-            android:background="@drawable/edittextbac"
-            android:capitalize="characters"
-            android:ems="10"
-            android:paddingBottom="8dp"
-            android:paddingLeft="5dp"
-            android:paddingTop="8dp"
-            android:textSize="20sp" >
-        </EditText>
+            <EditText
+                android:id="@+id/txtamount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/edittextbac"
+                android:capitalize="characters"
+                android:ems="10"
+                android:paddingBottom="8dp"
+                android:paddingLeft="5dp"
+                android:paddingTop="8dp"
+                android:textSize="20sp" >
+            </EditText>
+            <TextView
+                android:id="@+id/txtRatetxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="Rate from company:"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+            <EditText
+                android:id="@+id/txtRate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textCapCharacters"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/edittextbac"
+                android:capitalize="characters"
+                android:ems="10"
+                android:paddingBottom="8dp"
+                android:paddingLeft="5dp"
+                android:paddingTop="8dp"
+                android:textSize="20sp" >
+            </EditText>
+        </LinearLayout>
         <Button
             android:id="@+id/btnSave"
             android:layout_width="match_parent"

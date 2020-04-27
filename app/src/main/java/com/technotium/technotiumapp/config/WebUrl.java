@@ -2,8 +2,8 @@ package com.technotium.technotiumapp.config;
 
 public class WebUrl {
     //  public static String BASE_URL="http://192.168.42.112/technotium/";
-//  public static String BASE_URL= "http://4isoftwares.com/technotium/";
-public static String BASE_URL= "http://www.kitsgeotech.in/technotium/";
+  public static String BASE_URL= "http://4isoftwares.com/technotium/";
+//public static String BASE_URL= "http://www.kitsgeotech.in/technotium/";
 
     public static String LOGIN_URL=BASE_URL+"app_login.php";
     public static String ADD_WORK_ORDER_URL=BASE_URL+"addWorkOrder.php";

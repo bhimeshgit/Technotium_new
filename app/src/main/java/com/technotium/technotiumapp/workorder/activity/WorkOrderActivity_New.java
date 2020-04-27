@@ -21,6 +21,7 @@ import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -64,10 +65,11 @@ public class WorkOrderActivity_New extends AppCompatActivity {
     Button btnSave,btnUpdate;
     ProgressDialog pDialog ;
     TextView txtRatetxt;
+    LinearLayout finance_lay;
 
     WorkOrderActivity_New currentActivity;
     LinearLayoutCompat finance_head_lay;
-    ImageView contact_pick_img,contact2_pick_img;
+    ImageView contact_pick_img,contact2_pick_img,date_img_view;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -192,6 +194,12 @@ public class WorkOrderActivity_New extends AppCompatActivity {
             public void onClick(View v) {
                 Intent contactPickerIntent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
                 startActivityForResult(contactPickerIntent,102);
+            }
+        });
+        date_img_view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dateFunction();
             }
         });
         btnSave.setOnClickListener(new View.OnClickListener() {
@@ -346,10 +354,11 @@ public class WorkOrderActivity_New extends AppCompatActivity {
 
         adapter = new SpinnerAdapter(currentActivity, gridArray);
         spnGridType.setAdapter(adapter);
-        if(SessionManager.getMyInstance(currentActivity).getEmpType().equalsIgnoreCase("Electrician")){
+        if(SessionManager.getMyInstance(currentActivity).getEmpType().equals("Employee") || SessionManager.getMyInstance(currentActivity).getEmpType().equals("Electrician")){
             txtamount.setVisibility(View.GONE);
             txtamounttxt.setVisibility(View.GONE);
             finance_head_lay.setVisibility(View.GONE);
+            finance_lay.setVisibility(View.GONE);
         }
         pDialog = new ProgressDialog(currentActivity);
 
@@ -361,6 +370,7 @@ public class WorkOrderActivity_New extends AppCompatActivity {
     }
 
     private void generateId() {
+        date_img_view=findViewById(R.id.date_img_view);
         txtfname=findViewById(R.id.txtfname);
         txtlname=findViewById(R.id.txtlname);
         txtmobile=findViewById(R.id.txtmobile);
@@ -413,6 +423,8 @@ public class WorkOrderActivity_New extends AppCompatActivity {
         txtFirmName=findViewById(R.id.txtFirmName);
         contact_pick_img=findViewById(R.id.contact_pick_img);
         contact2_pick_img=findViewById(R.id.contact2_pick_img);
+
+        finance_lay=findViewById(R.id.finance_lay);
     }
 
     public void dateFunction(){
@@ -605,18 +617,18 @@ public class WorkOrderActivity_New extends AppCompatActivity {
             return 0;
         }
 
-        if(workOrderPojo.getGst_no().trim().length()!=0 && workOrderPojo.getGst_no().trim().length()!=11){
-            Toast.makeText(currentActivity,"Invalid GST No. It should be 11 character.",Toast.LENGTH_SHORT).show();
+        if(workOrderPojo.getGst_no().trim().length()!=0 && workOrderPojo.getGst_no().trim().length()>15){
+            Toast.makeText(currentActivity,"Invalid GST No. It should be maximum 15 character.",Toast.LENGTH_SHORT).show();
             return 0;
         }
         if(txtamount.getVisibility()!=View.GONE && workOrderPojo.getAmount().trim().length()==0){
             Toast.makeText(currentActivity,"Enter the work order amount",Toast.LENGTH_SHORT).show();
             return 0;
         }
-        if(txtRate.getVisibility()!=View.GONE && workOrderPojo.getRateFromCompany().trim().length()==0){
-            Toast.makeText(currentActivity,"Enter the rate from company",Toast.LENGTH_SHORT).show();
-            return 0;
-        }
+//        if(txtRate.getVisibility()!=View.GONE && workOrderPojo.getRateFromCompany().trim().length()==0){
+//            Toast.makeText(currentActivity,"Enter the rate from company",Toast.LENGTH_SHORT).show();
+//            return 0;
+//        }
         if(workOrderPojo.getContactPerson().trim().length()>0 && workOrderPojo.getContactPerson().trim().length()!=10){
             Toast.makeText(currentActivity,"Invalid contact person mobile no.",Toast.LENGTH_SHORT).show();
             return 0;
@@ -644,10 +656,19 @@ public class WorkOrderActivity_New extends AppCompatActivity {
                             while (phones.moveToNext()) {
                                 String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
                                 if(requestCode==101){
-                                    txtmobile.setText(phoneNumber);
+                                    try{
+                                        String s=phoneNumber.substring(phoneNumber.length()-10,phoneNumber.length());
+                                        txtmobile.setText(s);
+                                    }
+                                    catch (Exception e){}
+
                                 }
                                 else if(requestCode==102){
-                                    txtmobile_con_person.setText(phoneNumber);
+                                    try {
+                                        String s = phoneNumber.substring(phoneNumber.length() - 10, phoneNumber.length());
+                                        txtmobile_con_person.setText(s);
+                                    }
+                                    catch (Exception e){}
                                 }
                             }
                             phones.close();
