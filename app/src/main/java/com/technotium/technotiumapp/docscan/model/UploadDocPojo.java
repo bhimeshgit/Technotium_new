@@ -3,7 +3,7 @@ package com.technotium.technotiumapp.docscan.model;
 import android.graphics.Bitmap;
 
 public class UploadDocPojo {
-    String encodedPhotoString;
+    String img_file_path;
 
     public Bitmap getBitmap() {
         return bitmap;
@@ -14,13 +14,23 @@ public class UploadDocPojo {
     }
 
     Bitmap bitmap;
-    public String getEncodedPhotoString() {
-        return encodedPhotoString;
+    public String getImg_file_path() {
+        return img_file_path;
     }
 
-    public void setEncodedPhotoString(String encodedPhotoString) {
-        this.encodedPhotoString = encodedPhotoString;
+    public void setImg_file_path(String img_file_path) {
+        this.img_file_path = img_file_path;
     }
+
+    public String getEncodedString() {
+        return encodedString;
+    }
+
+    public void setEncodedString(String encodedString) {
+        this.encodedString = encodedString;
+    }
+
+    public String encodedString;
 
     public String getDoc_type() {
         return doc_type;
@@ -77,4 +87,14 @@ public class UploadDocPojo {
 
     int push_flag;   //0=new,1=updated,2=successfully push
     public long modifiedDate;
+
+    public int getAddedBy() {
+        return addedBy;
+    }
+
+    public void setAddedBy(int addedBy) {
+        this.addedBy = addedBy;
+    }
+
+    public int addedBy;
 }

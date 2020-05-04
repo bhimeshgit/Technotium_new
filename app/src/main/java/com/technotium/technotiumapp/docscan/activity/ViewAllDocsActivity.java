@@ -111,7 +111,7 @@ public class ViewAllDocsActivity extends AppCompatActivity {
             public void onClick(View v) {
         //        Intent intent=new Intent(currentActivity,UploadDocActivity.class);
 //                Intent intent=new Intent(currentActivity,UploadMultipleDocActivity.class);
-                Intent intent=new Intent(currentActivity,UploadMultipleDocActivity.class);
+                Intent intent=new Intent(currentActivity,UploadMultipleDocActivityLocal.class);
                 intent.putExtra("orderData",workOrderPojo);
                 startActivity(intent);
                 finish();

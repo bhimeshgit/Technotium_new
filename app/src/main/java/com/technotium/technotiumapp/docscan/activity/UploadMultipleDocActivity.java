@@ -2,7 +2,6 @@ package com.technotium.technotiumapp.docscan.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,7 +22,6 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -145,7 +143,7 @@ public class UploadMultipleDocActivity extends AppCompatActivity {
         for (UploadDocPojo pojo: doc_List) {
             JSONObject jsonObject=new JSONObject();
             jsonObject.put("doc_type",pojo.getDoc_type());
-            jsonObject.put("encodedPhotoString",pojo.getEncodedPhotoString());
+            jsonObject.put("encodedPhotoString",pojo.getImg_file_path());
             jsonArray.put(jsonObject);
         }
         docJsonArray = (JsonArray) new Gson().toJsonTree(doc_List);
@@ -545,7 +543,7 @@ public class UploadMultipleDocActivity extends AppCompatActivity {
             return;
         }
         UploadDocPojo uploadDocPojo=new UploadDocPojo();
-        uploadDocPojo.setEncodedPhotoString(encodedPhotoString);
+        uploadDocPojo.setImg_file_path(encodedPhotoString);
         uploadDocPojo.setDoc_type(spndocName.getSelectedItem().toString());
         uploadDocPojo.setBitmap(bitmap);
         doc_List.add(uploadDocPojo);

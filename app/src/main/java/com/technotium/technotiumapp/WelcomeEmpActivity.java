@@ -39,6 +39,7 @@ import com.technotium.technotiumapp.config.ApplicationGlobal;
 import com.technotium.technotiumapp.config.JsonParserVolley;
 import com.technotium.technotiumapp.config.SessionManager;
 import com.technotium.technotiumapp.config.WebUrl;
+import com.technotium.technotiumapp.config.services.SyncingService;
 import com.technotium.technotiumapp.employee.AddUpdateEmpActivity;
 import com.technotium.technotiumapp.employee.ManageEmployeeActivity;
 import com.technotium.technotiumapp.employee.MyProfileActivity;
@@ -65,6 +66,7 @@ public class WelcomeEmpActivity extends AppCompatActivity  implements Navigation
     HomeIconAdapter adapter;
     WelcomeEmpActivity currentActivity;
     ImageView empProfileImg;
+    public static final int CAMERA_PERMISSION=2, READ_CONTACT_PERMISSION=3, WRITE_EXTERNAL_STORAGE_PERMISSION=1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -161,10 +163,7 @@ public class WelcomeEmpActivity extends AppCompatActivity  implements Navigation
 
             }
         });
-        isCameraPermissionGranted();
-        isReadContactsPermissionGranted();
-        isReadStoragePermissionGranted();
-        isWriteStoragePermissionGranted();
+
     }
 
     public  boolean isReadStoragePermissionGranted() {
@@ -186,10 +185,9 @@ public class WelcomeEmpActivity extends AppCompatActivity  implements Navigation
         if (Build.VERSION.SDK_INT >= 23) {
             if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     == PackageManager.PERMISSION_GRANTED) {
-
                 return true;
             } else {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 2);
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},WRITE_EXTERNAL_STORAGE_PERMISSION );
                 return false;
             }
         }
@@ -204,7 +202,7 @@ public class WelcomeEmpActivity extends AppCompatActivity  implements Navigation
                     == PackageManager.PERMISSION_GRANTED) {
                 return true;
             } else {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_CONTACTS}, 3);
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_CONTACTS}, READ_CONTACT_PERMISSION);
                 return false;
             }
         }
@@ -217,10 +215,9 @@ public class WelcomeEmpActivity extends AppCompatActivity  implements Navigation
         if (Build.VERSION.SDK_INT >= 23) {
             if (checkSelfPermission(Manifest.permission.CAMERA)
                     == PackageManager.PERMISSION_GRANTED) {
-
                 return true;
             } else {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, 1);
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION);
                 return false;
             }
         }
@@ -229,29 +226,13 @@ public class WelcomeEmpActivity extends AppCompatActivity  implements Navigation
         }
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch(requestCode){
-            case 1:
-                isWriteStoragePermissionGranted();
-                   break;
-            case 2:
-                isReadStoragePermissionGranted();
-                break;
-            case 3:
-                isReadContactsPermissionGranted();
-                break;
-        }
-    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_welcome_employee_drawer, menu);
         return true;
     }
-
-
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -318,7 +299,6 @@ public class WelcomeEmpActivity extends AppCompatActivity  implements Navigation
                     @Override
                     public void getResponse(String response) {
                         pDialog.dismiss();
-                        Log.d("iss","valid="+response);
                         try {
                             JSONObject jsonObject=new JSONObject(response);
                             int success=jsonObject.getInt("success");
@@ -334,7 +314,6 @@ public class WelcomeEmpActivity extends AppCompatActivity  implements Navigation
                                 if (drawer.isDrawerOpen(GravityCompat.START)) {
                                     drawer.closeDrawer(GravityCompat.START);
                                 } else {
-
                                     final AlertDialog.Builder alertDialogBuilder=new AlertDialog.Builder(currentActivity);
                                     alertDialogBuilder.setCancelable(false);
                                     alertDialogBuilder.setTitle("Exit");
@@ -364,11 +343,26 @@ public class WelcomeEmpActivity extends AppCompatActivity  implements Navigation
                                                 .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE)).into(empProfileImg);
                                     }
                                 }
+
+                                isCameraPermissionGranted();
+                                isReadContactsPermissionGranted();
+                                isReadStoragePermissionGranted();
+                                isWriteStoragePermissionGranted();
+
+
+                                if(!ApplicationGlobal.isMyServiceRunning(currentActivity,SyncingService.class)){
+                                    Log.d("iss","service="+"service not running");
+                                    SyncingService.startSyncing(currentActivity,new Intent());
+                                }
+
+
+
                             }
 
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+
                     }
                 }
         );

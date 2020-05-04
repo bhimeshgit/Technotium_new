@@ -1,5 +1,6 @@
 package com.technotium.technotiumapp.config;
 
+import android.app.ActivityManager;
 import android.app.Application;
 import android.app.Dialog;
 import android.content.Context;
@@ -143,6 +144,18 @@ public class ApplicationGlobal extends Application {
         dialog.show();
     }//shownointernetconnectiondialog
 
-
+    public static boolean isMyServiceRunning(Context context, Class<?> serviceClass) {
+        try {
+            ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+            for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+                if (serviceClass.getName().equals(service.service.getClassName())) {
+                    return true;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 
 }
