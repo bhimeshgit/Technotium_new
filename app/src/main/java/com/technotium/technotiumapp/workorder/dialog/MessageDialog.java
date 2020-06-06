@@ -85,6 +85,7 @@ public class MessageDialog extends DialogFragment {
     }
 
     private void sendMsg() {
+        Log.d("stest","mobile="+mobile);
         if(txtMsg.getText().toString().trim().length()<=0){
             Toast.makeText(mContext,"Please enter the message",Toast.LENGTH_SHORT).show();
             return;
@@ -97,6 +98,7 @@ public class MessageDialog extends DialogFragment {
                     @Override
                     public void getResponse(String response) {
                         pDialog.dismiss();
+                        Log.d("stest","msg="+response);
                         try {
 //                            JSONObject jsonObject=new JSONObject(response);
 //                            int success=jsonObject.getInt("success");

@@ -126,11 +126,11 @@ public class SendSmsActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
 
-                    if(orderList!=null){
+                    if(tempArrayList!=null){
                         if(isChecked){
                             alstMobile.clear();
                             allChkFlg=1;
-                            for(WorkOrderPojo w : orderList){
+                            for(WorkOrderPojo w : tempArrayList){
                                 w.setSelected(isChecked);
                                 if(isChecked){
                                     alstMobile.add(w.getMobile());
@@ -141,7 +141,7 @@ public class SendSmsActivity extends AppCompatActivity {
                             allChkFlg=0;
                             if(itemChkflg==0) {
                                 alstMobile.clear();
-                                for (WorkOrderPojo w : orderList) {
+                                for (WorkOrderPojo w : tempArrayList) {
                                     w.setSelected(isChecked);
                                 }
                             }
@@ -230,7 +230,7 @@ public class SendSmsActivity extends AppCompatActivity {
 
                                         if(b) {
                                             if(allChkFlg==0){
-                                                alstMobile.add(orderList.get(position).getMobile());
+                                                alstMobile.add(tempArrayList.get(position).getMobile());
                                             }
                                         }
                                         else {
@@ -239,7 +239,7 @@ public class SendSmsActivity extends AppCompatActivity {
                                                 selectAllChk.setChecked(false);
                                             }
 
-                                            alstMobile.remove(orderList.get(position).getMobile());
+                                            alstMobile.remove(tempArrayList.get(position).getMobile());
                                         }
 //                                        adapter.notifyItemChanged(position);
                                     }
@@ -283,7 +283,7 @@ public class SendSmsActivity extends AppCompatActivity {
 
     public void sendSmsBtnClick(){
         alstMobile.clear();
-        for (WorkOrderPojo w : orderList) {
+        for (WorkOrderPojo w : tempArrayList) {
             w.setSelected(false);
         }
         adapter.notifyDataSetChanged();
