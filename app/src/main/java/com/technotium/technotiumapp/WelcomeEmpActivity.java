@@ -5,6 +5,8 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -12,7 +14,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -54,6 +59,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class WelcomeEmpActivity extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener  {
 
@@ -66,7 +72,12 @@ public class WelcomeEmpActivity extends AppCompatActivity  implements Navigation
     HomeIconAdapter adapter;
     WelcomeEmpActivity currentActivity;
     ImageView empProfileImg;
-    public static final int CAMERA_PERMISSION=2, READ_CONTACT_PERMISSION=3, WRITE_EXTERNAL_STORAGE_PERMISSION=1;
+    String[] permissions= new String[]{
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_CONTACTS,
+            Manifest.permission.CAMERA};
+    public static final int MULTIPLE_PERMISSIONS = 10;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,7 +115,6 @@ public class WelcomeEmpActivity extends AppCompatActivity  implements Navigation
         else{
             checkValidUser();
         }
-
     }
 
     private void init() {
@@ -165,67 +175,6 @@ public class WelcomeEmpActivity extends AppCompatActivity  implements Navigation
         });
 
     }
-
-    public  boolean isReadStoragePermissionGranted() {
-        if (Build.VERSION.SDK_INT >= 23) {
-            if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
-                    == PackageManager.PERMISSION_GRANTED) {
-                return true;
-            } else {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 3);
-                return false;
-            }
-        }
-        else { //permission is automatically granted on sdk<23 upon installation
-            return true;
-        }
-    }
-
-    public  boolean isWriteStoragePermissionGranted() {
-        if (Build.VERSION.SDK_INT >= 23) {
-            if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    == PackageManager.PERMISSION_GRANTED) {
-                return true;
-            } else {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},WRITE_EXTERNAL_STORAGE_PERMISSION );
-                return false;
-            }
-        }
-        else { //permission is automatically granted on sdk<23 upon installation
-            return true;
-        }
-    }
-
-    public  boolean isReadContactsPermissionGranted() {
-        if (Build.VERSION.SDK_INT >= 23) {
-            if (checkSelfPermission(Manifest.permission.READ_CONTACTS)
-                    == PackageManager.PERMISSION_GRANTED) {
-                return true;
-            } else {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_CONTACTS}, READ_CONTACT_PERMISSION);
-                return false;
-            }
-        }
-        else { //permission is automatically granted on sdk<23 upon installation
-            return true;
-        }
-    }
-
-    public  boolean isCameraPermissionGranted() {
-        if (Build.VERSION.SDK_INT >= 23) {
-            if (checkSelfPermission(Manifest.permission.CAMERA)
-                    == PackageManager.PERMISSION_GRANTED) {
-                return true;
-            } else {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION);
-                return false;
-            }
-        }
-        else { //permission is automatically granted on sdk<23 upon installation
-            return true;
-        }
-    }
-
 
 
     @Override
@@ -344,11 +293,7 @@ public class WelcomeEmpActivity extends AppCompatActivity  implements Navigation
                                     }
                                 }
 
-                                isCameraPermissionGranted();
-                                isReadContactsPermissionGranted();
-                                isReadStoragePermissionGranted();
-                                isWriteStoragePermissionGranted();
-
+                                checkPermissions();
 
                                 if(!ApplicationGlobal.isMyServiceRunning(currentActivity,SyncingService.class)){
                                     Log.d("iss","service="+"service not running");
@@ -372,6 +317,43 @@ public class WelcomeEmpActivity extends AppCompatActivity  implements Navigation
         pDialog.setMessage("Please Wait...");
         pDialog.setCancelable(false);
         pDialog.show();
+    }
+
+    private  boolean checkPermissions() {
+        int result;
+        List<String> listPermissionsNeeded = new ArrayList<>();
+        for (String p:permissions) {
+            result = ContextCompat.checkSelfPermission(currentActivity,p);
+            if (result != PackageManager.PERMISSION_GRANTED) {
+                listPermissionsNeeded.add(p);
+            }
+        }
+        if (!listPermissionsNeeded.isEmpty()) {
+            ActivityCompat.requestPermissions(this, listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]),MULTIPLE_PERMISSIONS );
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissionsList[], int[] grantResults) {
+        switch (requestCode) {
+            case MULTIPLE_PERMISSIONS:{
+                if (grantResults.length > 0) {
+                    String permissionsDenied = "";
+                    for (String per : permissionsList) {
+                        if(grantResults[0] == PackageManager.PERMISSION_DENIED){
+                            permissionsDenied += "\n" + per;
+
+                        }
+
+                    }
+                    // Show permissionsDenied
+                  //  updateViews();
+                }
+                return;
+            }
+        }
     }
 
 }

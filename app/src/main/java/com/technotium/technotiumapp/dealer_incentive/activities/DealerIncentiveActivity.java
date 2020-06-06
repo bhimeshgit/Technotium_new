@@ -83,6 +83,7 @@ public class DealerIncentiveActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dealer_incentive);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setTitle("Dealer Incentive");
         Intent intent=getIntent();
         if(intent!=null){
             if(intent.getSerializableExtra("orderData")!=null){

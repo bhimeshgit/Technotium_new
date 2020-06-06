@@ -21,6 +21,7 @@ public class OrderStatusActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_status);
+        setTitle("Status");
         currentActivity=OrderStatusActivity.this;
         if(getIntent().getSerializableExtra("orderData") != null) {
             workOrderPojo =(WorkOrderPojo) getIntent().getSerializableExtra("orderData");

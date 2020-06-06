@@ -42,6 +42,9 @@ public class PostDocsModule {
     }
 
     public void getProductListForPost() {
+        if(docsDao==null){
+            return;
+        }
         List<Docs> alstDocs = docsDao.getAllDocsForPush();
         ArrayList<UploadDocPojo> alstPostDocs=new ArrayList<>();
         for(Docs docs: alstDocs){
@@ -50,9 +53,11 @@ public class PostDocsModule {
             if (filePath != null) {
                 Bitmap bitmap = ImageProcessing.decodeSampledBitmapFromFile(filePath, 1024,768);
                 Matrix matrix = new Matrix();
-                bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-                String encodedPhotoString= compressImage(bitmap);
-                uploadDocPojo.setEncodedString(encodedPhotoString);
+                if(bitmap!=null){
+                    bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+                    String encodedPhotoString= compressImage(bitmap);
+                    uploadDocPojo.setEncodedString(encodedPhotoString);
+                }
             }
             uploadDocPojo.setDoc_type(docs.getDoc_name());
             uploadDocPojo.setOrder_id(docs.getOrder_id());

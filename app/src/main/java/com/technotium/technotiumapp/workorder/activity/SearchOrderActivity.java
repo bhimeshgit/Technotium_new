@@ -70,6 +70,32 @@ public class SearchOrderActivity extends AppCompatActivity {
                 if(modul.equals("workorder")){
                     addNewBtn.setVisibility(View.VISIBLE);
                 }
+                switch (modul){
+                    case "workorder":
+                        setTitle("Work Order");
+                        break;
+                    case "payment":
+                        setTitle("Payment");
+                        break;
+                    case "docscan":
+                        setTitle("Documents");
+                        break;
+                    case "status":
+                        setTitle("Status");
+                        break;
+                    case "material":
+                        setTitle("Material");
+                        break;
+                    case "expense":
+                        setTitle("Expense");
+                        break;
+                    case "after_sale":
+                        setTitle("After Sale");
+                        break;
+                    case "dealer_incentive":
+                        setTitle("Dealer Incentive");
+                        break;
+                }
             }
         }
     }

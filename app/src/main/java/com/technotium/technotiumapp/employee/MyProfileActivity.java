@@ -64,6 +64,7 @@ public class MyProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle("Profile");
         setContentView(R.layout.activity_my_profile);
         init();
     }

@@ -60,7 +60,7 @@ public class SendSmsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_send_sms);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        setTitle("Send SMS");
         //Action bar
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setDisplayShowCustomEnabled(true);

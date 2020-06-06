@@ -40,6 +40,7 @@ public class AddUpdateEmpActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_update_emp);
+        setTitle("Add/Upddate Detail");
         init();
         Intent intent=getIntent();
         if(intent.getStringExtra("emp")!=null){

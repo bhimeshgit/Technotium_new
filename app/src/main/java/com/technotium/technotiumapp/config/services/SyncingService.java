@@ -1,12 +1,18 @@
 package com.technotium.technotiumapp.config.services;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.JobIntentService;
+import androidx.core.app.NotificationCompat;
 
+import com.technotium.technotiumapp.R;
 import com.technotium.technotiumapp.config.ApplicationGlobal;
 import com.technotium.technotiumapp.config.DateUtil;
 import com.technotium.technotiumapp.config.SyncSharePref;
@@ -28,10 +34,12 @@ public class SyncingService extends JobIntentService implements SyncingCallbacks
     private static DocsDao docsDao;
     private static Context context;
     private boolean isSyncFailed=false;
-
+    private NotificationManager notificationManager;
+    NotificationCompat.Builder notification;
     @Override
     public void onCreate() {
         super.onCreate();
+
     }
 
     public static void enqueueWork(Context context, Intent intent) {
@@ -43,8 +51,14 @@ public class SyncingService extends JobIntentService implements SyncingCallbacks
     @Override
     protected void onHandleWork(@NonNull Intent intent) {
         setLastModifiedDateTimeDocs();
+
         if(!isSyncFailed) {
+            showNotification();
+ //           notification.setProgress(100, 50, false);
+            // Displays the progress bar for the first time.
+            notificationManager.notify(0, notification.build());
             postDocsModule();
+            notificationManager.cancel(0);
         }
 
     }
@@ -89,4 +103,24 @@ public class SyncingService extends JobIntentService implements SyncingCallbacks
     public void uniqueIdsForPullingData(Object[] uniqueKeyUpdates) {
 
     }
+
+    // Creates and displays a notification
+    private void showNotification() {
+        String channelId = "myNotificationChannel"; // Store channel ID as String or String resource
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+
+            NotificationChannel notificationChannel = new NotificationChannel(channelId , "Notify", NotificationManager.IMPORTANCE_HIGH);
+
+            notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.createNotificationChannel(notificationChannel);
+        }
+
+        notification = new NotificationCompat.Builder(this, channelId) // Use  the same channelId String while creating notification
+                .setContentTitle("Document upload is in progress")
+                .setSmallIcon(R.mipmap.ic_launcher);
+
+
+
+    }
+
 }

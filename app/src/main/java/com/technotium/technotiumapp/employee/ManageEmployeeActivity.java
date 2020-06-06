@@ -42,6 +42,7 @@ public class ManageEmployeeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_employee);
+        setTitle("Manage Employee");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         init();
     }

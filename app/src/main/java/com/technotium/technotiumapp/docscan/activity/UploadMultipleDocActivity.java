@@ -77,6 +77,7 @@ public class UploadMultipleDocActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload_multiple_doc);
+        setTitle("Upload Document");
         if(getIntent().getSerializableExtra("orderData") != null) {
             workOrderPojo =(WorkOrderPojo) getIntent().getSerializableExtra("orderData");
             init();

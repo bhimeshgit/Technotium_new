@@ -17,6 +17,7 @@ import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
@@ -88,6 +89,7 @@ public class UploadMultipleDocActivityLocal extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload_multiple_doc_local);
+        setTitle("Upload Document");
         if(getIntent().getSerializableExtra("orderData") != null) {
             workOrderPojo =(WorkOrderPojo) getIntent().getSerializableExtra("orderData");
             init();
@@ -173,7 +175,12 @@ public class UploadMultipleDocActivityLocal extends AppCompatActivity {
             SyncingService.startSyncing(currentActivity,new Intent());
         }
         pDialog.dismiss();
-
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                UploadMultipleDocActivityLocal.this.finish();
+            }
+        }, 2000);
     }
 
     public static void captureImage(Activity activity) {

@@ -90,6 +90,7 @@ public class ViewAllDocsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_all_docs);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setTitle("All Customer Document");
         Intent intent=getIntent();
         if(intent!=null){
             if(intent.getSerializableExtra("orderData")!=null){

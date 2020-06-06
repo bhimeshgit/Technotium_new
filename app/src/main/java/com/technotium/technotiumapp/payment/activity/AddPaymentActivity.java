@@ -77,6 +77,7 @@ public class AddPaymentActivity extends AppCompatActivity {
     ProgressDialog pDialog;
     String OrderDate;
     String orderToset;
+    ImageView date_img_view;
     AutoCompleteTextView pay_txt;
     Spinner sp_bank_name;
     @Override
@@ -84,6 +85,7 @@ public class AddPaymentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_payment);
         getSupportActionBar().hide();
+        setTitle("Add Payment Detail");
         if(getIntent().getSerializableExtra("orderData") != null) {
             workOrderPojo =(WorkOrderPojo) getIntent().getSerializableExtra("orderData");
             init();
@@ -100,6 +102,7 @@ public class AddPaymentActivity extends AppCompatActivity {
         btnSave_AttachDocument=findViewById(R.id.btnSave_AttachDocument);
         txtPayDate=findViewById(R.id.txtPayDate);
         txtAmout=findViewById(R.id.txtAmout);
+        date_img_view=findViewById(R.id.date_img_view);
         txtComment=findViewById(R.id.txtComment);
         radioCheque=findViewById(R.id.radioCheque) ;
         radioCash=findViewById(R.id.radioCash);
@@ -140,7 +143,12 @@ public class AddPaymentActivity extends AppCompatActivity {
                 dateFunction();
             }
         });
-
+        date_img_view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dateFunction();
+            }
+        });
         sp_bank_name=findViewById(R.id.sp_bank_name);
         String[] banks = getResources().getStringArray(R.array.bank_array);
         ArrayList<String> bank_list=new ArrayList<String>();
@@ -388,8 +396,8 @@ public class AddPaymentActivity extends AppCompatActivity {
 
     public void compressImage(){
         if (bitmap != null) {
-            int maxHeight=700;
-            int maxWidth=450;
+            int maxHeight=bitmap.getHeight();
+            int maxWidth=bitmap.getWidth();
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             int width = bitmap.getWidth();
             int height = bitmap.getHeight();
@@ -529,8 +537,12 @@ public class AddPaymentActivity extends AppCompatActivity {
             Toast.makeText(currentActivity,"Enter Comment",Toast.LENGTH_SHORT).show();
             return;
         }
-        if(sp_bank_name.getSelectedItem().toString().equals("--Select--")){
+        if(sp_bank_name.getSelectedItem().toString().equals("--Select--") && payment_mode.equals("Cheque") ){
             Toast.makeText(currentActivity,"Enter Bank Name",Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(payment_mode.equals("Cheque") && encodedPhotoString.equals("")){
+            Toast.makeText(currentActivity,"Please select cheque image",Toast.LENGTH_SHORT).show();
             return;
         }
 

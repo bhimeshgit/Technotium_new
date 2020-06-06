@@ -47,7 +47,7 @@ import java.util.ArrayList;
 
 public class PaymentHistoryActivity extends AppCompatActivity {
 
-    TextView txtCustomerName,txtTotal,txtTotalPaid;
+    TextView txtCustomerName,txtTotal,txtTotalPaid,txtBalance;
     WorkOrderPojo workOrderPojo;
     RecyclerView lv_payList;
     PaymentHistoryActivity currentActivity;
@@ -66,6 +66,7 @@ public class PaymentHistoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setTitle("Payment Detail");
         Intent intent=getIntent();
         if(intent!=null){
             if(intent.getSerializableExtra("orderData")!=null){
@@ -84,6 +85,8 @@ public class PaymentHistoryActivity extends AppCompatActivity {
         txtTotal=findViewById(R.id.txtTotal);
         txtTotalPaid=findViewById(R.id.txtTotalPaid);
         txtTotal.setText(workOrderPojo.getAmount());
+        txtBalance=findViewById(R.id.txtBalance);
+        txtBalance.setText(workOrderPojo.getAmount());
         payAmtLay=findViewById(R.id.payAmtLay);
         if(workOrderPojo.getAdded_by_type().equalsIgnoreCase("dealer") && SessionManager.getMyInstance(currentActivity).getEmpType().equalsIgnoreCase("employee")){
             payAmtLay.setVisibility(View.GONE);
@@ -116,6 +119,7 @@ public class PaymentHistoryActivity extends AppCompatActivity {
                             int success=jsonObject.getInt("success");
                             total_paid=Integer.parseInt(jsonObject.getString("total_paid").equals("null")? "0": jsonObject.getString("total_paid"));
                             txtTotalPaid.setText(total_paid+"");
+                            txtBalance.setText((Integer.parseInt(workOrderPojo.getAmount())-total_paid)+"");
                             if(success==1){
                                 JSONArray jsonArray=jsonObject.getJSONArray("data");
                                 for(int i=0;i<jsonArray.length();i++){

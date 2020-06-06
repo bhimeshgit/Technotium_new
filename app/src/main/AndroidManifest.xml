@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:name=".config.ApplicationGlobal"
@@ -20,7 +20,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".docscan.activity.UploadMultipleDocActivityLocal"></activity>
+        <activity android:name=".ConstrationtsActivity"></activity>
+        <activity android:name=".docscan.activity.UploadMultipleDocActivityLocal" />
         <activity
             android:name=".workorder.activity.WorkOrderActivity_New"
             android:screenOrientation="portrait" />
@@ -118,9 +119,9 @@
             </intent-filter>
         </service>
         <service
-            android:name="com.technotium.technotiumapp.config.services.SyncingService"
-            android:permission="android.permission.BIND_JOB_SERVICE"
-            android:exported="true"/>
+            android:name=".config.services.SyncingService"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
 
         <activity
             android:name=".WelcomeEmpActivity"

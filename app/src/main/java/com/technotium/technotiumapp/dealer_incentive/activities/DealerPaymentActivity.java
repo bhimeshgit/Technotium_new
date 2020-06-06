@@ -73,6 +73,7 @@ public class DealerPaymentActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dealer_payment);
+        setTitle("Dealer Payment");
         if(getIntent().getStringExtra("dealer_incentive_id") != null) {
             dealer_incentive_id =getIntent().getStringExtra("dealer_incentive_id");
             init();

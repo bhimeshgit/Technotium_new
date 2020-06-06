@@ -74,6 +74,7 @@ public class WorkOrderActivity_New extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_work_order__new);
+        setTitle("Work Order");
         generateId();
         createObj();
         onClick();

@@ -73,6 +73,7 @@ public class AfterSalesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_after_sales);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setTitle("After Sale");
         Intent intent=getIntent();
         if(intent!=null){
             if(intent.getSerializableExtra("orderData")!=null){

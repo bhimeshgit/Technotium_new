@@ -26,6 +26,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -65,14 +66,17 @@ public class AddExpense extends AppCompatActivity {
     Bitmap bitmap;
     WorkOrderPojo workOrderPojo;
     EditText txtAmout,txtComment;
+    TextView cust_name;
     ProgressDialog pDialog;
     EditText txtExpDate;
     String OrderDate;
     String orderToset;
+    ImageView date_img_view;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_expense);
+        setTitle("Add Expenses");
         if(getIntent().getSerializableExtra("orderData") != null) {
             workOrderPojo =(WorkOrderPojo) getIntent().getSerializableExtra("orderData");
             init();
@@ -90,6 +94,15 @@ public class AddExpense extends AppCompatActivity {
         txtAmout=findViewById(R.id.txtAmout);
         txtExpDate=findViewById(R.id.txtExpDate);
         txtComment=findViewById(R.id.txtComment);
+        cust_name = findViewById(R.id.cust_name);
+        cust_name.setText(workOrderPojo.getFullname());
+        date_img_view = findViewById(R.id.date_img_view);
+        date_img_view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dateFunction();
+            }
+        });
         btnBrowse_AttachDocument.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

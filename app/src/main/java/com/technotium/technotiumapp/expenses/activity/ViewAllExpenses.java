@@ -68,6 +68,7 @@ public class ViewAllExpenses extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_all_expenses);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setTitle("All Expenses");
         Intent intent=getIntent();
         if(intent!=null){
             if(intent.getSerializableExtra("orderData")!=null){
@@ -108,7 +109,7 @@ public class ViewAllExpenses extends AppCompatActivity {
         pDialog.show();
         final JsonParserVolley jsonParserVolley = new JsonParserVolley(currentActivity);
         jsonParserVolley.addParameter("order_id", workOrderPojo.getPkid());
-
+        jsonParserVolley.addParameter("empid",SessionManager.getMyInstance(currentActivity).getEmpid());
         jsonParserVolley.executeRequest(Request.Method.POST, WebUrl.GET_ALL_EXPENSES ,new JsonParserVolley.VolleyCallback() {
                     @Override
                     public void getResponse(String response) {

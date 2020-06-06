@@ -108,7 +108,7 @@ public class PaymentAdapter  extends RecyclerView.Adapter<PaymentAdapter.Payment
                     holder.btnShare.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            shareImage(((BitmapDrawable)holder.pay_img.getDrawable()).getBitmap());
+                            shareImage(position);
                         }
                     });
                 }
@@ -120,30 +120,40 @@ public class PaymentAdapter  extends RecyclerView.Adapter<PaymentAdapter.Payment
     public int getItemCount() {
         return pay_List.size();
     }
-    private void shareImage(Bitmap bitmap){
+    private void shareImage(int position){
         // save bitmap to cache directory
         try {
-            File cachePath = new File(context.getCacheDir(), "images");
-            cachePath.mkdirs(); // don't forget to make the directory
-            FileOutputStream stream = new FileOutputStream(cachePath + "/image.png"); // overwrites this image every time
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-            stream.close();
+//            File cachePath = new File(context.getCacheDir(), "images");
+//            cachePath.mkdirs(); // don't forget to make the directory
+//            FileOutputStream stream = new FileOutputStream(cachePath + "/image.png"); // overwrites this image every time
+//            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+//            stream.close();
+//
+//
+//            File imagePath = new File(context.getCacheDir(), "images");
+//            File newFile = new File(imagePath, "image.png");
+//            Uri contentUri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".provider", newFile);
+//
+//            if (contentUri != null) {
+//                Intent shareIntent = new Intent();
+//                shareIntent.setAction(Intent.ACTION_SEND);
+//                shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION); // temp permission for receiving app to read this file
+//                shareIntent.setDataAndType(contentUri, context.getContentResolver().getType(contentUri));
+//                shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
+//                shareIntent.setType("image/png");
+//                context.startActivity(Intent.createChooser(shareIntent, "Choose an app"));
+//            }
+            Intent share = new Intent(android.content.Intent.ACTION_SEND);
+            share.setType("text/plain");
+            share.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
 
+            // Add data to the intent, the receiving app will decide
+            // what to do with it.
+            share.putExtra(Intent.EXTRA_SUBJECT, "Payment Image");
+            share.putExtra(Intent.EXTRA_TEXT, WebUrl.BASE_URL+pay_List.get(position).getPay_image());
 
-            File imagePath = new File(context.getCacheDir(), "images");
-            File newFile = new File(imagePath, "image.png");
-            Uri contentUri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".provider", newFile);
-
-            if (contentUri != null) {
-                Intent shareIntent = new Intent();
-                shareIntent.setAction(Intent.ACTION_SEND);
-                shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION); // temp permission for receiving app to read this file
-                shareIntent.setDataAndType(contentUri, context.getContentResolver().getType(contentUri));
-                shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
-                shareIntent.setType("image/png");
-                context.startActivity(Intent.createChooser(shareIntent, "Choose an app"));
-            }
-        } catch (IOException e) {
+            context.startActivity(Intent.createChooser(share, "Share link!"));
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
