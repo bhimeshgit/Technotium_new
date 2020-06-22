@@ -81,6 +81,8 @@ public class WelcomeEmpActivity extends AppCompatActivity  implements Navigation
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        try {
+
         setContentView(R.layout.activity_welcome_emp);
         init();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -114,6 +116,10 @@ public class WelcomeEmpActivity extends AppCompatActivity  implements Navigation
         }
         else{
             checkValidUser();
+        }
+        } catch (Exception e) {
+//            FirebaseCrashlytics.logException(e);
+            // handle your exception here!
         }
     }
 

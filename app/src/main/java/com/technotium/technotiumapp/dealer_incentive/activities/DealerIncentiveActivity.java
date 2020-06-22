@@ -78,6 +78,7 @@ public class DealerIncentiveActivity extends AppCompatActivity {
     private Dialog zoomable_image_dialog;
     private SubsamplingScaleImageView imageView;
     TextView txtComRateAsPerCap;
+    AlertDialog alertDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -374,7 +375,7 @@ public class DealerIncentiveActivity extends AppCompatActivity {
     private void setData(DealerIncentive dealerIncentive){
         this.dealerIncentive=dealerIncentive;
         txtCompanyRate.setText(dealerIncentive.getCompany_rate());
-        txtPanelAmt.setText(dealerIncentive.getPaid_amt());
+        txtPanelAmt.setText(dealerIncentive.getPanel_ex_amt());
         txtInverterAmt.setText(dealerIncentive.getInverter_ex_amt());
         txtStructureAmt.setText(dealerIncentive.getStructure_ex_amt());
         txtOtherAmt.setText(dealerIncentive.getOther_ex_amt());
@@ -439,7 +440,7 @@ public class DealerIncentiveActivity extends AppCompatActivity {
 
                                     @Override
                                     public void onLongItemClick(int position, View v) {
-                                      //  showDeleteAlertDialog(paymentList.get(position).getPayment_id());
+                                        showDeleteAlertDialog(paymentList.get(position).getPayment_id(),position);
                                     }
                                 });
                             }
@@ -450,6 +451,53 @@ public class DealerIncentiveActivity extends AppCompatActivity {
                             e.printStackTrace();
                         }
 
+                    }
+                }
+        );
+    }
+
+
+    public void showDeleteAlertDialog(final String paymentId, final int position){
+        alertDialog=new AlertDialog.Builder(currentActivity)
+                .setTitle("Delete entry")
+                .setMessage("Are you sure you want to delete this payment entry?")
+
+                // Specifying a listener allows you to take an action before dismissing the dialog.
+                // The dialog is automatically dismissed when a dialog button is clicked.
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        deactivatePayment(paymentId, position);
+                    }
+                })
+
+                // A null listener allows the button to dismiss the dialog and take no further action.
+                .setNegativeButton(android.R.string.no, null)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+    }
+
+    public void deactivatePayment(String paymentId, final int position){
+        pDialog.show();
+        final JsonParserVolley jsonParserVolley = new JsonParserVolley(currentActivity);
+        jsonParserVolley.addParameter("paymentId",paymentId);
+        jsonParserVolley.executeRequest(Request.Method.POST,WebUrl.DELETE_DEALER_INC_PAYMENT_ENTRY_URL ,new JsonParserVolley.VolleyCallback() {
+                    @Override
+                    public void getResponse(String response) {
+                        pDialog.hide();
+                        Log.d("iss",response);
+                        try {
+                            JSONObject jsonObject=new JSONObject(response);
+                            int success=jsonObject.getInt("success");
+                            if(success==1){
+                                paymentList.get(position).setActive("2");
+                                adapter.notifyDataSetChanged();
+                            }
+                            else{
+                                Toast.makeText(currentActivity,jsonObject.getString("message"),Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
         );

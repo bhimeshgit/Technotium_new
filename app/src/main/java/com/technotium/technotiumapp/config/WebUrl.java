@@ -52,4 +52,5 @@ public class WebUrl {
     public static String  UPLOAD_ALL_DOC_URL=BASE_URL+"uploadAllDocs.php";
     public static String  SEND_SMS_URL=BASE_URL+"sendSms.php";
     public static String  POST_DOCS_SYNC_SERVICE_URL=BASE_URL+"postSyncDocs.php";
+  public static String  DELETE_DEALER_INC_PAYMENT_ENTRY_URL = BASE_URL+"deleteDealerPayment.php";
 }
