@@ -206,6 +206,9 @@ public class WorkOrderActivity_New extends AppCompatActivity {
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if( validate()==0){
+                    return;
+                }
                 workOrderPojo=getData();
 //                SessionManager.getMyInstance(getActivity()).progressShow();
                 pDialog.setMessage("Please Wait...");
@@ -222,7 +225,7 @@ public class WorkOrderActivity_New extends AppCompatActivity {
                                     Log.d("iss","response="+response);
                                     JSONObject jsonObject=new JSONObject(response);
                                     int success=jsonObject.getInt("success");
-                                    if(success==1){
+                                    if(success == 1){
                                         Toast.makeText(currentActivity,jsonObject.getString("message"),Toast.LENGTH_SHORT).show();
                                         Intent intent=new Intent(currentActivity, SearchOrderActivity.class);
                                         intent.putExtra("modul","workorder");
