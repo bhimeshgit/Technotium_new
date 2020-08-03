@@ -53,6 +53,7 @@ public class LoginActivity extends AppCompatActivity {
          btnLogin.setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View v) {
+//                 throw new RuntimeException("Creash testing ");
                  showProgressDialog();
                  if(SessionManager.getMyInstance(currentActivity).getFirebaseId().equalsIgnoreCase("")) {
                      FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(currentActivity, new OnSuccessListener<InstanceIdResult>() {

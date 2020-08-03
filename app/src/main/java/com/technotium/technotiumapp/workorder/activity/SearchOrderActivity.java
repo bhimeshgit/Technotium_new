@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,11 +15,16 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
+import com.google.gson.GsonBuilder;
 import com.technotium.technotiumapp.R;
 import com.technotium.technotiumapp.WelcomeEmpActivity;
 import com.technotium.technotiumapp.after_sales.Activities.AfterSalesActivity;
@@ -31,20 +37,33 @@ import com.technotium.technotiumapp.expenses.activity.AddExpense;
 import com.technotium.technotiumapp.expenses.activity.ViewAllExpenses;
 import com.technotium.technotiumapp.material.activity.AddMaterialActivity;
 import com.technotium.technotiumapp.payment.activity.PaymentHistoryActivity;
+import com.technotium.technotiumapp.status.OrderStatusPOJO;
 import com.technotium.technotiumapp.status.activity.OrderStatusActivity;
+import com.technotium.technotiumapp.status.activity.OrderStatusEntryActivity;
+import com.technotium.technotiumapp.status.activity.OrderStatusListActivity;
+import com.technotium.technotiumapp.workorder.adapter.SpinnerAdapter;
 import com.technotium.technotiumapp.workorder.adapter.WorkOrderAdapter;
+import com.technotium.technotiumapp.workorder.model.Dealer;
 import com.technotium.technotiumapp.workorder.model.WorkOrderPojo;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 public class SearchOrderActivity extends AppCompatActivity {
 
     RecyclerView lv_wo;
     EditText txtCustomerName;
+    TextView txtStartDate,txtEndDate;
+    String selectedStartDate, selectedToDate;
     Button addNewBtn;
     ArrayList<WorkOrderPojo> orderList;
     SearchOrderActivity currentActivity;
@@ -55,7 +74,11 @@ public class SearchOrderActivity extends AppCompatActivity {
     AlertDialog alertDialog;
     Button btnDelete,btnReport;
     ArrayList<WorkOrderPojo> tempArrayList = new ArrayList<WorkOrderPojo>();
-
+    Spinner dealer_sp;
+    ArrayList<Dealer> dealerArrayList = new ArrayList<Dealer>();
+    ArrayList<String> dealerNameArrayList = new ArrayList<String>();
+    SpinnerAdapter dealerSpinnerAdapter;
+    ArrayList<WorkOrderPojo> tempArrayList2 = new ArrayList<WorkOrderPojo>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,6 +128,14 @@ public class SearchOrderActivity extends AppCompatActivity {
         lv_wo= (RecyclerView)findViewById(R.id.lv_wo);
         txtCustomerName=findViewById(R.id.txtCustomerName);
         addNewBtn=findViewById(R.id.btnAddNew);
+        txtStartDate =findViewById(R.id.txtStartDate);
+        txtEndDate =findViewById(R.id.txtEndDate);
+
+        layoutManager=new GridLayoutManager(currentActivity,1);
+        lv_wo.setLayoutManager(layoutManager);
+        lv_wo.setHasFixedSize(true);
+        adapter=new WorkOrderAdapter(tempArrayList,currentActivity);
+        lv_wo.setAdapter(adapter);
 
         addNewBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -114,7 +145,7 @@ public class SearchOrderActivity extends AppCompatActivity {
                 finish();
             }
         });
-        getAllWorkOrder();
+        getAllWorkOrder(SessionManager.getMyInstance(currentActivity).getEmpid());
 
         txtCustomerName.addTextChangedListener(new TextWatcher() {
             @Override
@@ -128,13 +159,15 @@ public class SearchOrderActivity extends AppCompatActivity {
                 tempArrayList.clear();
                 for(WorkOrderPojo c: orderList){
                     if (textlength <= c.getFullname().length()) {
+
                         if (c.getFullname().toLowerCase().contains(s.toString().toLowerCase())) {
                             tempArrayList.add(c);
                         }
                     }
                 }
-                adapter=new WorkOrderAdapter(tempArrayList,currentActivity);
-                lv_wo.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+//                adapter=new WorkOrderAdapter(tempArrayList,currentActivity);
+//                lv_wo.setAdapter(adapter);
             }
 
             @Override
@@ -143,21 +176,184 @@ public class SearchOrderActivity extends AppCompatActivity {
             }
         });
         addNewBtn.setVisibility(View.GONE);
+
+        dealer_sp = findViewById(R.id.dealer_sp);
+        dealerNameArrayList.add("All Dealer");
+        dealerSpinnerAdapter = new SpinnerAdapter(currentActivity, dealerNameArrayList);
+
+        dealer_sp.setAdapter(dealerSpinnerAdapter);
+        dealer_sp.setSelection(0, false);
+        if (SessionManager.getMyInstance(currentActivity).getEmpType().equals("Admin")){
+            dealer_sp.setVisibility(View.VISIBLE);
+
+            dealer_sp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                   String selected_name= dealerNameArrayList.get(position);
+                   if(selected_name.equals("All Dealer")){
+                       getAllWorkOrder(SessionManager.getMyInstance(currentActivity).getEmpid());
+                       return;
+                   }
+
+                    for(Dealer d : dealerArrayList){
+                       if(d.fullname.equals(selected_name)){
+                           getAllWorkOrder(d.id+"");
+                           break;
+                       }
+                   }
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parentView) {
+                    // your code here
+                }
+
+            });
+        }
+
+        txtStartDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dateFunction(1);
+            }
+        });
+        txtEndDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dateFunction(2);
+            }
+        });
     }
 
-    private void getAllWorkOrder(){
+    public void dateFunction(final int a){
+        Calendar calendar= Calendar.getInstance();
+        int year =calendar.get(Calendar.YEAR);
+        int month=calendar.get(Calendar.MONTH);
+        int days=calendar.get(Calendar.DAY_OF_MONTH);
+        DatePickerDialog dg=new DatePickerDialog(currentActivity, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                int monthofyear=month+1;
+
+                String date=String.format("%02d" , dayOfMonth)+"-"+String.format("%02d" , monthofyear)+"-"+year;
+                if(a == 1){
+                    txtStartDate.setText(date);
+                    selectedStartDate = date;
+                    if(selectedStartDate!= null && selectedToDate!=null){
+                       showWoDateWise();
+                    }
+                    txtEndDate.setText("To Date");
+                }
+                else{  txtEndDate.setText(date);
+                    selectedToDate = date;
+                    if(selectedStartDate!= null && selectedToDate!=null){
+                        showWoDateWise();
+                    }
+                }
+
+                SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+                Date dt = null;
+                try {
+                    dt = format.parse(date);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                SimpleDateFormat your_format = new SimpleDateFormat("yyyy-MM-dd");
+
+            }
+        },year,month,days);
+        dg.getDatePicker().setMaxDate(new Date().getTime());
+        dg.show();
+
+    }
+
+    private void showWoDateWise(){
+        try {
+            tempArrayList2.clear();
+
+            Date startDate = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH).parse(selectedStartDate);
+            Date endDate = new SimpleDateFormat("dd-MM-yyyy",Locale.ENGLISH).parse(selectedToDate);
+
+            if (startDate != null && endDate != null) {
+
+                if (endDate.compareTo(startDate) >= 0) {
+                    for (WorkOrderPojo workOrderPojo : orderList) {
+                        Date woDate = new SimpleDateFormat("yyyy-MM-dd").parse(workOrderPojo.getOrder_date());
+
+                        if (woDate.compareTo(startDate) >= 0 && woDate.compareTo(endDate) <= 0) {
+                            tempArrayList2.add(workOrderPojo);
+                        }
+                    }
+                } else {
+                    Toast.makeText(currentActivity, "Invalid Date Range Selected", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+
+            if (tempArrayList2.size() > 0) {
+                Log.d("iss","data hoafksd");
+                tempArrayList.clear();
+                tempArrayList.addAll(tempArrayList2);
+                adapter.notifyDataSetChanged();
+//                adapter=new WorkOrderAdapter(tempArrayList,currentActivity);
+//                lv_wo.setAdapter(adapter);
+//                adapter.notifyDataSetChanged();
+//                Log.d("iss","tempArrayList="+tempArrayList.size());
+
+//                adapter.notifyDataSetChanged();
+            }
+            else{
+                tempArrayList.clear();
+                adapter.notifyDataSetChanged();
+            }
+
+            selectedStartDate = null;
+            selectedToDate = null;
+        }
+        catch (Exception ex){
+            ex.printStackTrace();
+        }
+    }
+
+//    public static Date convertStringToDateForDisplay(String strDate) {
+//        SimpleDateFormat sdf1 = new SimpleDateFormat(Utils.DATE_DISPLAY_FORMAT, Locale.ENGLISH);
+//        Date convertDate = new Date();
+//        try {
+//            convertDate = sdf1.parse(strDate);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return convertDate;
+//    }
+
+    private void getAllWorkOrder(String userid){
         showProgressDialog();
         final JsonParserVolley jsonParserVolley = new JsonParserVolley(currentActivity);
-        jsonParserVolley.addParameter("userid",SessionManager.getMyInstance(currentActivity).getEmpid());
+        jsonParserVolley.addParameter("userid",userid);
 
         jsonParserVolley.executeRequest(Request.Method.POST,WebUrl.GET_ALL_WORK_ORDER_URL ,new JsonParserVolley.VolleyCallback() {
                     @Override
                     public void getResponse(String response) {
                         try {
-                            Log.d("iss",response);
+//                            Log.d("iss",response);
                             JSONObject jsonObject=new JSONObject(response);
                             int success=jsonObject.getInt("success");
                             if(success==1){
+                                try {
+                                    dealerArrayList.clear();
+                                    dealerArrayList.addAll(new ArrayList<Dealer>(Arrays.asList(new GsonBuilder().create().fromJson(jsonObject.getString("dealer_data"), Dealer[].class))));
+                                    if(dealerArrayList.size() > 0){
+                                        dealerNameArrayList.clear();
+                                        dealerNameArrayList.add("All Dealer");
+                                        for(Dealer d : dealerArrayList){
+                                            dealerNameArrayList.add(d.fullname);
+                                        }
+                                        dealerSpinnerAdapter.notifyDataSetChanged();
+                                    }
+
+                                }
+                                catch (Exception e){}
+                                orderList.clear();
                                 JSONArray jsonArray=jsonObject.getJSONArray("data");
                                 for(int i=0;i<jsonArray.length();i++){
                                     JSONObject jsonWO=jsonArray.getJSONObject(i);
@@ -212,12 +408,16 @@ public class SearchOrderActivity extends AppCompatActivity {
                                     orderList.add(workOrderPojo);
                                 }
 
-                                layoutManager=new GridLayoutManager(currentActivity,1);
-                                lv_wo.setLayoutManager(layoutManager);
-                                lv_wo.setHasFixedSize(true);
-                                adapter=new WorkOrderAdapter(orderList, currentActivity);
-                                lv_wo.setAdapter(adapter);
+//                                layoutManager=new GridLayoutManager(currentActivity,1);
+//                                lv_wo.setLayoutManager(layoutManager);
+//                                lv_wo.setHasFixedSize(true);
+//                                adapter=new WorkOrderAdapter(orderList, currentActivity);
+//                                lv_wo.setAdapter(adapter);
+                                tempArrayList.clear();
                                 tempArrayList.addAll(orderList);
+                                adapter.notifyDataSetChanged();
+
+
                                 adapter.setOnItemClickListener(new WorkOrderAdapter.ClickListener() {
                                     @Override
                                     public void onItemClick(int position, View v) {
@@ -232,7 +432,8 @@ public class SearchOrderActivity extends AppCompatActivity {
                                             intent=new Intent(currentActivity, ViewAllDocsActivity.class);
                                         }
                                         else if(modul.equals("status")){
-                                            intent=new Intent(currentActivity, OrderStatusActivity.class);
+//                                            intent=new Intent(currentActivity, OrderStatusActivity.class);
+                                            intent=new Intent(currentActivity, OrderStatusListActivity.class);
                                         }
                                         else if(modul.equals("material")){
                                             intent=new Intent(currentActivity, AddMaterialActivity.class);
@@ -253,7 +454,7 @@ public class SearchOrderActivity extends AppCompatActivity {
 
                                     @Override
                                     public void onLongItemClick(int position, View v) {
-                                        showDeleteAlertDialog(Integer.parseInt(orderList.get(position).getPkid()),position);
+                                        showDeleteAlertDialog(Integer.parseInt(tempArrayList.get(position).getPkid()),position);
                                     }
                                 });
                             }
@@ -294,7 +495,7 @@ public class SearchOrderActivity extends AppCompatActivity {
                     @Override
                     public void getResponse(String response) {
                         pDialog.dismiss();
-                        Log.d("iss",response);
+//                        Log.d("iss",response);
                         try {
                             JSONObject jsonObject=new JSONObject(response);
                             int success=jsonObject.getInt("success");

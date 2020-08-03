@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp">
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/pay_img"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/nodoc"
+                    android:layout_margin="10dp"
+                    android:layout_gravity="center_vertical"
+                    />
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        >
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@string/font_family_light"
+                            android:textSize="14dp"
+                            android:text="Status Type : "
+                            android:textStyle="bold"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginBottom="5dp"
+                            android:gravity="start"
+                            android:textAlignment="viewStart"
+                            android:textColor="@color/color_text_black"/>
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/txtStatusType"
+                            android:fontFamily="@string/font_family_light"
+                            android:textSize="14dp"
+                            android:maxLines="2"
+                            android:text="Bank Name"
+                            android:gravity="end"
+                            android:textAlignment="viewEnd"
+                            android:textStyle="bold"
+                            android:textColor="@color/color_text_black"/>
+
+                    </LinearLayout>
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/txtDate"
+                        android:fontFamily="@string/font_family_light"
+                        android:textSize="14dp"
+                        android:textStyle="bold"
+                        android:text="Date"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:textColor="@color/color_text_black"
+                        />
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        >
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@string/font_family_light"
+                            android:textSize="14dp"
+                            android:text="Status : "
+                            android:textStyle="bold"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginBottom="5dp"
+                            android:gravity="start"
+                            android:textAlignment="viewStart"
+                            android:textColor="@color/color_text_black"/>
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/txtStatus"
+                            android:fontFamily="@string/font_family_light"
+                            android:textSize="14dp"
+                            android:maxLines="2"
+                            android:text="Bank Name"
+                            android:gravity="end"
+                            android:textAlignment="viewEnd"
+                            android:textStyle="bold"
+                            android:textColor="@color/color_text_black"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        >
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@string/font_family_light"
+                            android:textSize="14dp"
+                            android:text="Expense : "
+                            android:textStyle="bold"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginBottom="5dp"
+                            android:gravity="start"
+                            android:textAlignment="viewStart"
+                            android:textColor="@color/color_text_black"/>
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/txtExpense"
+                            android:fontFamily="@string/font_family_light"
+                            android:textSize="14dp"
+                            android:text="Comment"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginBottom="5dp"
+                            android:textStyle="bold"
+                            android:autoLink="web"
+                            android:textColor="@color/color_text_black"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        >
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@string/font_family_light"
+                            android:textSize="14dp"
+                            android:text="Comment : "
+                            android:textStyle="bold"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginBottom="5dp"
+                            android:gravity="start"
+                            android:textAlignment="viewStart"
+                            android:textColor="@color/color_text_black"/>
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/txtComment"
+                        android:fontFamily="@string/font_family_light"
+                        android:textSize="14dp"
+                        android:text="Comment"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:autoLink="web"
+                        android:textStyle="bold"
+                        android:textColor="@color/color_text_black"/>
+                    </LinearLayout>
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/exName"
+                        android:textSize="14dp"
+                        android:text="Name"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:textColor="@color/color_text_black"
+                        />
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <Button
+                android:id="@+id/btnShare"
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/squarecorner_rounded"
+                android:fontFamily="sans-serif"
+                android:gravity="center"
+                android:text="Share"
+                android:layout_marginBottom="15dp"
+                android:layout_marginTop="5dp"
+                android:layout_gravity="center"
+                android:textColor="#ffffff"
+                android:textStyle="bold" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+    </androidx.cardview.widget.CardView>
+</LinearLayout>

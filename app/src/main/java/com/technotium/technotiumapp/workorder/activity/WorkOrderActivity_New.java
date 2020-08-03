@@ -206,10 +206,11 @@ public class WorkOrderActivity_New extends AppCompatActivity {
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                workOrderPojo=getData();
                 if( validate()==0){
                     return;
                 }
-                workOrderPojo=getData();
+
 //                SessionManager.getMyInstance(getActivity()).progressShow();
                 pDialog.setMessage("Please Wait...");
                 pDialog.setCancelable(false);
@@ -222,7 +223,7 @@ public class WorkOrderActivity_New extends AppCompatActivity {
                                 // SessionManager.getMyInstance(getActivity()).progressHide();
                                 pDialog.dismiss();
                                 try {
-                                    Log.d("iss","response="+response);
+                                    Log.d("iss","add response="+response);
                                     JSONObject jsonObject=new JSONObject(response);
                                     int success=jsonObject.getInt("success");
                                     if(success == 1){
@@ -608,10 +609,10 @@ public class WorkOrderActivity_New extends AppCompatActivity {
             Toast.makeText(currentActivity,"Select Phase",Toast.LENGTH_SHORT).show();
             return 0;
         }
-        if(workOrderPojo.getEmail().trim().length()==0){
-            Toast.makeText(currentActivity,"Enter the email id",Toast.LENGTH_SHORT).show();
-            return 0;
-        }
+//        if(workOrderPojo.getEmail().trim().length()==0){
+//            Toast.makeText(currentActivity,"Enter the email id",Toast.LENGTH_SHORT).show();
+//            return 0;
+//        }
         if(workOrderPojo.getAddress().trim().length()==0){
             Toast.makeText(currentActivity,"Enter the address",Toast.LENGTH_SHORT).show();
             return 0;
@@ -621,10 +622,10 @@ public class WorkOrderActivity_New extends AppCompatActivity {
             return 0;
         }
 
-        if(workOrderPojo.getGst_no().trim().length()!=0 && workOrderPojo.getGst_no().trim().length()>15){
-            Toast.makeText(currentActivity,"Invalid GST No. It should be maximum 15 character.",Toast.LENGTH_SHORT).show();
-            return 0;
-        }
+//        if(workOrderPojo.getGst_no().trim().length()!=0 && workOrderPojo.getGst_no().trim().length()>15){
+//            Toast.makeText(currentActivity,"Invalid GST No. It should be maximum 15 character.",Toast.LENGTH_SHORT).show();
+//            return 0;
+//        }
         if(txtamount.getVisibility()!=View.GONE && workOrderPojo.getAmount().trim().length()==0){
             Toast.makeText(currentActivity,"Enter the work order amount",Toast.LENGTH_SHORT).show();
             return 0;

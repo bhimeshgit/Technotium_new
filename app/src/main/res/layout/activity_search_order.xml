@@ -12,15 +12,15 @@ tools:context=".workorder.activity.SearchOrderActivity">
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:weightSum="10">
+            >
 
                 <EditText
                     android:id="@+id/txtCustomerName"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentTop="true"
-                    android:layout_weight="8"
+                    android:layout_weight="7"
                     android:layout_marginLeft="5dp"
                     android:fontFamily="sans-serif"
                     android:hint="Enter Customer Name"
@@ -30,12 +30,13 @@ tools:context=".workorder.activity.SearchOrderActivity">
                     android:paddingLeft="5dp"
                     android:paddingTop="10dp"
                     android:paddingRight="5dp"
+                    android:layout_marginRight="5dp"
                     android:singleLine="true"
                     android:textSize="16sp"
                     />
             <Button
                 android:id="@+id/btnAddNew"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="35dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_margin="5dp"
@@ -46,9 +47,69 @@ tools:context=".workorder.activity.SearchOrderActivity">
                 android:layout_marginLeft="10dp"
                 android:textColor="#ffffff"
                 android:textStyle="bold"
-                android:layout_weight="2"/>
+                android:layout_weight="3"/>
         </androidx.appcompat.widget.LinearLayoutCompat>
 
+    <Spinner
+        android:id="@+id/dealer_sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/edittextbac"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
+        android:visibility="gone"
+        />
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp">
+        <TextView
+            android:id="@+id/txtStartDate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_weight="7"
+            android:fontFamily="sans-serif"
+            android:hint="Enter Customer Name"
+            android:inputType="text"
+            android:layout_marginRight="2dp"
+            android:background="@drawable/edittextbac"
+            android:padding="10dp"
+            android:paddingLeft="5dp"
+            android:paddingTop="10dp"
+            android:paddingRight="5dp"
+            android:singleLine="true"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:text="From Date"
+            />
+        <TextView
+            android:id="@+id/txtEndDate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_weight="7"
+           android:layout_marginLeft="2dp"
+            android:fontFamily="sans-serif"
+            android:inputType="text"
+            android:textStyle="bold"
+            android:background="@drawable/edittextbac"
+            android:padding="10dp"
+            android:paddingLeft="5dp"
+            android:paddingTop="10dp"
+            android:paddingRight="5dp"
+            android:singleLine="true"
+            android:textSize="13sp"
+            android:text="To Date"
+            />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"

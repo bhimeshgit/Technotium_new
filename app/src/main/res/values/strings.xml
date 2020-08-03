@@ -13,4 +13,42 @@
         <item>BOI</item>
     </string-array>
 
+    <string-array name="admin_status">
+        <item>--select admin status--</item>
+        <item>Change of name</item>
+        <item>Solar Sanction</item>
+        <item>Subsidy Sanction</item>
+        <item>Meter Installation</item>
+        <item>Agreement</item>
+        <item>Load Extension</item>
+        <item>Application Submission</item>
+        <item>Site Visit</item>
+        <item>Final Submission</item>
+        <item>JIR Application</item>
+        <item>Meter Testing</item>
+        <item>Invoice Generation</item>
+        <item>Documents Handover To Client</item>
+        <item>Insurance</item>
+    </string-array>
+    <string-array name="technical_status">
+        <item>--select technical status--</item>
+        <item>RCCB/ELCB Installation</item>
+        <item>Panel Installation</item>
+        <item>Grounding</item>
+        <item>Earthing</item>
+        <item>Inverter Installation</item>
+        <item>ACDB</item>
+        <item>DCDB</item>
+        <item>LA Installation</item>
+        <item>Meter Installation</item>
+        <item>Service Wire Installation</item>
+        <item>Structure Installation</item>
+        <item>Walkway</item>
+        <item>Structure Painting</item>
+        <item>AC Wiring</item>
+        <item>DC Wiring</item>
+        <item>Commissioning of Project</item>
+        <item>Remote Monitoring</item>
+    </string-array>
+
 </resources>

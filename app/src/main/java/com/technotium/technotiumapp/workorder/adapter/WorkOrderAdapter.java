@@ -18,7 +18,10 @@ import com.technotium.technotiumapp.workorder.activity.SearchOrderActivity;
 import com.technotium.technotiumapp.workorder.activity.WorkOrderPdfReportActivity;
 import com.technotium.technotiumapp.workorder.model.WorkOrderPojo;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -50,50 +53,57 @@ public class WorkOrderAdapter extends RecyclerView.Adapter<WorkOrderAdapter.Work
 
     @Override
     public void onBindViewHolder(@NonNull WorkOrderViewHolder holder, final int position) {
-        final WorkOrderPojo workOrderPojo=orderList.get(position);
+        try{
+            final WorkOrderPojo workOrderPojo=orderList.get(position);
 
-        holder.customerNameTxt.setText(workOrderPojo.getFname()+" "+workOrderPojo.getLname());
-        holder.mobileTxt.setText(workOrderPojo.getMobile());
-        holder.addedByTxt.setText("Ex.: "+workOrderPojo.getAdded_by());
-        holder.orderDateTxt.setText(workOrderPojo.getOrder_date());
-        holder.wo_no_txt.setText(workOrderPojo.getPkid());
+            holder.customerNameTxt.setText(workOrderPojo.getFname()+" "+workOrderPojo.getLname());
+            holder.mobileTxt.setText(workOrderPojo.getMobile());
+            holder.addedByTxt.setText("Ex.: "+workOrderPojo.getAdded_by());
 
-        if(workOrderPojo.getWo_activity()==0){
-            holder.btnDelete.setVisibility(View.GONE);
-            holder.btnReport.setVisibility(View.GONE);
-        }
-        if(!SessionManager.getMyInstance(context).getEmpType().equalsIgnoreCase("admin")){
-            holder.btnDelete.setVisibility(View.GONE);
-        }
-        holder.btnDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((SearchOrderActivity)context).showDeleteAlertDialog(Integer.parseInt(workOrderPojo.getPkid()),position);
+            Date  order_date = new SimpleDateFormat("yyyy-MM-dd").parse(workOrderPojo.getOrder_date());
+            SimpleDateFormat sdf2 = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);
+            holder.orderDateTxt.setText(sdf2.format(order_date));
+            holder.wo_no_txt.setText(workOrderPojo.getPkid());
+
+            if(workOrderPojo.getWo_activity()==0){
+                holder.btnDelete.setVisibility(View.GONE);
+                holder.btnReport.setVisibility(View.GONE);
             }
-        });
-        holder.btnReport.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(workOrderPojo.getWo_report().trim().length()>0) {
-                    Intent intent = new Intent((SearchOrderActivity) context, WorkOrderPdfReportActivity.class);
-                    intent.putExtra("pdf_name", workOrderPojo.getWo_report());
-                    ((SearchOrderActivity) context).startActivity(intent);
-                    ((SearchOrderActivity) context).finish();
-                }
-                else{
-                    Toast.makeText(context,"Report is not available. Try to generate by updating Work Order.",Toast.LENGTH_SHORT).show();
-                }
+            if(!SessionManager.getMyInstance(context).getEmpType().equalsIgnoreCase("admin")){
+                holder.btnDelete.setVisibility(View.GONE);
             }
-        });
+            holder.btnDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ((SearchOrderActivity)context).showDeleteAlertDialog(Integer.parseInt(workOrderPojo.getPkid()),position);
+                }
+            });
+            holder.btnReport.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(workOrderPojo.getWo_report().trim().length()>0) {
+                        Intent intent = new Intent((SearchOrderActivity) context, WorkOrderPdfReportActivity.class);
+                        intent.putExtra("pdf_name", workOrderPojo.getWo_report());
+                        ((SearchOrderActivity) context).startActivity(intent);
+                        ((SearchOrderActivity) context).finish();
+                    }
+                    else{
+                        Toast.makeText(context,"Report is not available. Try to generate by updating Work Order.",Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
 
-        if(workOrderPojo.getActive()==2){
-            holder.card_view.setBackgroundColor(Color.GRAY);
-            holder.btnDelete.setVisibility(View.GONE);
+            if(workOrderPojo.getActive()==2){
+                holder.card_view.setBackgroundColor(Color.GRAY);
+                holder.btnDelete.setVisibility(View.GONE);
+            }
+            else{
+                holder.card_view.setBackgroundColor(Color.WHITE);
+            }
         }
-        else{
-            holder.card_view.setBackgroundColor(Color.WHITE);
-        }
+        catch (Exception ex){
 
+        }
     }
     public interface ClickListener {
         void onItemClick(int position, View v);

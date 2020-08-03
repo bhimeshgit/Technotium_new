@@ -52,7 +52,7 @@ tools:context=".material.activity.AddMaterialActivity">
             android:paddingLeft="5dp"
             android:paddingTop="8dp"
             android:textSize="20sp" >
-            <requestFocus />
+
         </EditText>
 
         <TextView
@@ -76,7 +76,6 @@ tools:context=".material.activity.AddMaterialActivity">
             android:paddingLeft="5dp"
             android:paddingTop="8dp"
             android:textSize="20sp" >
-            <requestFocus />
         </EditText>
         <TextView
             android:layout_width="wrap_content"
@@ -86,21 +85,41 @@ tools:context=".material.activity.AddMaterialActivity">
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textSize="18sp"
             android:textStyle="bold" />
-        <EditText
-            android:id="@+id/txtOrderDate"
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textCapCharacters"
-            android:layout_marginBottom="15dp"
-            android:background="@drawable/edittextbac"
-            android:capitalize="characters"
-            android:ems="10"
-            android:paddingBottom="8dp"
-            android:paddingLeft="5dp"
-            android:paddingTop="8dp"
-            android:textSize="20sp" >
-            <requestFocus />
-        </EditText>
+            android:orientation="horizontal"
+            android:weightSum="10">
+            <EditText
+                android:id="@+id/txtOrderDate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:inputType="textCapCharacters"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/edittextbac"
+                android:layout_weight="9"
+                android:capitalize="characters"
+                android:ems="10"
+                android:paddingBottom="8dp"
+                android:paddingLeft="5dp"
+                android:paddingTop="8dp"
+                android:textSize="20sp" >
+            </EditText>
+            <ImageView
+                android:id="@+id/date_img_view"
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:layout_weight="1"
+                android:layout_marginLeft="5dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/cal"
+                android:layout_marginBottom="10dp"
+                />
+        </LinearLayout>
+
+
+
 
 
         <Button

@@ -118,8 +118,6 @@ public class WelcomeEmpActivity extends AppCompatActivity  implements Navigation
             checkValidUser();
         }
         } catch (Exception e) {
-//            FirebaseCrashlytics.logException(e);
-            // handle your exception here!
         }
     }
 

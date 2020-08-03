@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -54,6 +55,7 @@ public class AddMaterialActivity extends AppCompatActivity {
     EditText txtMaterialDate;
     String OrderDate;
     String orderToset;
+    ImageView date_img_view;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,12 +76,14 @@ public class AddMaterialActivity extends AppCompatActivity {
         txtMaterialName=findViewById(R.id.txtMaterialName);
         lv_materialList=findViewById(R.id.lv_materialList);
         txtMaterialDate=findViewById(R.id.txtOrderDate);
+        date_img_view=findViewById(R.id.date_img_view);
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 addMaterial();
             }
         });
+
         pDialog = new ProgressDialog(currentActivity);
         pDialog.setMessage("Please Wait...");
         pDialog.setCancelable(false);
@@ -89,6 +93,12 @@ public class AddMaterialActivity extends AppCompatActivity {
         orderToset=sdf.format(dt);
         txtMaterialDate.setText(new SimpleDateFormat("dd-MM-yyyy").format(dt));
         txtMaterialDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dateFunction();
+            }
+        });
+        date_img_view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dateFunction();

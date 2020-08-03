@@ -16,12 +16,14 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
         android:requestLegacyExternalStorage="true"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ConstrationtsActivity"></activity>
+        <activity android:name=".status.activity.OrderStatusEntryActivity" ></activity>
+        <activity android:name=".status.activity.OrderStatusListActivity"   android:theme="@style/Theme.AppCompat.Light" />
+        <activity android:name=".ConstrationtsActivity" />
         <activity android:name=".docscan.activity.UploadMultipleDocActivityLocal" />
         <activity
             android:name=".workorder.activity.WorkOrderActivity_New"
