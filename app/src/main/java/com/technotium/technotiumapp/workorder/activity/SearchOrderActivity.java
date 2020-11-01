@@ -24,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.gson.GsonBuilder;
 import com.technotium.technotiumapp.R;
 import com.technotium.technotiumapp.WelcomeEmpActivity;
@@ -79,6 +80,7 @@ public class SearchOrderActivity extends AppCompatActivity {
     ArrayList<String> dealerNameArrayList = new ArrayList<String>();
     SpinnerAdapter dealerSpinnerAdapter;
     ArrayList<WorkOrderPojo> tempArrayList2 = new ArrayList<WorkOrderPojo>();
+    private ShimmerFrameLayout mShimmerViewContainer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -223,6 +225,10 @@ public class SearchOrderActivity extends AppCompatActivity {
                 dateFunction(2);
             }
         });
+
+        mShimmerViewContainer = findViewById(R.id.shimmer_view_container);
+        mShimmerViewContainer.setVisibility(View.VISIBLE);
+        mShimmerViewContainer.startShimmerAnimation();
     }
 
     public void dateFunction(final int a){
@@ -336,6 +342,8 @@ public class SearchOrderActivity extends AppCompatActivity {
                     public void getResponse(String response) {
                         try {
 //                            Log.d("iss",response);
+                            mShimmerViewContainer.stopShimmerAnimation();
+                            mShimmerViewContainer.setVisibility(View.GONE);
                             JSONObject jsonObject=new JSONObject(response);
                             int success=jsonObject.getInt("success");
                             if(success==1){

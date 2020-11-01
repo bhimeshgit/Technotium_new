@@ -12,5 +12,5 @@
     <color name="color_text_black">#000000</color>
     <color name="ic_launcher_background">#ffffff</color>
     <color name="background_color_new">#e5eaf0</color>
-
+    <color name="background">#dddddd</color>
 </resources>

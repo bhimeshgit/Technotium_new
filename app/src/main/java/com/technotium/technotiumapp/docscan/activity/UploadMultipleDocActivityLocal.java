@@ -62,8 +62,6 @@ import java.util.Locale;
 
 public class UploadMultipleDocActivityLocal extends AppCompatActivity {
 
-
-
     Spinner spndocName;
     UploadMultipleDocActivityLocal currentActivity;
     ArrayList<String> docNameList;
