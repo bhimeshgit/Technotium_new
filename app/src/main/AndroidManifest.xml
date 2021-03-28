@@ -21,8 +21,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".status.activity.OrderStatusEntryActivity" ></activity>
-        <activity android:name=".status.activity.OrderStatusListActivity"   android:theme="@style/Theme.AppCompat.Light" />
+        <activity android:name=".payment.activity.PaymentListActivity"     android:theme="@style/Theme.AppCompat.Light"  android:screenOrientation="portrait"></activity>
+        <activity android:name=".status.activity.OrderStatusEntryActivity"    android:theme="@style/Theme.AppCompat.Light"   android:screenOrientation="portrait"/>
+        <activity
+            android:name=".status.activity.OrderStatusListActivity"
+            android:theme="@style/Theme.AppCompat.Light" />
         <activity android:name=".ConstrationtsActivity" />
         <activity android:name=".docscan.activity.UploadMultipleDocActivityLocal" />
         <activity

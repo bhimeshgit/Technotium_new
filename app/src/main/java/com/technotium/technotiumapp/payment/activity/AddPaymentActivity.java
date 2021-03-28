@@ -80,6 +80,7 @@ public class AddPaymentActivity extends AppCompatActivity {
     ImageView date_img_view;
     AutoCompleteTextView pay_txt;
     Spinner sp_bank_name;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -379,7 +380,7 @@ public class AddPaymentActivity extends AppCompatActivity {
 
             try {
                 FileOutputStream out = new FileOutputStream(file);
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 5, out);
                 out.flush();
                 out.close();
             } catch (Exception e) {
@@ -551,6 +552,7 @@ public class AddPaymentActivity extends AppCompatActivity {
         jsonParserVolley.addParameter("payment_mode",payment_mode);
         jsonParserVolley.addParameter("comment",txtComment.getText().toString());
         jsonParserVolley.addParameter("amount",txtAmout.getText().toString());
+        jsonParserVolley.addParameter("userid", SessionManager.getMyInstance(currentActivity).getEmpid());
         jsonParserVolley.addParameter("userid", SessionManager.getMyInstance(currentActivity).getEmpid());
         jsonParserVolley.addParameter("image", encodedPhotoString);
         jsonParserVolley.addParameter("pay_date", orderToset);

@@ -2,8 +2,9 @@ package com.technotium.technotiumapp.config;
 
 public class WebUrl {
 //    public static String BASE_URL="http://192.168.0.6/technotium/";
-  public static String BASE_URL= "http://www.technotiumtech.in/";
+    public static String BASE_URL = "http://www.technotiumtech.in/";
 //    public static String BASE_URL= "http://www.kitsgeotech.in/technotium/";
+//public static String BASE_URL = "http://4isoftwares.com/technotium/";
 
     public static String LOGIN_URL=BASE_URL+"app_login.php";
     public static String ADD_WORK_ORDER_URL=BASE_URL+"addWorkOrder.php";
@@ -58,4 +59,5 @@ public class WebUrl {
     public static String ADD_WORK_ORDER_STATUS_URL=BASE_URL+"addWOStatus.php";
     public static String GET_WORK_ORDER_STATUS_URL=BASE_URL+"getAllStatus.php";
     public static String DEL_WORK_ORDER_STATUS_URL=BASE_URL+"deleteWOStatus.php";
+    public static String GET_ALL_PAYMENTS_URL=BASE_URL+"getAllPayments.php";
 }

@@ -38,6 +38,7 @@ import com.technotium.technotiumapp.expenses.activity.AddExpense;
 import com.technotium.technotiumapp.expenses.activity.ViewAllExpenses;
 import com.technotium.technotiumapp.material.activity.AddMaterialActivity;
 import com.technotium.technotiumapp.payment.activity.PaymentHistoryActivity;
+import com.technotium.technotiumapp.payment.activity.PaymentListActivity;
 import com.technotium.technotiumapp.status.OrderStatusPOJO;
 import com.technotium.technotiumapp.status.activity.OrderStatusActivity;
 import com.technotium.technotiumapp.status.activity.OrderStatusEntryActivity;
@@ -73,7 +74,7 @@ public class SearchOrderActivity extends AppCompatActivity {
     String modul="";
     ProgressDialog pDialog;
     AlertDialog alertDialog;
-    Button btnDelete,btnReport;
+    Button btnDelete,btnReport,btnPaymentList;
     ArrayList<WorkOrderPojo> tempArrayList = new ArrayList<WorkOrderPojo>();
     Spinner dealer_sp;
     ArrayList<Dealer> dealerArrayList = new ArrayList<Dealer>();
@@ -101,6 +102,7 @@ public class SearchOrderActivity extends AppCompatActivity {
                         break;
                     case "payment":
                         setTitle("Payment");
+                        btnPaymentList.setVisibility(View.VISIBLE);
                         break;
                     case "docscan":
                         setTitle("Documents");
@@ -132,6 +134,7 @@ public class SearchOrderActivity extends AppCompatActivity {
         addNewBtn=findViewById(R.id.btnAddNew);
         txtStartDate =findViewById(R.id.txtStartDate);
         txtEndDate =findViewById(R.id.txtEndDate);
+        btnPaymentList = findViewById(R.id.btnPaymentList);
 
         layoutManager=new GridLayoutManager(currentActivity,1);
         lv_wo.setLayoutManager(layoutManager);
@@ -229,6 +232,13 @@ public class SearchOrderActivity extends AppCompatActivity {
         mShimmerViewContainer = findViewById(R.id.shimmer_view_container);
         mShimmerViewContainer.setVisibility(View.VISIBLE);
         mShimmerViewContainer.startShimmerAnimation();
+
+        btnPaymentList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(currentActivity, PaymentListActivity.class));
+            }
+        });
     }
 
     public void dateFunction(final int a){

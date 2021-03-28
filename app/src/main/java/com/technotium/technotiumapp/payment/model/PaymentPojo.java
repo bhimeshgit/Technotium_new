@@ -3,6 +3,27 @@ package com.technotium.technotiumapp.payment.model;
 public class PaymentPojo {
     String payment_id;
     String order_id;
+    String order_name;
+    String dealer_name;
+
+    public String getDealer_name() {
+        return dealer_name;
+    }
+
+    public void setDealer_name(String dealer_name) {
+        this.dealer_name = dealer_name;
+    }
+
+
+
+    public String getOrder_name() {
+        return order_name;
+    }
+
+    public void setOrder_name(String order_name) {
+        this.order_name = order_name;
+    }
+
 
     public String getPay_bank() {
         return pay_bank;
@@ -74,6 +95,16 @@ public class PaymentPojo {
     String pay_image;
     String payment_date;
     String amount;
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    String fullName;
 
     public int getTotal_paid() {
         return total_paid;

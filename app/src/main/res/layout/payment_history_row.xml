@@ -33,7 +33,19 @@
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:id="@+id/txtCustomerName"
+                        android:textStyle="bold"
+                        android:textSize="14dp"
+                        android:text="Name"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:textColor="@color/color_text_black"
+                        />
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:id="@+id/txtPayMode"
+                        android:textStyle="bold"
                         android:textSize="14dp"
                         android:text="Name"
                         android:layout_marginLeft="5dp"
@@ -78,6 +90,18 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/txtComment"
+                        android:fontFamily="@string/font_family_light"
+                        android:textSize="14dp"
+                        android:text="Comment"
+                        android:textStyle="bold"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:autoLink="web"
+                        android:textColor="@color/color_text_black"/>
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/txtAddedBy"
                         android:fontFamily="@string/font_family_light"
                         android:textSize="14dp"
                         android:text="Comment"

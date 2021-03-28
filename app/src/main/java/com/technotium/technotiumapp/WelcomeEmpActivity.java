@@ -50,6 +50,7 @@ import com.technotium.technotiumapp.employee.ManageEmployeeActivity;
 import com.technotium.technotiumapp.employee.MyProfileActivity;
 import com.technotium.technotiumapp.employee.model.EmployeePojo;
 import com.technotium.technotiumapp.model.HomeIcon;
+import com.technotium.technotiumapp.payment.activity.PaymentListActivity;
 import com.technotium.technotiumapp.workorder.activity.SearchOrderActivity;
 import com.technotium.technotiumapp.workorder.activity.SendSmsActivity;
 import com.technotium.technotiumapp.workorder.activity.WorkOrderActivity;
@@ -154,6 +155,9 @@ public class WelcomeEmpActivity extends AppCompatActivity  implements Navigation
                            return;
                     }
                     intent.putExtra("modul","payment");
+//                    Intent intent1 = new Intent(currentActivity, PaymentListActivity.class);
+//                    startActivity(intent1);
+//                    return;
                 }
                 else if(position==2){
                     intent.putExtra("modul","docscan");

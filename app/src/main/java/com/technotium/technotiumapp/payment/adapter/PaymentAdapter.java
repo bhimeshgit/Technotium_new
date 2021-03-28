@@ -32,6 +32,7 @@ import com.technotium.technotiumapp.R;
 import com.technotium.technotiumapp.config.ImageProcessing;
 import com.technotium.technotiumapp.config.WebUrl;
 import com.technotium.technotiumapp.payment.activity.PaymentHistoryActivity;
+import com.technotium.technotiumapp.payment.activity.PaymentListActivity;
 import com.technotium.technotiumapp.payment.model.PaymentPojo;
 
 import java.io.File;
@@ -50,6 +51,7 @@ public class PaymentAdapter  extends RecyclerView.Adapter<PaymentAdapter.Payment
     Context context;
     private static ClickListener clickListener;
     String image_url="";
+    static boolean fromPaymentList = false;
 
     public PaymentAdapter(){
 
@@ -57,6 +59,9 @@ public class PaymentAdapter  extends RecyclerView.Adapter<PaymentAdapter.Payment
     public PaymentAdapter(ArrayList<PaymentPojo> pay_List, Context context) {
         this.pay_List=pay_List;
         this.context=context;
+        if(context instanceof PaymentListActivity){
+            fromPaymentList = true;
+        }
     }
     @NonNull
     @Override
@@ -75,6 +80,20 @@ public class PaymentAdapter  extends RecyclerView.Adapter<PaymentAdapter.Payment
         holder.txtDate.setText("Payment Date: "+paymentPojo.getPayment_date());
         holder.txtAmount.setText("Payment Amount: "+paymentPojo.getAmount());
         holder.txtComment.setText("Comment: "+paymentPojo.getComment());
+
+        if(context instanceof PaymentListActivity){
+            holder.btnShare.setVisibility(View.GONE);
+        }
+        if (paymentPojo.getFullName() != null && !paymentPojo.getFullName().equals("null")) {
+            holder.txtAddedBy.setText("Added By: " + paymentPojo.getFullName());
+        } else{
+            holder.txtAddedBy.setVisibility(View.GONE);
+        }
+        if (paymentPojo.getOrder_name() != null && !paymentPojo.getOrder_name().equals("null")) {
+            holder.txtCustomerName.setText("Customer Name: " + paymentPojo.getOrder_name());
+        } else{
+            holder.txtCustomerName.setVisibility(View.GONE);
+        }
         Linkify.addLinks(holder.txtComment, Linkify.WEB_URLS);
         if(!paymentPojo.getPay_bank().equals("") && !paymentPojo.getPay_bank().equals("null")){
             holder.txtBank.setText("Bank Name: "+paymentPojo.getPay_bank());
@@ -163,7 +182,7 @@ public class PaymentAdapter  extends RecyclerView.Adapter<PaymentAdapter.Payment
         void onLongItemClick(int position, View v);
     }
     public static class PaymentViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,View.OnLongClickListener {
-        TextView txtPayMode,txtDate,txtAmount,txtComment,txtBank;
+        TextView txtPayMode,txtDate,txtAmount,txtComment,txtBank, txtAddedBy, txtCustomerName;
         ImageView pay_img;
         CardView card_view;
         Button btnShare;
@@ -175,21 +194,26 @@ public class PaymentAdapter  extends RecyclerView.Adapter<PaymentAdapter.Payment
             txtComment= (TextView) view.findViewById(R.id.txtComment);
             pay_img=(ImageView) view.findViewById(R.id.pay_img);
             txtBank= (TextView) view.findViewById(R.id.txtBank);
+            txtAddedBy = (TextView) view.findViewById(R.id.txtAddedBy);
             card_view=(CardView) view.findViewById(R.id.card_view);
             btnShare=(Button)view.findViewById(R.id.btnShare);
+            txtCustomerName = (TextView) view.findViewById(R.id.txtCustomerName);
             view.setOnClickListener(this);
             view.setOnLongClickListener(this);
         }
         @Override
         public void onClick(View v) {
-
-            clickListener.onItemClick(getAdapterPosition(), v);
+            if (!fromPaymentList) {
+                clickListener.onItemClick(getAdapterPosition(), v);
+            }
         }
 
 
         @Override
         public boolean onLongClick(View v) {
-            clickListener.onLongItemClick(getAdapterPosition(),v);
+            if (!fromPaymentList) {
+                clickListener.onLongItemClick(getAdapterPosition(), v);
+            }
             return true;
         }
     }
