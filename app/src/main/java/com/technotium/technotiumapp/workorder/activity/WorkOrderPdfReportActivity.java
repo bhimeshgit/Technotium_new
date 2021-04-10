@@ -1,39 +1,51 @@
 package com.technotium.technotiumapp.workorder.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
 import com.technotium.technotiumapp.R;
+import com.technotium.technotiumapp.config.JsonParserVolley;
+import com.technotium.technotiumapp.config.SessionManager;
 import com.technotium.technotiumapp.config.WebUrl;
+import com.technotium.technotiumapp.payment.adapter.PaymentAdapter;
+import com.technotium.technotiumapp.payment.model.PaymentPojo;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class WorkOrderPdfReportActivity extends AppCompatActivity {
 
     WorkOrderPdfReportActivity currentActivity;
+    String order_id = "";
+    ProgressDialog pDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_work_order_pdf_report);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         currentActivity=this;
-        if(getIntent().getStringExtra("pdf_name")!=null){
-            WebView webView = (WebView) findViewById(R.id.webview);
-            webView.getSettings().setJavaScriptEnabled(true);
-            webView.getSettings().setPluginState(WebSettings.PluginState.ON);
-            webView.loadUrl("http://docs.google.com/gview?embedded=true&url="+WebUrl.WORK_ORDER_REPORT+getIntent().getStringExtra("pdf_name"));//+WebUrl.WORK_ORDER_REPORT);
+        if(getIntent().getStringExtra("order_id")!=null){
+            order_id = getIntent().getStringExtra("order_id");
+//            WebView webView = (WebView) findViewById(R.id.webview);
+//            webView.getSettings().setJavaScriptEnabled(true);
+//            webView.getSettings().setPluginState(WebSettings.PluginState.ON);
+//            webView.loadUrl("http://docs.google.com/gview?embedded=true&url="+WebUrl.WORK_ORDER_REPORT+getIntent().getStringExtra("pdf_name"));//+WebUrl.WORK_ORDER_REPORT);
             //finish();
         }
-        else {
-            Toast.makeText(currentActivity,"Report is not availble. Try to generate by updating Work Order",Toast.LENGTH_SHORT);
-            finish();
-        }
+        getPdfReport();
 
     }
     @Override
@@ -61,6 +73,47 @@ public class WorkOrderPdfReportActivity extends AppCompatActivity {
     @Override
     protected void onRestart() {
         super.onRestart();
-
     }
+
+    private void showProgressLoad(){
+        pDialog = new ProgressDialog(currentActivity);
+        pDialog.setMessage("Please Wait...");
+        pDialog.setCancelable(false);
+        pDialog.show();
+    }
+    private void hideProgressLoad(){
+        if (pDialog != null){
+            pDialog.dismiss();
+        }
+    }
+
+    public void getPdfReport(){
+        showProgressLoad();
+        final JsonParserVolley jsonParserVolley = new JsonParserVolley(currentActivity);
+        jsonParserVolley.addParameter("order_id", order_id);
+
+        jsonParserVolley.executeRequest(Request.Method.POST, WebUrl.GET_WO_PDF_REPORT_NAME ,new JsonParserVolley.VolleyCallback() {
+                    @Override
+                    public void getResponse(String response) {
+                        Log.d("iss","response="+response);
+                        try {
+                            WebView webView = (WebView) findViewById(R.id.webview);
+                            webView.getSettings().setJavaScriptEnabled(true);
+                            webView.getSettings().setPluginState(WebSettings.PluginState.ON);
+                            webView.loadUrl("http://docs.google.com/gview?embedded=true&url="+WebUrl.WORK_ORDER_REPORT+response.trim());//+WebUrl.WORK_ORDER_REPORT);
+
+                            Intent intent=new Intent(currentActivity, SearchOrderActivity.class);
+                            intent.putExtra("modul","workorder");
+                            startActivity(intent);
+                            finish();
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        hideProgressLoad();
+                    }
+                }
+        );
+    }
+
 }

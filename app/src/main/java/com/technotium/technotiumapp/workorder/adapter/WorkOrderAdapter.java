@@ -81,15 +81,15 @@ public class WorkOrderAdapter extends RecyclerView.Adapter<WorkOrderAdapter.Work
             holder.btnReport.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(workOrderPojo.getWo_report().trim().length()>0) {
+//                    if(workOrderPojo.getWo_report().trim().length()>0) {
                         Intent intent = new Intent((SearchOrderActivity) context, WorkOrderPdfReportActivity.class);
-                        intent.putExtra("pdf_name", workOrderPojo.getWo_report());
+                        intent.putExtra("order_id", workOrderPojo.getPkid());
                         ((SearchOrderActivity) context).startActivity(intent);
                         ((SearchOrderActivity) context).finish();
-                    }
-                    else{
-                        Toast.makeText(context,"Report is not available. Try to generate by updating Work Order.",Toast.LENGTH_SHORT).show();
-                    }
+//                    }
+//                    else{
+//                        Toast.makeText(context,"Report is not available. Try to generate by updating Work Order.",Toast.LENGTH_SHORT).show();
+//                    }
                 }
             });
 

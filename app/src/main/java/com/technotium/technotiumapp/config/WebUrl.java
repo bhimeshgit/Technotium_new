@@ -60,4 +60,6 @@ public class WebUrl {
     public static String GET_WORK_ORDER_STATUS_URL=BASE_URL+"getAllStatus.php";
     public static String DEL_WORK_ORDER_STATUS_URL=BASE_URL+"deleteWOStatus.php";
     public static String GET_ALL_PAYMENTS_URL=BASE_URL+"getAllPayments.php";
+    public static String GET_WO_PDF_REPORT_NAME=BASE_URL+"work_order_report.php";
+    public static String VIEW_WORK_ORDER_REPORT=BASE_URL+"report.php?";
 }

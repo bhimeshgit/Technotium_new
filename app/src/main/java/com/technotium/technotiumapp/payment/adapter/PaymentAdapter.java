@@ -85,6 +85,7 @@ public class PaymentAdapter  extends RecyclerView.Adapter<PaymentAdapter.Payment
             holder.btnShare.setVisibility(View.GONE);
         }
         if (paymentPojo.getFullName() != null && !paymentPojo.getFullName().equals("null")) {
+            holder.txtAddedBy.setVisibility(View.VISIBLE);
             holder.txtAddedBy.setText("Added By: " + paymentPojo.getFullName());
         } else{
             holder.txtAddedBy.setVisibility(View.GONE);
