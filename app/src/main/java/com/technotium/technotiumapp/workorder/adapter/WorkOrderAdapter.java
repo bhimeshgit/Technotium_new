@@ -85,7 +85,7 @@ public class WorkOrderAdapter extends RecyclerView.Adapter<WorkOrderAdapter.Work
                         Intent intent = new Intent((SearchOrderActivity) context, WorkOrderPdfReportActivity.class);
                         intent.putExtra("order_id", workOrderPojo.getPkid());
                         ((SearchOrderActivity) context).startActivity(intent);
-                        ((SearchOrderActivity) context).finish();
+//                        ((SearchOrderActivity) context).finish();
 //                    }
 //                    else{
 //                        Toast.makeText(context,"Report is not available. Try to generate by updating Work Order.",Toast.LENGTH_SHORT).show();

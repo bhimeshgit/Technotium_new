@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -97,14 +98,17 @@ public class WorkOrderPdfReportActivity extends AppCompatActivity {
                     public void getResponse(String response) {
                         Log.d("iss","response="+response);
                         try {
-                            WebView webView = (WebView) findViewById(R.id.webview);
-                            webView.getSettings().setJavaScriptEnabled(true);
-                            webView.getSettings().setPluginState(WebSettings.PluginState.ON);
-                            webView.loadUrl("http://docs.google.com/gview?embedded=true&url="+WebUrl.WORK_ORDER_REPORT+response.trim());//+WebUrl.WORK_ORDER_REPORT);
+//                            WebView webView = (WebView) findViewById(R.id.webview);
+//                            webView.getSettings().setJavaScriptEnabled(true);
+//                            webView.getSettings().setPluginState(WebSettings.PluginState.ON);
+//                            webView.loadUrl("https://docs.google.com/viewerng/viewer?url="+WebUrl.WORK_ORDER_REPORT+response.trim());//+WebUrl.WORK_ORDER_REPORT);
 
-                            Intent intent=new Intent(currentActivity, SearchOrderActivity.class);
-                            intent.putExtra("modul","workorder");
+                            Intent intent = new Intent(Intent.ACTION_VIEW).setData(Uri.parse(WebUrl.WORK_ORDER_REPORT+response.trim()));
                             startActivity(intent);
+
+//                            Intent intent2=new Intent(currentActivity, SearchOrderActivity.class);
+//                            intent2.putExtra("modul","workorder");
+//                            startActivity(intent2);
                             finish();
 
                         } catch (Exception e) {

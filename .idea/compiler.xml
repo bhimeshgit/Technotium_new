@@ -2,7 +2,7 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel>
-      <module name="Technotiumapp.app" target="1.8" />
+      <module name="Technotiumapp.app" target="11" />
     </bytecodeTargetLevel>
   </component>
 </project>
