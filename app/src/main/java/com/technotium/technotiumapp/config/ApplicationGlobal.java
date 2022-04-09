@@ -38,6 +38,7 @@ public class ApplicationGlobal extends Application {
     JSONObject json_response=null;
     public static String string_response=null;
     HashMap<String,String> parameters;
+    static Dialog dialog = null;
 
     @Override
     public void onCreate() {
@@ -127,7 +128,7 @@ public class ApplicationGlobal extends Application {
     }//checkInternetConenction
 
     public static void shownointernetconnectiondialog(Context context) {
-        final Dialog dialog = new Dialog(context);
+         dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(false);
@@ -143,6 +144,13 @@ public class ApplicationGlobal extends Application {
 
         dialog.show();
     }//shownointernetconnectiondialog
+
+
+    public static void closeInternetDialog(){
+        if(dialog!=null){
+            dialog.dismiss();
+        }
+    }
 
     public static boolean isMyServiceRunning(Context context, Class<?> serviceClass) {
         try {

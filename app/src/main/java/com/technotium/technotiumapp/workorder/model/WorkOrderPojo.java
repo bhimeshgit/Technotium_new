@@ -6,6 +6,7 @@ public class WorkOrderPojo implements Serializable {
     String fname;
     String added_by;
 
+
     public boolean isSelected() {
         return selected;
     }
@@ -418,6 +419,25 @@ public class WorkOrderPojo implements Serializable {
 
     public void setOrder_date(String order_date) {
         this.order_date = order_date;
+    }
+
+    private double gstRate;
+    private double orderAmountAfterGst;
+
+    public double getGstRate() {
+        return gstRate;
+    }
+
+    public void setGstRate(double gstRate) {
+        this.gstRate = gstRate;
+    }
+
+    public double getOrderAmountAfterGst() {
+        return orderAmountAfterGst;
+    }
+
+    public void setOrderAmountAfterGst(double orderAmountAfterGst) {
+        this.orderAmountAfterGst = orderAmountAfterGst;
     }
 
 }

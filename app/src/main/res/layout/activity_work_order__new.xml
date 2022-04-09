@@ -827,6 +827,53 @@
                 android:paddingTop="8dp"
                 android:textSize="20sp" >
             </EditText>
+
+            <TextView
+                android:id="@+id/txtGstTaxRate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="GST Rate:"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+            <EditText
+                android:id="@+id/edtGstTaxRate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/edittextbac"
+                android:capitalize="characters"
+                android:ems="10"
+                android:paddingBottom="8dp"
+                android:paddingLeft="5dp"
+                android:paddingTop="8dp"
+                android:textSize="20sp" >
+            </EditText>
+            <TextView
+                android:id="@+id/txtTotWoAmount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="Total Work Order Amount:"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+            <EditText
+                android:id="@+id/edtTotWoAmount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/edittextbac"
+                android:capitalize="characters"
+                android:ems="10"
+                android:paddingBottom="8dp"
+                android:paddingLeft="5dp"
+                android:paddingTop="8dp"
+                android:textSize="20sp" >
+            </EditText>
         </LinearLayout>
         <Button
             android:id="@+id/btnSave"

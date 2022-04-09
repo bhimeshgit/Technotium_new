@@ -13,6 +13,8 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -57,11 +59,11 @@ public class WorkOrderActivity_New extends AppCompatActivity {
     ArrayList<String> structureArray=new ArrayList<>();
     ArrayList<String> phaseArray=new ArrayList<>();
     String OrderDate;
-    TextView txtamounttxt;
+    TextView txtamounttxt, txtGstTaxRate, txtTotWoAmount;
     String orderToset;
 
     CheckBox load_extension,changeofname,solarsanction,meterinstall,medasaction,subsidy_approval,commissioning,agreement;
-    EditText txtpanelcapacity,txtinvertercapacity,txtRate,txtContactPerson,txtFirmName;
+    EditText txtpanelcapacity,txtinvertercapacity,txtRate,txtContactPerson,txtFirmName, edtTotWoAmount, edtGstTaxRate;
     Button btnSave,btnUpdate;
     ProgressDialog pDialog ;
     TextView txtRatetxt;
@@ -180,6 +182,8 @@ public class WorkOrderActivity_New extends AppCompatActivity {
         }
         txtContactPerson.setText(workOrderPojo.getContact_person_name());
         txtFirmName.setText(workOrderPojo.getFirm_name());
+        edtGstTaxRate.setText(workOrderPojo.getGstRate()+"");
+        edtTotWoAmount.setText(workOrderPojo.getOrderAmountAfterGst()+"");
     }
 
     private void onClick() {
@@ -284,6 +288,26 @@ public class WorkOrderActivity_New extends AppCompatActivity {
                 );
             }
         });
+
+        edtGstTaxRate.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                try{
+                    double tatRate = Double.parseDouble(charSequence.toString());
+                    double woAmount = Double.parseDouble(txtamount.getText().toString());
+                    double finalWoAmt= woAmount +  ((tatRate/100)*woAmount);
+                    edtTotWoAmount.setText(finalWoAmt+"");
+                }catch (Exception e){}
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        });
     }
 
     private void createObj() {
@@ -364,6 +388,11 @@ public class WorkOrderActivity_New extends AppCompatActivity {
             txtamounttxt.setVisibility(View.GONE);
             finance_head_lay.setVisibility(View.GONE);
             finance_lay.setVisibility(View.GONE);
+
+            txtGstTaxRate.setVisibility(View.GONE);
+            edtGstTaxRate.setVisibility(View.GONE);
+            txtTotWoAmount.setVisibility(View.GONE);
+            edtTotWoAmount.setVisibility(View.GONE);
         }
         pDialog = new ProgressDialog(currentActivity);
 
@@ -430,6 +459,10 @@ public class WorkOrderActivity_New extends AppCompatActivity {
         contact2_pick_img=findViewById(R.id.contact2_pick_img);
 
         finance_lay=findViewById(R.id.finance_lay);
+        edtTotWoAmount=findViewById(R.id.edtTotWoAmount);
+        edtGstTaxRate=findViewById(R.id.edtGstTaxRate);
+        txtGstTaxRate=findViewById(R.id.txtGstTaxRate);
+        txtTotWoAmount=findViewById(R.id.txtTotWoAmount);
     }
 
     public void dateFunction(){
@@ -499,6 +532,8 @@ public class WorkOrderActivity_New extends AppCompatActivity {
         workOrderPojo.setPanelcapacity(txtpanelcapacity.getText().toString());
         workOrderPojo.setRateFromCompany(txtRate.getText().toString());
         workOrderPojo.setContact_person_name(txtContactPerson.getText().toString());
+        workOrderPojo.setOrderAmountAfterGst(Double.parseDouble(edtTotWoAmount.getText().toString()));
+        workOrderPojo.setGstRate(Double.parseDouble(edtGstTaxRate.getText().toString()));
         return workOrderPojo;
     }
     public JsonParserVolley setAllparameter(){
@@ -542,6 +577,8 @@ public class WorkOrderActivity_New extends AppCompatActivity {
         jsonParserVolley.addParameter("firm_name",workOrderPojo.getFirm_name());
         jsonParserVolley.addParameter("contact_person_name",workOrderPojo.getContact_person_name());
         jsonParserVolley.addParameter("insertuserid",SessionManager.getMyInstance(currentActivity).getEmpid());
+        jsonParserVolley.addParameter("gstTaxRate",workOrderPojo.getGstRate()+"");
+        jsonParserVolley.addParameter("totWoAmount",workOrderPojo.getOrderAmountAfterGst()+"");
         return jsonParserVolley;
     }
     private int validate() {

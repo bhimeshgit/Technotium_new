@@ -420,6 +420,12 @@ public class SearchOrderActivity extends AppCompatActivity {
                                     workOrderPojo.setFirm_name(jsonWO.getString("firm_name"));
                                     workOrderPojo.setPhase(jsonWO.getString("phase"));
                                     workOrderPojo.setContact_person_name(jsonWO.getString("contact_person_name"));
+                                    if (jsonWO.getString("totWoAmount")!=null && !jsonWO.getString("totWoAmount").equals("")) {
+                                        workOrderPojo.setOrderAmountAfterGst(Double.parseDouble(jsonWO.getString("totWoAmount")));
+                                    }
+                                    if (jsonWO.getString("gstTaxRate")!=null && !jsonWO.getString("gstTaxRate").equals("")) {
+                                        workOrderPojo.setGstRate(Double.parseDouble(jsonWO.getString("gstTaxRate")));
+                                    }
                                     if(modul.equals("workorder")){
                                         workOrderPojo.setWo_activity(1);
                                     }

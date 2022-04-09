@@ -1,6 +1,7 @@
 package com.technotium.technotiumapp;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -21,8 +22,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkRequest;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -78,48 +83,83 @@ public class WelcomeEmpActivity extends AppCompatActivity  implements Navigation
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.READ_CONTACTS,
             Manifest.permission.CAMERA};
+    ConnectivityManager mConnectivityManager;
+    ConnectivityManager.NetworkCallback mNetworkCallback ;
+    NetworkRequest request;
     public static final int MULTIPLE_PERMISSIONS = 10;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         try {
 
-        setContentView(R.layout.activity_welcome_emp);
-        init();
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-        View headerView = navigationView.getHeaderView(0);
-        TextView navUsername = (TextView) headerView.findViewById(R.id.welcome_txt);
-        empProfileImg=(ImageView) headerView.findViewById(R.id.imageView);
-        Glide.with(currentActivity).load(WebUrl.BASE_URL+SessionManager.getMyInstance(currentActivity).getEmpImage())
-                 .apply(RequestOptions.skipMemoryCacheOf(false))
-                .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE)).into(empProfileImg);
+            setContentView(R.layout.activity_welcome_emp);
+            init();
+            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+            setSupportActionBar(toolbar);
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                    this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+            drawer.addDrawerListener(toggle);
+            toggle.syncState();
+            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+            navigationView.setNavigationItemSelectedListener(this);
+            View headerView = navigationView.getHeaderView(0);
+            TextView navUsername = (TextView) headerView.findViewById(R.id.welcome_txt);
+            empProfileImg=(ImageView) headerView.findViewById(R.id.imageView);
+            Glide.with(currentActivity).load(WebUrl.BASE_URL+SessionManager.getMyInstance(currentActivity).getEmpImage())
+                     .apply(RequestOptions.skipMemoryCacheOf(false))
+                    .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE)).into(empProfileImg);
 
-        navUsername.setText("Welcome "+ SessionManager.getMyInstance(currentActivity).getEmpName());
-        Menu menu=navigationView.getMenu();
-        if(SessionManager.getMyInstance(currentActivity).getEmpType().equals("Employee") || SessionManager.getMyInstance(currentActivity).getEmpType().equals("Electrician")){
-            menu.findItem(R.id.manage_employee).setVisible(false);
-            menu.findItem(R.id.send_sms).setVisible(false);
-        }
-        if(SessionManager.getMyInstance(currentActivity).getEmpType().equals("Dealer")){
-            menu.findItem(R.id.send_sms).setVisible(false);
-        }
+            navUsername.setText("Welcome "+ SessionManager.getMyInstance(currentActivity).getEmpName());
+            Menu menu=navigationView.getMenu();
+            if(SessionManager.getMyInstance(currentActivity).getEmpType().equals("Employee") || SessionManager.getMyInstance(currentActivity).getEmpType().equals("Electrician")){
+                menu.findItem(R.id.manage_employee).setVisible(false);
+                menu.findItem(R.id.send_sms).setVisible(false);
+            }
+            if(SessionManager.getMyInstance(currentActivity).getEmpType().equals("Dealer")){
+                menu.findItem(R.id.send_sms).setVisible(false);
+            }
 
-        if(!ApplicationGlobal.checkInternetConenction(currentActivity)){
-            ApplicationGlobal.shownointernetconnectiondialog(currentActivity);
-        }
-        else{
-            checkValidUser();
-        }
+//            if(!ApplicationGlobal.checkInternetConenction(currentActivity)){
+//                ApplicationGlobal.shownointernetconnectiondialog(currentActivity);
+//            }
+//            else{
+//                checkValidUser();
+//            }
+            checkNetworkConnectivity();
         } catch (Exception e) {
         }
+    }
+
+    private void checkNetworkConnectivity(){
+        mConnectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            request = new NetworkRequest.Builder().build();
+            mNetworkCallback = new ConnectivityManager.NetworkCallback(){
+                @Override
+                public void onLost(@NonNull Network network) {
+                    super.onLost(network);
+                    ApplicationGlobal.shownointernetconnectiondialog(currentActivity);
+                }
+
+                @Override
+                public void onAvailable(@NonNull Network network) {
+                    super.onAvailable(network);
+                    ApplicationGlobal.closeInternetDialog();
+                    checkValidUser();
+                }
+            };
+        }
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    @Override
+    protected void onResume() {
+        super.onResume();
+        try {
+            mConnectivityManager.registerNetworkCallback(request, mNetworkCallback);
+        } catch (Exception e){}
     }
 
     private void init() {
@@ -364,4 +404,14 @@ public class WelcomeEmpActivity extends AppCompatActivity  implements Navigation
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    @Override
+    protected void onStop() {
+        super.onStop();
+        try {
+            if (mNetworkCallback != null && mConnectivityManager != null) {
+                mConnectivityManager.unregisterNetworkCallback(mNetworkCallback);
+            }
+        } catch (Exception e){ }
+    }
 }
