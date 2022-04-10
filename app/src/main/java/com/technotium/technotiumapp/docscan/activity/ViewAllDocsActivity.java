@@ -147,13 +147,18 @@ public class ViewAllDocsActivity extends AppCompatActivity {
                                 JSONArray jsonArray=jsonObject.getJSONArray("data");
                                 for(int i=0;i<jsonArray.length();i++){
                                     JSONObject jsonWO=jsonArray.getJSONObject(i);
-                                    DocPojo docPojo=new DocPojo();
-                                    docPojo.setDoc_path(jsonWO.getString("doc_path"));
-                                    docPojo.setDoc_name(jsonWO.getString("doc_name"));
-                                    docPojo.setOrder_id(jsonWO.getString("order_id"));
-                                    docPojo.setDoc_id(jsonWO.getString("pkid"));
-                                    docPojo.setActive(jsonWO.getString("active"));
-                                    docList.add(docPojo);
+                                    if(!SessionManager.getMyInstance(currentActivity).getEmpType().equals("Admin") &&
+                                            jsonWO.getString("doc_name").equals("Warranty")){
+
+                                    } else {
+                                        DocPojo docPojo = new DocPojo();
+                                        docPojo.setDoc_path(jsonWO.getString("doc_path"));
+                                        docPojo.setDoc_name(jsonWO.getString("doc_name"));
+                                        docPojo.setOrder_id(jsonWO.getString("order_id"));
+                                        docPojo.setDoc_id(jsonWO.getString("pkid"));
+                                        docPojo.setActive(jsonWO.getString("active"));
+                                        docList.add(docPojo);
+                                    }
                                 }
 
                                 layoutManager=new GridLayoutManager(currentActivity,2);
@@ -202,7 +207,8 @@ public class ViewAllDocsActivity extends AppCompatActivity {
         }
         Long tsLong = System.currentTimeMillis()/1000;
         final String download_file_name = tsLong.toString()+"_WO.zip";
-        String DOWNLOAD_DOCS_URL= WebUrl.DOWNLOAD_ALL_DOC_URL+"?order_id="+workOrderPojo.getPkid()+"&userid="+SessionManager.getMyInstance(currentActivity).getEmpid();
+        int admin_flag = SessionManager.getMyInstance(currentActivity).getEmpType().equals("Admin")? 1 : 0;
+        String DOWNLOAD_DOCS_URL= WebUrl.DOWNLOAD_ALL_DOC_URL+"?order_id="+workOrderPojo.getPkid()+"&userid="+SessionManager.getMyInstance(currentActivity).getEmpid()+"&admin_flag="+admin_flag;
         downloadIdOne = PRDownloader.download(DOWNLOAD_DOCS_URL, dirPath,download_file_name )
                 .build()
                 .setOnStartOrResumeListener(new OnStartOrResumeListener() {

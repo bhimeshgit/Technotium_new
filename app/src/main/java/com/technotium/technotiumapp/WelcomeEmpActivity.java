@@ -149,6 +149,13 @@ public class WelcomeEmpActivity extends AppCompatActivity  implements Navigation
                     checkValidUser();
                 }
             };
+        } else {
+            if(!ApplicationGlobal.checkInternetConenction(currentActivity)){
+                ApplicationGlobal.shownointernetconnectiondialog(currentActivity);
+            }
+            else{
+                checkValidUser();
+            }
         }
 
     }

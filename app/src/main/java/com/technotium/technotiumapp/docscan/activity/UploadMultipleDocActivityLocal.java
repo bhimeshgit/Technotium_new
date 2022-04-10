@@ -271,7 +271,12 @@ public class UploadMultipleDocActivityLocal extends AppCompatActivity {
                                 docNameList.add("--SELECT--");
                                 for(int i=0;i<jsonArray.length();i++){
                                     JSONObject jsonWO=jsonArray.getJSONObject(i);
-                                    docNameList.add(jsonWO.getString("doc_name"));
+                                    if(!SessionManager.getMyInstance(currentActivity).getEmpType().equals("Admin") &&
+                                            jsonWO.getString("doc_name").equals("Warranty")){
+
+                                    } else {
+                                        docNameList.add(jsonWO.getString("doc_name"));
+                                    }
                                 }
                                 docNameList.add("Other");
                                 docName_adapter = new SpinnerAdapter(currentActivity, docNameList);
