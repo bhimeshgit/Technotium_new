@@ -58,7 +58,7 @@ public class PaymentHistoryActivity extends AppCompatActivity {
     private Dialog zoomable_image_dialog;
     SubsamplingScaleImageView imageView;
     AlertDialog alertDialog;
-    int total_paid=0;
+    double total_paid=0;
     ProgressDialog pDialog;
     LinearLayoutCompat payAmtLay;
     @Override
@@ -84,7 +84,7 @@ public class PaymentHistoryActivity extends AppCompatActivity {
         txtCustomerName.setText(workOrderPojo.getFullname());
         txtTotal=findViewById(R.id.txtTotal);
         txtTotalPaid=findViewById(R.id.txtTotalPaid);
-        txtTotal.setText(workOrderPojo.getAmount());
+        txtTotal.setText(workOrderPojo.getOrderAmountAfterGst()+"");
         txtBalance=findViewById(R.id.txtBalance);
         txtBalance.setText(workOrderPojo.getAmount());
         payAmtLay=findViewById(R.id.payAmtLay);
@@ -117,9 +117,9 @@ public class PaymentHistoryActivity extends AppCompatActivity {
                         try {
                             JSONObject jsonObject=new JSONObject(response);
                             int success=jsonObject.getInt("success");
-                            total_paid=Integer.parseInt(jsonObject.getString("total_paid").equals("null")? "0": jsonObject.getString("total_paid"));
+                            total_paid=Double.parseDouble(jsonObject.getString("total_paid").equals("null")? "0": jsonObject.getString("total_paid"));
                             txtTotalPaid.setText(total_paid+"");
-                            txtBalance.setText((Integer.parseInt(workOrderPojo.getAmount())-total_paid)+"");
+                            txtBalance.setText((workOrderPojo.getOrderAmountAfterGst()-total_paid)+"");
                             if(success==1){
                                 JSONArray jsonArray=jsonObject.getJSONArray("data");
                                 for(int i=0;i<jsonArray.length();i++){
