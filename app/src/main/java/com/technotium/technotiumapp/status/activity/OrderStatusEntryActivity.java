@@ -92,21 +92,24 @@ public class OrderStatusEntryActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_order_status_entry);
-        createObj();
+        try {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_order_status_entry);
+            createObj();
 
-        setTitle("Add Payment Detail");
-        if(getIntent().getSerializableExtra("orderData") != null) {
-            workOrderPojo =(WorkOrderPojo) getIntent().getSerializableExtra("orderData");
-            generateId();
-            txtOrderName.setText(workOrderPojo.getFullname());
+            setTitle("Add Status Detail");
+            if (getIntent().getSerializableExtra("orderData") != null) {
+                workOrderPojo = (WorkOrderPojo) getIntent().getSerializableExtra("orderData");
+                generateId();
+                txtOrderName.setText(workOrderPojo.getFullname());
+            }
+
+            if (getIntent().getSerializableExtra("statusList") != null) {
+                statusList.addAll((ArrayList<OrderStatusPOJO>) getIntent().getSerializableExtra("statusList"));
+            }
+        } catch (Exception e){
+            e.printStackTrace();
         }
-
-        if(getIntent().getSerializableExtra("statusList") != null) {
-            statusList.addAll((ArrayList<OrderStatusPOJO>)getIntent().getSerializableExtra("statusList") );
-        }
-
     }
 
     private void createObj() {
@@ -115,179 +118,191 @@ public class OrderStatusEntryActivity extends AppCompatActivity {
 
 
     private void checkStatusAlreadyPresent(int position){
-        String status_type_str = status_type_sp.getSelectedItem().toString();
-        String tech_type_str = tech_sp.getSelectedItem().toString();
-        String admin_type_str = admin_sp.getSelectedItem().toString();
-        String status= "";
+        try {
+            String status_type_str = status_type_sp.getSelectedItem().toString();
+            String tech_type_str = tech_sp.getSelectedItem().toString();
+            String admin_type_str = admin_sp.getSelectedItem().toString();
+            String status = "";
 
-        if(status_type_str.trim().equals("Technical")){
-            status = tech_status_list.get(position);
-        }
-        if(status_type_str.trim().equals("Admin")){
-            status = admin_status_list.get(position);
-        }
-        int found_flag = 0;
-        if(statusList != null){
-            if(statusList.size() > 0){
-                for(OrderStatusPOJO orderStatusPOJO : statusList){
+            if (status_type_str.trim().equals("Technical")) {
+                status = tech_status_list.get(position);
+            }
+            if (status_type_str.trim().equals("Admin")) {
+                status = admin_status_list.get(position);
+            }
+            int found_flag = 0;
+            if (statusList != null) {
+                if (statusList.size() > 0) {
+                    for (OrderStatusPOJO orderStatusPOJO : statusList) {
 //                    Log.d("iss",orderStatusPOJO.getStatus_type()+ " "+status_type_str+" "+orderStatusPOJO.getStatus()+" "+status+position);
-                    if(orderStatusPOJO.getStatus_type().equals(status_type_str) && orderStatusPOJO.getStatus().equals(status) && orderStatusPOJO.getActive().equals("1")){
-                        txtDupStatus.setVisibility(View.VISIBLE);
-                        found_flag = 1;
-                        break;
+                        if (orderStatusPOJO.getStatus_type().equals(status_type_str) && orderStatusPOJO.getStatus().equals(status) && orderStatusPOJO.getActive().equals("1")) {
+                            txtDupStatus.setVisibility(View.VISIBLE);
+                            found_flag = 1;
+                            break;
+                        }
                     }
                 }
             }
-        }
-        if(found_flag == 0){
-            txtDupStatus.setVisibility(View.GONE);
+            if (found_flag == 0) {
+                txtDupStatus.setVisibility(View.GONE);
+            }
+        } catch (Exception e){
+            e.printStackTrace();
         }
     }
     private void generateId() {
-        tech_sp = findViewById(R.id.tech_sp);
-        status_type_sp = findViewById(R.id.status_type_sp);
-        admin_sp = findViewById(R.id.admin_sp);
+        try{
+            tech_sp = findViewById(R.id.tech_sp);
+            status_type_sp = findViewById(R.id.status_type_sp);
+            admin_sp = findViewById(R.id.admin_sp);
 
-        txtStatusDate = findViewById(R.id.txtStatusDate);
-        date_img_view = findViewById(R.id.date_img_view);
-        txtExpense = findViewById(R.id.txtExpense);
-        txtComment = findViewById(R.id.txtComment);
-        txtOrderName = findViewById(R.id.txtOrderName);
-        txtDupStatus = findViewById(R.id.txtDupStatus);
-        txtDupStatus.setVisibility(View.GONE);
+            txtStatusDate = findViewById(R.id.txtStatusDate);
+            date_img_view = findViewById(R.id.date_img_view);
+            txtExpense = findViewById(R.id.txtExpense);
+            txtComment = findViewById(R.id.txtComment);
+            txtOrderName = findViewById(R.id.txtOrderName);
+            txtDupStatus = findViewById(R.id.txtDupStatus);
+            txtDupStatus.setVisibility(View.GONE);
 
-        btnBrowse_AttachDocument = findViewById(R.id.btnBrowse_AttachDocument);
-        btnCapture_AttachDocument = findViewById(R.id.btnCapture_AttachDocument);
-        imgPreview_AttachDocument = findViewById(R.id.imgPreview_AttachDocument);
-        btnRotate_AttachDocument = findViewById(R.id.btnRotate_AttachDocument);
-        btnRotate1_AttachDocument = findViewById(R.id.btnRotate1_AttachDocument);
-        btnCrop_AttachDocument = findViewById(R.id.btnCrop_AttachDocument);
-        btnSave_AttachDocument = findViewById(R.id.btnSave_AttachDocument);
+            btnBrowse_AttachDocument = findViewById(R.id.btnBrowse_AttachDocument);
+            btnCapture_AttachDocument = findViewById(R.id.btnCapture_AttachDocument);
+            imgPreview_AttachDocument = findViewById(R.id.imgPreview_AttachDocument);
+            btnRotate_AttachDocument = findViewById(R.id.btnRotate_AttachDocument);
+            btnRotate1_AttachDocument = findViewById(R.id.btnRotate1_AttachDocument);
+            btnCrop_AttachDocument = findViewById(R.id.btnCrop_AttachDocument);
+            btnSave_AttachDocument = findViewById(R.id.btnSave_AttachDocument);
 
-        btnBrowse_AttachDocument.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                browseImage(currentActivity);
-            }
-        });
-        btnCapture_AttachDocument.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                captureImage(currentActivity);
-            }
-        });
-        btnSave_AttachDocument.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                saveDetail(0);
-            }
-        });
-
-        pDialog = new ProgressDialog(currentActivity);
-        pDialog.setMessage("Please Wait...");
-        pDialog.setCancelable(true);
-
-        ArrayList<String> status_type_list = new ArrayList<>();
-        status_type_list.add("--Status type--");
-        status_type_list.add("Admin");
-        status_type_list.add("Technical");
-
-        SpinnerAdapter spinnerAdapter = new SpinnerAdapter(currentActivity, status_type_list);
-        status_type_sp.setAdapter(spinnerAdapter);
-
-        admin_status_list = Arrays.asList(getResources().getStringArray(R.array.admin_status));
-        tech_status_list = Arrays.asList(getResources().getStringArray(R.array.technical_status));
-        admin_sp.setAdapter(new SpinnerAdapter(currentActivity, new ArrayList<String>(admin_status_list)));
-        tech_sp.setAdapter(new SpinnerAdapter(currentActivity, new ArrayList<String>(tech_status_list)));
-        admin_sp.setVisibility(View.GONE);
-        tech_sp.setVisibility(View.GONE);
-
-        status_type_sp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                if (position == 1) {
-                    admin_sp.setVisibility(View.VISIBLE);
-                    tech_sp.setVisibility(View.GONE);
-                } else if (position == 2) {
-                    admin_sp.setVisibility(View.GONE);
-                    tech_sp.setVisibility(View.VISIBLE);
+            btnBrowse_AttachDocument.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    browseImage(currentActivity);
                 }
-                else if (position == 0) {
-                    admin_sp.setVisibility(View.GONE);
-                    tech_sp.setVisibility(View.GONE);
+            });
+            btnCapture_AttachDocument.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    captureImage(currentActivity);
                 }
-            }
+            });
+            btnSave_AttachDocument.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    saveDetail(0);
+                }
+            });
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parentView) {
-                // your code here
-            }
+            pDialog = new ProgressDialog(currentActivity);
+            pDialog.setMessage("Please Wait...");
+            pDialog.setCancelable(true);
 
-        });
+            ArrayList<String> status_type_list = new ArrayList<>();
+            status_type_list.add("--Status type--");
+            status_type_list.add("Admin");
+            status_type_list.add("Technical");
 
-        admin_sp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                checkStatusAlreadyPresent(position);
-            }
+            SpinnerAdapter spinnerAdapter = new SpinnerAdapter(currentActivity, status_type_list);
+            status_type_sp.setAdapter(spinnerAdapter);
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parentView) {
-                // your code here
-            }
+            admin_status_list = Arrays.asList(getResources().getStringArray(R.array.admin_status));
+            tech_status_list = Arrays.asList(getResources().getStringArray(R.array.technical_status));
+            admin_sp.setAdapter(new SpinnerAdapter(currentActivity, new ArrayList<String>(admin_status_list)));
+            tech_sp.setAdapter(new SpinnerAdapter(currentActivity, new ArrayList<String>(tech_status_list)));
+            admin_sp.setVisibility(View.GONE);
+            tech_sp.setVisibility(View.GONE);
 
-        });
+            status_type_sp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                    if (position == 1) {
+                        admin_sp.setVisibility(View.VISIBLE);
+                        tech_sp.setVisibility(View.GONE);
+                    } else if (position == 2) {
+                        admin_sp.setVisibility(View.GONE);
+                        tech_sp.setVisibility(View.VISIBLE);
+                    }
+                    else if (position == 0) {
+                        admin_sp.setVisibility(View.GONE);
+                        tech_sp.setVisibility(View.GONE);
+                    }
+                }
 
-        tech_sp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                checkStatusAlreadyPresent(position);
-            }
+                @Override
+                public void onNothingSelected(AdapterView<?> parentView) {
+                    // your code here
+                }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parentView) {
-                // your code here
-            }
+            });
 
-        });
-        txtStatusDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dateFunction();
-            }
-        });
-        date_img_view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dateFunction();
-            }
-        });
+            admin_sp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                    checkStatusAlreadyPresent(position);
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parentView) {
+                    // your code here
+                }
+
+            });
+
+            tech_sp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                    checkStatusAlreadyPresent(position);
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parentView) {
+                    // your code here
+                }
+
+            });
+            txtStatusDate.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dateFunction();
+                }
+            });
+            date_img_view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dateFunction();
+                }
+            });
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
     public void dateFunction(){
-        Calendar calendar= Calendar.getInstance();
-        int year =calendar.get(Calendar.YEAR);
-        int month=calendar.get(Calendar.MONTH);
-        int days=calendar.get(Calendar.DAY_OF_MONTH);
-        DatePickerDialog dg=new DatePickerDialog(currentActivity, new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                int monthofyear=month+1;
-                String date=dayOfMonth+"-"+monthofyear+"-"+year;
-                txtStatusDate.setText(date);
-                SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
-                Date dt = null;
-                try {
-                    dt = format.parse(date);
-                } catch (ParseException e) {
-                    e.printStackTrace();
+        try{
+            Calendar calendar= Calendar.getInstance();
+            int year =calendar.get(Calendar.YEAR);
+            int month=calendar.get(Calendar.MONTH);
+            int days=calendar.get(Calendar.DAY_OF_MONTH);
+            DatePickerDialog dg=new DatePickerDialog(currentActivity, new DatePickerDialog.OnDateSetListener() {
+                @Override
+                public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                    int monthofyear=month+1;
+                    String date=dayOfMonth+"-"+monthofyear+"-"+year;
+                    txtStatusDate.setText(date);
+                    SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+                    Date dt = null;
+                    try {
+                        dt = format.parse(date);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    SimpleDateFormat your_format = new SimpleDateFormat("yyyy-MM-dd");
+                    OrderDate = your_format.format(dt);
+                    orderToset=OrderDate;
                 }
-                SimpleDateFormat your_format = new SimpleDateFormat("yyyy-MM-dd");
-                OrderDate = your_format.format(dt);
-                orderToset=OrderDate;
-            }
-        },year,month,days);
-        dg.getDatePicker().setMaxDate(new Date().getTime());
-        dg.show();
+            },year,month,days);
+            dg.getDatePicker().setMaxDate(new Date().getTime());
+            dg.show();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
 
     }
     public static void captureImage(Activity activity) {
@@ -368,296 +383,304 @@ public class OrderStatusEntryActivity extends AppCompatActivity {
 
 
     private void saveDetail(int isUpdate){
+        try{
+            String status_type_str = status_type_sp.getSelectedItem().toString();
+            String tech_type_str = tech_sp.getSelectedItem().toString();
+            String admin_type_str = admin_sp.getSelectedItem().toString();
+            String txtStatusDate_st = txtStatusDate.getText().toString();
+            String txtExpense_str = txtExpense.getText().toString();
+            String txtComment_str = txtComment.getText().toString();
 
-        String status_type_str = status_type_sp.getSelectedItem().toString();
-        String tech_type_str = tech_sp.getSelectedItem().toString();
-        String admin_type_str = admin_sp.getSelectedItem().toString();
-        String txtStatusDate_st = txtStatusDate.getText().toString();
-        String txtExpense_str = txtExpense.getText().toString();
-        String txtComment_str = txtComment.getText().toString();
+            final JsonParserVolley jsonParserVolley = new JsonParserVolley(currentActivity);
 
-        final JsonParserVolley jsonParserVolley = new JsonParserVolley(currentActivity);
+            if(status_type_str.trim().equals("--Status type--")){
+                Toast.makeText(currentActivity,"please select status type",Toast.LENGTH_SHORT).show();
+                return;
+            }
 
-        if(status_type_str.trim().equals("--Status type--")){
-            Toast.makeText(currentActivity,"please select status type",Toast.LENGTH_SHORT).show();
-            return;
-        }
+            if(tech_type_str.trim().equals("--select technical status--") && status_type_str.trim().equals("Technical")){
+                Toast.makeText(currentActivity,"please select technical status",Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if(admin_type_str.trim().equals("--select admin status--") && status_type_str.trim().equals("Admin")){
+                Toast.makeText(currentActivity,"please select admin status",Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if(txtStatusDate_st.trim().equals("")){
+                Toast.makeText(currentActivity,"please select date",Toast.LENGTH_SHORT).show();
+                return;
+            }
+    //        if(txtExpense_str.trim().equals("")){
+    //            Toast.makeText(currentActivity,"please select date",Toast.LENGTH_SHORT).show();
+    //            return;
+    //        }
+    //        if(txtComment_str.trim().equals("")){
+    //            Toast.makeText(currentActivity,"please select date",Toast.LENGTH_SHORT).show();
+    //            return;
+    //        }
 
-        if(tech_type_str.trim().equals("--select technical status--") && status_type_str.trim().equals("Technical")){
-            Toast.makeText(currentActivity,"please select technical status",Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if(admin_type_str.trim().equals("--select admin status--") && status_type_str.trim().equals("Admin")){
-            Toast.makeText(currentActivity,"please select admin status",Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if(txtStatusDate_st.trim().equals("")){
-            Toast.makeText(currentActivity,"please select date",Toast.LENGTH_SHORT).show();
-            return;
-        }
-//        if(txtExpense_str.trim().equals("")){
-//            Toast.makeText(currentActivity,"please select date",Toast.LENGTH_SHORT).show();
-//            return;
-//        }
-//        if(txtComment_str.trim().equals("")){
-//            Toast.makeText(currentActivity,"please select date",Toast.LENGTH_SHORT).show();
-//            return;
-//        }
-
-        if(status_type_str.trim().equals("Technical")){
-            admin_type_str = "";
-        }
-        else{
-            tech_type_str = "";
-        }
+            if(status_type_str.trim().equals("Technical")){
+                admin_type_str = "";
+            }
+            else{
+                tech_type_str = "";
+            }
 
 
-        pDialog.show();
-        jsonParserVolley.addParameter("order_id",workOrderPojo.getPkid());
-        jsonParserVolley.addParameter("status_type",status_type_str);
-        jsonParserVolley.addParameter("comment",txtComment_str);
-        jsonParserVolley.addParameter("expense",txtExpense_str);
-        jsonParserVolley.addParameter("userid", SessionManager.getMyInstance(currentActivity).getEmpid());
-        jsonParserVolley.addParameter("image", encodedPhotoString);
-        jsonParserVolley.addParameter("status_date", orderToset);
-        jsonParserVolley.addParameter("admin_status", admin_type_str);
-        jsonParserVolley.addParameter("tech_status", tech_type_str);
-        jsonParserVolley.executeRequest(Request.Method.POST, WebUrl.ADD_WORK_ORDER_STATUS_URL ,new JsonParserVolley.VolleyCallback() {
-                    @Override
-                    public void getResponse(String response) {
-                        pDialog.dismiss();
-                        Log.d("iss",response);
-                        try {
-                            JSONObject jsonObject=new JSONObject(response);
-                            int success=jsonObject.getInt("success");
-                            if(success==1){
-                                Toast.makeText(currentActivity,jsonObject.getString("message"),Toast.LENGTH_SHORT).show();
-                                Intent intent=new Intent(currentActivity, OrderStatusListActivity.class);
-                                intent.putExtra("orderData",workOrderPojo);
-                                startActivity(intent);
-                                finish();
+            pDialog.show();
+            jsonParserVolley.addParameter("order_id",workOrderPojo.getPkid());
+            jsonParserVolley.addParameter("status_type",status_type_str);
+            jsonParserVolley.addParameter("comment",txtComment_str);
+            jsonParserVolley.addParameter("expense",txtExpense_str);
+            jsonParserVolley.addParameter("userid", SessionManager.getMyInstance(currentActivity).getEmpid());
+            jsonParserVolley.addParameter("image", encodedPhotoString);
+            jsonParserVolley.addParameter("status_date", orderToset);
+            jsonParserVolley.addParameter("admin_status", admin_type_str);
+            jsonParserVolley.addParameter("tech_status", tech_type_str);
+            jsonParserVolley.executeRequest(Request.Method.POST, WebUrl.ADD_WORK_ORDER_STATUS_URL ,new JsonParserVolley.VolleyCallback() {
+                        @Override
+                        public void getResponse(String response) {
+                            pDialog.dismiss();
+                            Log.d("iss",response);
+                            try {
+                                JSONObject jsonObject=new JSONObject(response);
+                                int success=jsonObject.getInt("success");
+                                if(success==1){
+                                    Toast.makeText(currentActivity,jsonObject.getString("message"),Toast.LENGTH_SHORT).show();
+                                    Intent intent=new Intent(currentActivity, OrderStatusListActivity.class);
+                                    intent.putExtra("orderData",workOrderPojo);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                                else{
+                                    Toast.makeText(currentActivity,jsonObject.getString("message"),Toast.LENGTH_SHORT).show();
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
-                            else{
-                                Toast.makeText(currentActivity,jsonObject.getString("message"),Toast.LENGTH_SHORT).show();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
                         }
                     }
-                }
-        );
+            );
+        } catch (Exception e){
+            e.printStackTrace();
+        }
 
     }
 
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // TODO Auto-generated method stub
-        super.onActivityResult(requestCode, resultCode, data);
-        //***************** DIR For Edited Image *********************\
-        File myDir = new File(Environment.getExternalStorageDirectory() + "/Loksuvidha/Images");
-        if (!myDir.exists()) {
-            myDir.mkdirs();
-        }
-        String fname = "Image.jpg";
-        final File file = new File(myDir, fname);
-        if((requestCode == CROP_IMAGE_REQUEST_CODE) && resultCode != 0){
-            if (file.exists())
-                file.delete();
-        }
+        try{
+            // TODO Auto-generated method stub
+            super.onActivityResult(requestCode, resultCode, data);
+            //***************** DIR For Edited Image *********************\
+            File myDir = new File(Environment.getExternalStorageDirectory() + "/Loksuvidha/Images");
+            if (!myDir.exists()) {
+                myDir.mkdirs();
+            }
+            String fname = "Image.jpg";
+            final File file = new File(myDir, fname);
+            if((requestCode == CROP_IMAGE_REQUEST_CODE) && resultCode != 0){
+                if (file.exists())
+                    file.delete();
+            }
 
-        if (requestCode == CAMERA_CAPTURE_IMAGE_REQUEST_CODE || requestCode == BROWSE_IMAGE_REQUEST_CODE) {
-            btnRotate_AttachDocument.setOnClickListener(new View.OnClickListener() {
+            if (requestCode == CAMERA_CAPTURE_IMAGE_REQUEST_CODE || requestCode == BROWSE_IMAGE_REQUEST_CODE) {
+                btnRotate_AttachDocument.setOnClickListener(new View.OnClickListener() {
 
-                @Override
-                public void onClick(View v) {
-                    // TODO Auto-generated method stub
+                    @Override
+                    public void onClick(View v) {
+                        // TODO Auto-generated method stub
 
-                    Matrix matrix = new Matrix();
-                    matrix.postRotate(90);
-                    Bitmap rotatedbitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(),
-                            matrix, true);
-                    imgPreview_AttachDocument.setImageBitmap(rotatedbitmap);
-                    bitmap = rotatedbitmap;
-                    try {
-                        FileOutputStream out = new FileOutputStream(file);
-                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
-                        out.flush();
-                        out.close();
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                        Matrix matrix = new Matrix();
+                        matrix.postRotate(90);
+                        Bitmap rotatedbitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(),
+                                matrix, true);
+                        imgPreview_AttachDocument.setImageBitmap(rotatedbitmap);
+                        bitmap = rotatedbitmap;
+                        try {
+                            FileOutputStream out = new FileOutputStream(file);
+                            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                            out.flush();
+                            out.close();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        compressImage();
                     }
-                    compressImage();
+                });
+
+                btnRotate1_AttachDocument.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        // TODO Auto-generated method stub
+                        Matrix matrix = new Matrix();
+                        matrix.postRotate(-90);
+                        Bitmap rotatedbitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(),
+                                matrix, true);
+                        imgPreview_AttachDocument.setImageBitmap(rotatedbitmap);
+                        bitmap = rotatedbitmap;
+                        try {
+                            FileOutputStream out = new FileOutputStream(file);
+                            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                            out.flush();
+                            out.close();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        compressImage();
+                    }
+                });
+
+                btnCrop_AttachDocument.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        // TODO Auto-generated method stub
+                        try{
+    //						cropCapturedImage(Uri.fromFile(file));
+
+                            cropCapturedImage(FileProvider.getUriForFile(currentActivity, BuildConfig.APPLICATION_ID + ".provider",file));
+
+                        }
+                        catch(ActivityNotFoundException aNFE){
+                            //display an error message if user device doesn't support
+                            String errorMessage = "Sorry - your device doesn't support the crop action!";
+                            Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+
+            }
+
+            if (requestCode == CAMERA_CAPTURE_IMAGE_REQUEST_CODE) {
+                if (resultCode == Activity.RESULT_OK) {
+                    Log.d("stest","camera");
+                    filePath = fileUri.getPath();
+                    if (filePath != null) {
+                        //BitmapFactory.Options options = new BitmapFactory.Options();
+                        //options.inSampleSize = 8;
+                        //bitmap = BitmapFactory.decodeFile(filePath, options);
+                        bitmap = ImageProcessing.decodeSampledBitmapFromFile(filePath, 1024,768);
+                        filename = "0" + "_" + SessionManager.getMyInstance(currentActivity).getEmpid()+ "_" +"1" + ".jpg";
+                        Matrix matrix = new Matrix();
+                        Bitmap newbitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+                        bitmap = newbitmap;
+                        imgPreview_AttachDocument.setImageBitmap(bitmap);
+                        try {
+                            FileOutputStream out = new FileOutputStream(file);
+                            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                            out.flush();
+                            out.close();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        try {
+                            filePath = file.getCanonicalPath();
+                        } catch (IOException e1) {
+                            // TODO Auto-generated catch block
+                            e1.printStackTrace();
+                        }
+                    }
+                    else {
+                        Toast.makeText(getApplicationContext(),"Sorry, file path is missing!", Toast.LENGTH_LONG).show();
+
+                    }
                 }
-            });
+                else if (resultCode == Activity.RESULT_CANCELED) {
+                    // user cancelled Image capture
+                    Toast.makeText(getApplicationContext(),"User cancelled image capture", Toast.LENGTH_SHORT).show();
 
-            btnRotate1_AttachDocument.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    // TODO Auto-generated method stub
-                    Matrix matrix = new Matrix();
-                    matrix.postRotate(-90);
-                    Bitmap rotatedbitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(),
-                            matrix, true);
-                    imgPreview_AttachDocument.setImageBitmap(rotatedbitmap);
-                    bitmap = rotatedbitmap;
-                    try {
-                        FileOutputStream out = new FileOutputStream(file);
-                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
-                        out.flush();
-                        out.close();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    compressImage();
                 }
-            });
+                else {
+                    // failed to capture image
+                    Toast.makeText(getApplicationContext(),"Sorry! Failed to capture image", Toast.LENGTH_SHORT).show();
 
-            btnCrop_AttachDocument.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    // TODO Auto-generated method stub
-                    try{
-//						cropCapturedImage(Uri.fromFile(file));
-
-                        cropCapturedImage(FileProvider.getUriForFile(currentActivity, BuildConfig.APPLICATION_ID + ".provider",file));
-
-                    }
-                    catch(ActivityNotFoundException aNFE){
-                        //display an error message if user device doesn't support
-                        String errorMessage = "Sorry - your device doesn't support the crop action!";
-                        Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_SHORT).show();
-                    }
                 }
-            });
+            }
 
 
-        }
+            if (requestCode == BROWSE_IMAGE_REQUEST_CODE) {
+                if (resultCode == Activity.RESULT_OK) {
 
-        if (requestCode == CAMERA_CAPTURE_IMAGE_REQUEST_CODE) {
-            if (resultCode == Activity.RESULT_OK) {
-                Log.d("stest","camera");
+                    Uri uri = data.getData();
+                    filePath = getRealPathFromURI(getApplicationContext(), uri);
+
+                    if (filePath != null) {
+                        //BitmapFactory.Options options = new BitmapFactory.Options();
+                        //options.inSampleSize = 8;
+                        //bitmap = BitmapFactory.decodeFile(filePath, options);
+                        bitmap = ImageProcessing.decodeSampledBitmapFromFile(filePath, 1024,768);
+                        filename = "0" + "_" + SessionManager.getMyInstance(currentActivity).getEmpid()+ "_" +"1" + ".jpg";
+
+                        Matrix matrix = new Matrix();
+                        Bitmap newbitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+                        bitmap = newbitmap;
+
+                        imgPreview_AttachDocument.setImageBitmap(bitmap);
+
+                        try {
+                            FileOutputStream out = new FileOutputStream(file);
+                            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                            out.flush();
+                            out.close();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        try {
+                            filePath = file.getCanonicalPath();
+                        } catch (IOException e1) {
+                            // TODO Auto-generated catch block
+                            e1.printStackTrace();
+                        }
+                    }
+                    else {
+                        Toast.makeText(getApplicationContext(),"Sorry, file path is missing!", Toast.LENGTH_LONG).show();
+                    }
+
+                }
+                else if (resultCode == Activity.RESULT_CANCELED) {
+                    Toast.makeText(getApplicationContext(),"User cancelled image browsing", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    // failed to record video
+                    Toast.makeText(getApplicationContext(),"Sorry! Failed to browse image", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            if(requestCode == CROP_IMAGE_REQUEST_CODE & resultCode == -1){
+
+                Bitmap croppedbitmap = null;
                 filePath = fileUri.getPath();
                 if (filePath != null) {
-                    //BitmapFactory.Options options = new BitmapFactory.Options();
-                    //options.inSampleSize = 8;
-                    //bitmap = BitmapFactory.decodeFile(filePath, options);
-                    bitmap = ImageProcessing.decodeSampledBitmapFromFile(filePath, 1024,768);
-                    filename = "0" + "_" + SessionManager.getMyInstance(currentActivity).getEmpid()+ "_" +"1" + ".jpg";
-                    Matrix matrix = new Matrix();
-                    Bitmap newbitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-                    bitmap = newbitmap;
-                    imgPreview_AttachDocument.setImageBitmap(bitmap);
-                    try {
-                        FileOutputStream out = new FileOutputStream(file);
-                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
-                        out.flush();
-                        out.close();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-                    try {
-                        filePath = file.getCanonicalPath();
-                    } catch (IOException e1) {
-                        // TODO Auto-generated catch block
-                        e1.printStackTrace();
-                    }
+                    croppedbitmap = BitmapFactory.decodeFile(filePath);
+                    imgPreview_AttachDocument.setImageBitmap(croppedbitmap);
                 }
-                else {
-                    Toast.makeText(getApplicationContext(),"Sorry, file path is missing!", Toast.LENGTH_LONG).show();
+                bitmap = croppedbitmap;
 
+                try {
+                    FileOutputStream out = new FileOutputStream(file);
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                    out.flush();
+                    out.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
-            else if (resultCode == Activity.RESULT_CANCELED) {
-                // user cancelled Image capture
-                Toast.makeText(getApplicationContext(),"User cancelled image capture", Toast.LENGTH_SHORT).show();
 
+            if(requestCode == CROP_IMAGE_REQUEST_CODE & resultCode == 0){
+                imgPreview_AttachDocument.setImageBitmap(bitmap);
+                //Toast.makeText(getApplicationContext(), String.valueOf(requestCode)+"  -  "+String.valueOf(resultCode), Toast.LENGTH_SHORT).show();
             }
-            else {
-                // failed to capture image
-                Toast.makeText(getApplicationContext(),"Sorry! Failed to capture image", Toast.LENGTH_SHORT).show();
+            compressImage();
 
-            }
+        } catch (Exception e){
+            e.printStackTrace();
         }
-
-
-        if (requestCode == BROWSE_IMAGE_REQUEST_CODE) {
-            if (resultCode == Activity.RESULT_OK) {
-
-                Uri uri = data.getData();
-                filePath = getRealPathFromURI(getApplicationContext(), uri);
-
-                if (filePath != null) {
-                    //BitmapFactory.Options options = new BitmapFactory.Options();
-                    //options.inSampleSize = 8;
-                    //bitmap = BitmapFactory.decodeFile(filePath, options);
-                    bitmap = ImageProcessing.decodeSampledBitmapFromFile(filePath, 1024,768);
-                    filename = "0" + "_" + SessionManager.getMyInstance(currentActivity).getEmpid()+ "_" +"1" + ".jpg";
-
-                    Matrix matrix = new Matrix();
-                    Bitmap newbitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-                    bitmap = newbitmap;
-
-                    imgPreview_AttachDocument.setImageBitmap(bitmap);
-
-                    try {
-                        FileOutputStream out = new FileOutputStream(file);
-                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
-                        out.flush();
-                        out.close();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-                    try {
-                        filePath = file.getCanonicalPath();
-                    } catch (IOException e1) {
-                        // TODO Auto-generated catch block
-                        e1.printStackTrace();
-                    }
-                }
-                else {
-                    Toast.makeText(getApplicationContext(),"Sorry, file path is missing!", Toast.LENGTH_LONG).show();
-                }
-
-            }
-            else if (resultCode == Activity.RESULT_CANCELED) {
-                Toast.makeText(getApplicationContext(),"User cancelled image browsing", Toast.LENGTH_SHORT).show();
-            }
-            else {
-                // failed to record video
-                Toast.makeText(getApplicationContext(),"Sorry! Failed to browse image", Toast.LENGTH_SHORT).show();
-            }
-        }
-
-        if(requestCode == CROP_IMAGE_REQUEST_CODE & resultCode == -1){
-
-            Bitmap croppedbitmap = null;
-            filePath = fileUri.getPath();
-            if (filePath != null) {
-                croppedbitmap = BitmapFactory.decodeFile(filePath);
-                imgPreview_AttachDocument.setImageBitmap(croppedbitmap);
-            }
-            bitmap = croppedbitmap;
-
-            try {
-                FileOutputStream out = new FileOutputStream(file);
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
-                out.flush();
-                out.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        if(requestCode == CROP_IMAGE_REQUEST_CODE & resultCode == 0){
-            imgPreview_AttachDocument.setImageBitmap(bitmap);
-            //Toast.makeText(getApplicationContext(), String.valueOf(requestCode)+"  -  "+String.valueOf(resultCode), Toast.LENGTH_SHORT).show();
-        }
-        compressImage();
     }
 
 

@@ -113,6 +113,8 @@ public class SyncingService extends JobIntentService implements SyncingCallbacks
 
             notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.createNotificationChannel(notificationChannel);
+        }else{
+            notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         }
 
         notification = new NotificationCompat.Builder(this, channelId) // Use  the same channelId String while creating notification
